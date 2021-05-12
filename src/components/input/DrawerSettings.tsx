@@ -13,16 +13,27 @@ import { TextField } from "@rmwc/textfield";
 import { Logo } from "../util/Logo";
 import "./DrawerSettings.scss";
 
+const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
+const latLngRegex = /^(-?\d+(\.\d+)?)$/;
+
+const pinColors = {
+  dark: {
+    green: "AED581",
+    red: "EF5350",
+  },
+  light: {
+    green: "388E3C",
+    red: "D32F2F",
+  },
+} as const;
+
 type DrawerSettingsProps = {
   loading: boolean;
   getData: (month: string, lat: string, lng: string) => void;
 };
 
-const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
-const latLngRegex = /^(-?\d+(\.\d+)?)$/;
-
 export const DrawerSettings = (props: DrawerSettingsProps) => {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const changeTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
@@ -136,8 +147,10 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
               <img
                 className="map-image"
                 src={`https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}${
-                  resultLocation && queryLocation === latLng ? `&markers=color:red|${resultLocation}` : ""
-                }&markers=color:green|${lat},${lng}`}
+                  resultLocation && queryLocation === latLng
+                    ? `&markers=color:0x${pinColors[theme].red}|${resultLocation}`
+                    : ""
+                }&markers=color:0x${pinColors[theme].green}|${lat},${lng}`}
               />
             ) : null}
             <Icon icon={{ icon: "map", size: "large" }} className="map-icon" />
