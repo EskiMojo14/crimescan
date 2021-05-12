@@ -3,6 +3,7 @@
 @use "@material/icon-button";
 @use "@material/linear-progress";
 @use "@material/ripple";
+@use "@material/snackbar";
 @use "@material/textfield/mixins" as text-field;
 @use "@material/textfield/helper-text/" as text-field-helper-text;
 @use "@material/textfield/icon/" as text-field-icon;
@@ -227,6 +228,15 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         10%
       )
     );
+  }
+
+  .mdc-snackbar {
+    @include snackbar.fill-color(mix(map-get($variables, on-surface), map-get($variables, surface), 80%));
+    @include snackbar.label-ink-color(map-get($variables, surface));
+    &__action:not(:disabled) {
+      color: if($dark, darken(map-get($variables, primary), 25%), map-get($variables, primary));
+      @include ripple.states(if($dark, darken(map-get($variables, primary), 25%), map-get($variables, primary)));
+    }
   }
 
   .mdc-text-field {

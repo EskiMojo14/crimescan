@@ -13,7 +13,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 16px;
+    padding: 8px 16px;
     @include util.divider-border(bottom);
     .drawer-logo {
       width: 56px;
