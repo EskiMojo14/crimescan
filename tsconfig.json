@@ -18,7 +18,6 @@
         "resolveJsonModule": true, // Include modules imported with .json extension
         "jsx": "react", // Support JSX in .tsx files
         "sourceMap": true, // Generate corrresponding .map file
-        "declaration": true, // Generate corresponding .d.ts file
         "noUnusedLocals": true, // Report errors on unused locals
         "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
         "noFallthroughCasesInSwitch": true // Report errors for fallthrough cases in switch statement
@@ -31,3 +30,4 @@
         "build"
     ] // *** The files to not type check ***
 }
+// https://www.sitepoint.com/react-with-typescript-best-practices/
