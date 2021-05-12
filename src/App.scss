@@ -23,6 +23,49 @@
   $styles-caption: typography-variables.$caption
 );
 
+@use "theme";
+
 @use "@material/drawer/mdc-drawer";
+@use "@material/icon-button/mdc-icon-button";
+
+@use "@material/theme/color-palette" as palette;
 
 @include typography.core-styles();
+
+.material-icons:not(.round) {
+  font-family: "Material Icons Sharp";
+}
+
+.mdc-drawer {
+  border-color: var(--divider-color);
+}
+
+.light {
+  $theme: (
+    primary: palette.$light-green-700,
+    secondary: palette.$red-700,
+    on-primary: black,
+    on-secondary: white,
+    background: palette.$grey-200,
+    error: palette.$deep-orange-500,
+    on-error: black,
+    surface: white,
+    on-surface: black,
+  );
+  @include theme.theme($theme);
+}
+
+.dark {
+  $theme: (
+    primary: palette.$light-green-300,
+    secondary: palette.$red-400,
+    on-primary: black,
+    on-secondary: black,
+    background: #121212,
+    error: palette.$deep-orange-400,
+    on-error: black,
+    surface: #121212,
+    on-surface: white,
+  );
+  @include theme.theme($theme, true);
+}

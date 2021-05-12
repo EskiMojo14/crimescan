@@ -1,0 +1,167 @@
+@use "@material/drawer";
+@use "@material/icon-button";
+@use "@material/theme/color-palette" as palette;
+
+// 1 - card, switch
+// 2 - contained button
+// 3 - refresh indicator
+// 4 - app bar
+// 6 - FAB, snackbar
+// 8 - menu, side sheet
+// 16 - nav drawer, modal side sheet
+// 24 - dialog
+$overlay-values: (
+  0: 0%,
+  1: 5%,
+  2: 7%,
+  3: 8%,
+  4: 9%,
+  6: 11%,
+  8: 12%,
+  12: 14%,
+  16: 15%,
+  24: 16%,
+);
+
+@function overlay-elevation($color, $elevation: 0) {
+  @return lighten($color, map-get($overlay-values, $elevation));
+}
+
+$graph-colors: (
+  palette.$red-500,
+  palette.$deep-orange-500,
+  palette.$orange-500,
+  palette.$amber-500,
+  palette.$yellow-500,
+  palette.$lime-500,
+  palette.$light-green-500,
+  palette.$green-500,
+  palette.$teal-500,
+  palette.$cyan-500,
+  palette.$light-blue-500,
+  palette.$blue-500,
+  palette.$indigo-500,
+  palette.$deep-purple-500,
+  palette.$purple-500,
+  palette.$pink-500,
+  palette.$blue-grey-500,
+  palette.$grey-500,
+  palette.$brown-500,
+  palette.$red-300,
+  palette.$deep-orange-300,
+  palette.$orange-300,
+  palette.$amber-300,
+  palette.$yellow-300,
+  palette.$lime-300,
+  palette.$light-green-300,
+  palette.$green-300,
+  palette.$teal-300,
+  palette.$cyan-300,
+  palette.$light-blue-300,
+  palette.$blue-300,
+  palette.$indigo-300,
+  palette.$deep-purple-300,
+  palette.$purple-300,
+  palette.$pink-300,
+  palette.$blue-grey-300,
+  palette.$grey-300,
+  palette.$brown-300
+);
+
+$graph-colors-dark: (
+  palette.$red-300,
+  palette.$deep-orange-300,
+  palette.$orange-300,
+  palette.$amber-300,
+  palette.$yellow-300,
+  palette.$lime-300,
+  palette.$light-green-300,
+  palette.$green-300,
+  palette.$teal-300,
+  palette.$cyan-300,
+  palette.$light-blue-300,
+  palette.$blue-300,
+  palette.$indigo-300,
+  palette.$deep-purple-300,
+  palette.$purple-300,
+  palette.$pink-300,
+  palette.$blue-grey-300,
+  palette.$grey-300,
+  palette.$brown-300,
+  palette.$red-200,
+  palette.$deep-orange-200,
+  palette.$orange-200,
+  palette.$amber-200,
+  palette.$yellow-200,
+  palette.$lime-200,
+  palette.$light-green-200,
+  palette.$green-200,
+  palette.$teal-200,
+  palette.$cyan-200,
+  palette.$light-blue-200,
+  palette.$blue-200,
+  palette.$indigo-200,
+  palette.$deep-purple-200,
+  palette.$purple-200,
+  palette.$pink-200,
+  palette.$blue-grey-200,
+  palette.$grey-200,
+  palette.$brown-200
+);
+
+$letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z);
+
+@mixin theme($theme, $dark: false) {
+  $text-colors: (
+    text-high: rgba(map-get($theme, on-surface), 0.87),
+    text-medium: rgba(map-get($theme, on-surface), 0.6),
+    text-disabled: rgba(map-get($theme, on-surface), 0.38),
+  );
+  $variables: map-merge($theme, $text-colors);
+  --meta-color: #{if(
+      $dark,
+      darken(overlay-elevation(map-get($variables, surface), 4), 10%),
+      darken(map-get($variables, primary), 10%)
+    )};
+  --divider-color: #{rgba(map-get($variables, on-surface), 0.12)};
+  --lighter-color: #{rgba(map-get($variables, on-surface), 0.06)};
+  body {
+    background-color: map-get($variables, background);
+    color: map-get($variables, on-surface);
+  }
+  ::selection {
+    background: rgba(map-get($variables, secondary), 0.45);
+    color: inherit;
+  }
+  .mdc-drawer {
+    @include drawer.fill-color-accessible(
+      if($dark, overlay-elevation(map-get($variables, surface), 16), map-get($variables, surface))
+    );
+    @include drawer.item-activated-icon-ink-color(map-get($variables, primary));
+    @include drawer.item-activated-text-ink-color(map-get($variables, primary));
+    @include drawer.scrim-fill-color(rgba(map-get($variables, on-surface), 0.32));
+    --mdc-slider-bg-color-behind-component: #{if(
+        $dark,
+        overlay-elevation(map-get($variables, surface), 16),
+        map-get($variables, surface)
+      )};
+    &.mdc-drawer--dismissible {
+      @include drawer.surface-fill-color(
+        if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface))
+      );
+      --mdc-slider-bg-color-behind-component: #{if(
+          $dark,
+          overlay-elevation(map-get($variables, surface), 1),
+          map-get($variables, surface)
+        )};
+    }
+  }
+
+  .mdc-icon-button {
+    @include icon-button.ink-color(map-get($variables, text-medium));
+    @include icon-button.disabled-ink-color(map-get($variables, text-disabled));
+    &--on.favorite {
+      @include icon-button.ink-color(map-get($variables, secondary));
+    }
+  }
+}
