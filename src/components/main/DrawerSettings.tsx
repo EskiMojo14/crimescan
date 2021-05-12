@@ -130,7 +130,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
             {latLngRegex.test(lat) && latLngRegex.test(lng) ? (
               <img
                 className="map-image"
-                src={`https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=13&size=448x448&key=${process.env.GOOGLE_MAPS_KEY}`}
+                src={`https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=13&size=448x448&key=${process.env.GOOGLE_MAPS_KEY}&markers=color:red|${lat},${lng}`}
               />
             ) : null}
             <Icon icon={{ icon: "map", size: "large" }} className="map-icon" />
