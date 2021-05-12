@@ -27,6 +27,7 @@
     "classnames": "^2.3.1",
     "normalize.css": "^8.0.1",
     "react": "^16.14.0",
+    "react-bem-helper": "^1.4.1",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.4"
   },

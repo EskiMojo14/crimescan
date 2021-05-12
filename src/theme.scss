@@ -334,4 +334,32 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       }
     }
   }
+
+  .segmented-button {
+    &.segmented-button--toggle .segmented-button__segment {
+      @include button.ink-color(map-get($variables, text-medium));
+      @include ripple.states(map-get($variables, on-surface), false, feature-targeting.all(), ".mdc-button__ripple");
+      @include ripple.states-selected(
+        map-get($variables, primary),
+        false,
+        feature-targeting.all(),
+        ".mdc-button__ripple"
+      );
+      @include ripple.states-selected(
+        map-get($variables, text-disabled),
+        false,
+        feature-targeting.all(),
+        "&:disabled .mdc-button__ripple"
+      );
+      &--selected {
+        @include button.ink-color(map-get($variables, primary));
+        @include button.outline-color(map-get($variables, primary));
+      }
+      &:disabled,
+      &--selected:disabled {
+        @include button.ink-color(map-get($variables, text-disabled));
+        @include button.outline-color(map-get($variables, text-disabled));
+      }
+    }
+  }
 }
