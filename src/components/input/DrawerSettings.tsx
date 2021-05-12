@@ -149,18 +149,25 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
               <Chip icon="location_on" label="Result" className="result-chip non-interactive" />
             ) : null}
           </div>
-          <div className={classNames("map-container", { image: validLocation })}>
-            {validLocation ? (
-              <img
-                className="map-image"
-                src={`https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}${
-                  resultLocation && queryLocation === latLng
-                    ? `&markers=color:0x${pinColors[theme].red}|${resultLocation}`
-                    : ""
-                }&markers=color:0x${pinColors[theme].green}|${lat},${lng}`}
-              />
-            ) : null}
-            <Icon icon={{ icon: "map", size: "large" }} className="map-icon" />
+          <div
+            className={classNames("map-container", { image: validLocation })}
+            style={
+              validLocation
+                ? {
+                    backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${
+                      process.env.GOOGLE_MAPS_KEY
+                    }${
+                      resultLocation && queryLocation === latLng
+                        ? `&markers=color:0x${pinColors[theme].red}|${resultLocation}`
+                        : ""
+                    }&markers=color:0x${pinColors[theme].green}|${lat},${lng}")`,
+                  }
+                : undefined
+            }
+          >
+            <div className="map-icon">
+              <Icon icon={{ icon: "map", size: "large" }} />
+            </div>
           </div>
         </div>
       </DrawerContent>

@@ -59,11 +59,21 @@
         }
       }
       .map-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 448px;
+        position: relative;
         @include util.divider-border(all);
+        background-size: contain;
+        background-position: center;
+        padding-top: 100%;
+        .map-icon {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
         &.image {
           .map-icon {
             display: none;
