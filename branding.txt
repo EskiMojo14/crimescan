@@ -1,0 +1,16 @@
+fonts
+-----
+headline: Arvo
+body: Poppins
+
+accents
+-------
+dark theme
+	primary = lg300
+	secondary = r400
+	error = do400
+	
+light theme
+	primary = lg700
+	secondary = r700
+	error = do500
