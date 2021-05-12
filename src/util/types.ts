@@ -27,3 +27,11 @@ export type CrimeEntry = {
   location_subtype: string;
   month: string;
 };
+
+/** Processed statistics data */
+
+export type ProcessedData = {
+  location: string;
+  queryLocation: string;
+  count: number;
+};

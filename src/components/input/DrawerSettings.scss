@@ -34,6 +34,9 @@
     }
   }
   .mdc-drawer__content {
+    .subheader {
+      margin-bottom: 8px;
+    }
     .month-group {
       display: flex;
       flex-direction: column;
@@ -44,25 +47,58 @@
       display: flex;
       flex-direction: column;
       padding: 16px;
+      .double-field {
+        display: flex;
+        margin-bottom: 16px;
+        flex: calc(50% - 8px) 1 0;
+        .field {
+          margin-bottom: 0;
+          &:first-child {
+            @include rtl.reflexive-box(margin, right, 8px);
+          }
+          &:last-child {
+            @include rtl.reflexive-box(margin, left, 8px);
+          }
+        }
+      }
       .field {
         display: flex;
         flex-direction: column;
         margin-bottom: 16px;
-        &:last-child {
-          margin-bottom: 0;
+      }
+      .guide-chips {
+        display: flex;
+        justify-content: center;
+        margin-top: -16px;
+        padding: 8px;
+        .mdc-chip {
+          margin: 0 8px;
         }
       }
       .map-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 448px;
+        position: relative;
         @include util.divider-border(all);
+        background-size: contain;
+        background-position: center;
+        padding-top: 100%;
+        .map-icon {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
         &.image {
           .map-icon {
             display: none;
           }
         }
+      }
+      .disclaimer-container {
+        margin-top: 16px;
       }
     }
   }

@@ -26,6 +26,7 @@
 @use "theme";
 
 @use "@material/button/mdc-button";
+@use "@material/chips/mdc-chips";
 @use "@material/drawer/mdc-drawer";
 @use "@material/icon-button/mdc-icon-button";
 @use "@material/linear-progress/mdc-linear-progress";
@@ -55,6 +56,15 @@
 svg.material-icons,
 .material-icons svg {
   fill: currentColor;
+}
+
+.mdc-chip {
+  &.non-interactive {
+    .mdc-chip__ripple {
+      display: none;
+    }
+    cursor: auto;
+  }
 }
 
 .mdc-drawer {

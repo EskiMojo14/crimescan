@@ -17,11 +17,13 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
     "@rmwc/button": "^6.1.4",
+    "@rmwc/chip": "^6.1.4",
     "@rmwc/drawer": "^6.1.4",
     "@rmwc/icon-button": "^6.1.4",
     "@rmwc/linear-progress": "^6.1.4",
     "@rmwc/snackbar": "^6.1.4",
     "@rmwc/textfield": "^6.1.4",
+    "@rmwc/typography": "^6.1.4",
     "classnames": "^2.3.1",
     "normalize.css": "^8.0.1",
     "react": "^16.14.0",
