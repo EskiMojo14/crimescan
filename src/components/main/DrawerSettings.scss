@@ -1,0 +1,23 @@
+@use "@material/rtl";
+@use "@material/typography";
+@use "../../util";
+
+.drawer-settings {
+  width: 480px;
+  .mdc-drawer__header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    @include util.divider-border(bottom);
+    .drawer-logo {
+      width: 56px;
+      height: 56px;
+      @include rtl.reflexive-box(margin, right, 16px);
+    }
+    .logo-text {
+      @include typography.typography(headline5);
+      font-family: "Nova Flat", sans-serif;
+      font-size: 22 / 16 * 1rem;
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import React from "react";
+import { DrawerAppContent } from "@rmwc/drawer";
+import { DrawerSettings } from "./components/main/DrawerSettings";
 import "./App.scss";
-import { Logo } from "./components/util/Logo";
+import "normalize.css";
 
 function App() {
   const getData = () => {
@@ -14,6 +16,11 @@ function App() {
         console.log(error);
       });
   };
-  return <Logo rotate />;
+  return (
+    <>
+      <DrawerSettings />
+      <DrawerAppContent></DrawerAppContent>
+    </>
+  );
 }
 export default App;
