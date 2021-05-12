@@ -5,11 +5,8 @@ import "./App.scss";
 import "normalize.css";
 
 function App() {
-  const getData = () => {
+  const getData = (month = "2020-02", lat = "52.629729", lng = "-1.131592") => {
     setLoading(true);
-    const month = "2020-02";
-    const lat = "52.629729";
-    const lng = "-1.131592";
     fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
       .then((response) => response.json())
       .then((result) => {

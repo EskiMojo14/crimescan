@@ -25,9 +25,11 @@
 
 @use "theme";
 
+@use "@material/button/mdc-button";
 @use "@material/drawer/mdc-drawer";
 @use "@material/icon-button/mdc-icon-button";
 @use "@material/linear-progress/mdc-linear-progress";
+@use "@material/textfield/mdc-text-field";
 
 @use "@material/theme/color-palette" as palette;
 
@@ -35,6 +37,22 @@
 
 .material-icons:not(.round) {
   font-family: "Material Icons Sharp";
+}
+
+.mdc-button.mdc-button--outlined,
+.mdc-card.mdc-card--outlined,
+.mdc-drawer,
+.mdc-list-divider,
+.mdc-data-table,
+.mdc-data-table__row,
+.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title,
+.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__actions {
+  border-color: var(--divider-color);
+}
+
+svg.material-icons,
+.material-icons svg {
+  fill: currentColor;
 }
 
 .mdc-drawer {

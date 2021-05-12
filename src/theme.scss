@@ -1,6 +1,13 @@
+@use "@material/button";
 @use "@material/drawer";
 @use "@material/icon-button";
 @use "@material/linear-progress";
+@use "@material/ripple";
+@use "@material/textfield/mixins" as text-field;
+@use "@material/textfield/helper-text/" as text-field-helper-text;
+@use "@material/textfield/icon/" as text-field-icon;
+
+@use "@material/feature-targeting";
 @use "@material/theme/color-palette" as palette;
 
 // 1 - card, switch
@@ -134,6 +141,40 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     background: rgba(map-get($variables, primary), 0.45);
     color: inherit;
   }
+
+  .mdc-button {
+    @include button.ink-color(map-get($variables, primary));
+    @include ripple.states(map-get($variables, primary), false, feature-targeting.all(), ".mdc-button__ripple");
+    &:disabled {
+      color: map-get($variables, text-disabled);
+    }
+    &.mdc-button--raised,
+    &.mdc-button--unelevated {
+      @include button.container-fill-color(map-get($variables, primary));
+      @include button.ink-color(map-get($variables, on-primary));
+      @include ripple.states(map-get($variables, on-primary), false, feature-targeting.all(), ".mdc-button__ripple");
+    }
+    &.secondary {
+      @include button.ink-color(map-get($variables, secondary));
+      @include ripple.states(map-get($variables, secondary), false, feature-targeting.all(), ".mdc-button__ripple");
+      &.mdc-button--raised,
+      &.mdc-button--unelevated {
+        @include button.container-fill-color(map-get($variables, secondary));
+        @include button.ink-color(map-get($variables, on-secondary));
+        @include ripple.states(
+          map-get($variables, on-secondary),
+          false,
+          feature-targeting.all(),
+          ".mdc-button__ripple"
+        );
+      }
+    }
+    &.delete {
+      @include button.ink-color(map-get($variables, error));
+      @include ripple.states(map-get($variables, error), false, feature-targeting.all(), ".mdc-button__ripple");
+    }
+  }
+
   .mdc-drawer {
     @include drawer.fill-color-accessible(
       if($dark, overlay-elevation(map-get($variables, surface), 16), map-get($variables, surface))
@@ -175,5 +216,53 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         10%
       )
     );
+  }
+
+  .mdc-text-field {
+    &:not(.mdc-text-field--focused) {
+      @include text-field-icon.leading-icon-color(map-get($variables, text-medium));
+      @include text-field-icon.trailing-icon-color(map-get($variables, text-medium));
+      @include text-field.ink-color(map-get($variables, text-high));
+      @include text-field.label-color(map-get($variables, text-medium));
+      @include text-field.caret-color(map-get($variables, text-high));
+      @include text-field.outline-color(map-get($variables, text-disabled));
+      @include text-field.hover-outline-color(map-get($variables, text-medium));
+      @include text-field-helper-text.helper-text-color(map-get($variables, text-medium));
+      &.mdc-text-field--invalid {
+        @include text-field-icon.leading-icon-color(map-get($variables, text-medium));
+        @include text-field-icon.trailing-icon-color(map-get($variables, text-medium));
+        @include text-field.ink-color(map-get($variables, text-high));
+        @include text-field.label-color(map-get($variables, error));
+        @include text-field.caret-color(map-get($variables, error));
+        @include text-field.outline-color(map-get($variables, error));
+        @include text-field.hover-outline-color(
+          if($dark, lighten(map-get($variables, error), 12%), darken(map-get($variables, error), 25%))
+        );
+        @include text-field-helper-text.helper-text-color(map-get($variables, error));
+      }
+    }
+    &.mdc-text-field--focused {
+      @include text-field-icon.leading-icon-color(map-get($variables, text-medium));
+      @include text-field-icon.trailing-icon-color(map-get($variables, text-medium));
+      @include text-field.ink-color(map-get($variables, text-high));
+      @include text-field.label-color(map-get($variables, primary));
+      @include text-field.caret-color(map-get($variables, primary));
+      @include text-field.outline-color(map-get($variables, primary));
+      @include text-field-helper-text.helper-text-color(map-get($variables, text-medium));
+      .mdc-text-field__input:required ~ .mdc-notched-outline .mdc-floating-label::after {
+        color: map-get($variables, primary);
+      }
+    }
+    &.mdc-text-field--disabled {
+      .mdc-text-field__input,
+      .mdc-floating-label {
+        color: map-get($variables, text-disabled);
+      }
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: rgba(map-get($variables, on-surface), 0.06);
+      }
+    }
   }
 }

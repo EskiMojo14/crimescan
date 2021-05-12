@@ -33,4 +33,33 @@
       bottom: 0;
     }
   }
+  .mdc-drawer__content {
+    .month-group {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      @include util.divider-border(bottom);
+    }
+    .location-group {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      .field {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 16px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      @include util.divider-border(bottom);
+    }
+    .submit-button {
+      display: flex;
+      padding: 16px;
+      .mdc-button {
+        flex-grow: 1;
+      }
+    }
+  }
 }
