@@ -24,7 +24,7 @@ const pinColors = {
     red: "EF5350",
   },
   light: {
-    green: "388E3C",
+    green: "689F38",
     red: "D32F2F",
   },
 } as const;
@@ -40,6 +40,10 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     document.documentElement.className = newTheme;
+    const meta = document.querySelector("meta[name=theme-color]");
+    if (meta) {
+      meta.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
+    }
   };
 
   const month = useAppSelector(selectMonth);
