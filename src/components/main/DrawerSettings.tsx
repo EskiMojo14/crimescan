@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import classNames from "classnames";
 import { iconObject } from "../../util/functions";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
+import { Icon } from "@rmwc/icon";
 import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
@@ -38,7 +40,8 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
       setLng(value);
     }
   };
-  const formFilled = month && monthRegex.test(month) && lat && latLngRegex.test(month) && lng && latLngRegex.test(lng);
+  const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
+  const formFilled = monthRegex.test(month) && latLngRegex.test(lat) && latLngRegex.test(lng);
   const submit = () => {
     if (formFilled) {
       props.getData(month, lat, lng);
@@ -123,11 +126,20 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
               }}
             />
           </div>
-        </div>
-        <div className="submit-button">
-          <Button label="submit" outlined disabled={!formFilled} onClick={submit} />
+          <div className={classNames("map-container", { image: validLocation })}>
+            {latLngRegex.test(lat) && latLngRegex.test(lng) ? (
+              <img
+                className="map-image"
+                src={`https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=13&size=448x448&key=${process.env.GOOGLE_MAPS_KEY}`}
+              />
+            ) : null}
+            <Icon icon={{ icon: "map", size: "large" }} className="map-icon" />
+          </div>
         </div>
       </DrawerContent>
+      <div className="submit-button">
+        <Button label="submit" outlined disabled={!formFilled} onClick={submit} />
+      </div>
     </Drawer>
   );
 };

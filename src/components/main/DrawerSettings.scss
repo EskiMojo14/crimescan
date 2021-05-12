@@ -52,14 +52,26 @@
           margin-bottom: 0;
         }
       }
+      .map-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 448px;
+        @include util.divider-border(all);
+        &.image {
+          .map-icon {
+            display: none;
+          }
+        }
+      }
       @include util.divider-border(bottom);
     }
-    .submit-button {
-      display: flex;
-      padding: 16px;
-      .mdc-button {
-        flex-grow: 1;
-      }
+  }
+  .submit-button {
+    display: flex;
+    padding: 16px;
+    .mdc-button {
+      flex-grow: 1;
     }
   }
 }
