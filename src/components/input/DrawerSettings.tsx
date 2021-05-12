@@ -155,7 +155,18 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
           <div className="guide-chips">
             {validLocation ? <Chip icon="location_on" label="Query" className="query-chip non-interactive" /> : null}
             {resultLocation && queryLocation === latLng ? (
-              <Chip icon="location_on" label="Result" className="result-chip non-interactive" />
+              <Chip
+                icon="location_on"
+                label={
+                  <>
+                    <a href="https://data.police.uk/about/#location-anonymisation" target="_blank" rel="noreferrer">
+                      Approximate
+                    </a>{" "}
+                    location
+                  </>
+                }
+                className="result-chip non-interactive"
+              />
             ) : null}
           </div>
           <div
