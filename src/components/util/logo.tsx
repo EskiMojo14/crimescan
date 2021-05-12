@@ -46,7 +46,7 @@ export const Logo = (props: LogoProps) => {
           <rect width="192" height="192" fill="none" />
         </g>
         <g id="Background">
-          <circle cx="96" cy="96" r="88" fill="#434343" />
+          <circle cx="96" cy="96" r="88" fill="#434343" className="background" />
           <path
             d="M96,183A88,88,0,0,1,8,95.5c0,.17,0,.33,0,.5a88,88,0,0,0,176,0c0-.17,0-.33,0-.5A88,88,0,0,1,96,183Z"
             fill="#212121"

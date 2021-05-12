@@ -64,12 +64,12 @@
           }
         }
       }
-      @include util.divider-border(bottom);
     }
   }
   .submit-button {
     display: flex;
     padding: 16px;
+    @include util.divider-border(top);
     .mdc-button {
       flex-grow: 1;
     }
