@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { inputSet, selectLat, selectLng, selectMonth } from "./inputSlice";
 import classNames from "classnames";
 import { iconObject } from "../../util/functions";
 import { Button } from "@rmwc/button";
@@ -12,7 +14,7 @@ import "./DrawerSettings.scss";
 
 type DrawerSettingsProps = {
   loading: boolean;
-  getData: (month?: string, lat?: string, lng?: string) => void;
+  getData: (month: string, lat: string, lng: string) => void;
 };
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
@@ -25,20 +27,18 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
     setTheme(newTheme);
     document.documentElement.className = newTheme;
   };
-  const [month, setMonth] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+
+  const month = useAppSelector(selectMonth);
+  const lat = useAppSelector(selectLat);
+  const lng = useAppSelector(selectLng);
+
+  const dispatch = useAppDispatch();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.persist();
     const name = e.target.name;
     const value = e.target.value;
-    if (name === "month") {
-      setMonth(value);
-    } else if (name === "lat") {
-      setLat(value);
-    } else if (name === "lng") {
-      setLng(value);
-    }
+    dispatch(inputSet({ key: name, value: value }));
   };
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
   const formFilled = monthRegex.test(month) && latLngRegex.test(lat) && latLngRegex.test(lng);

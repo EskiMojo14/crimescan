@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { DrawerAppContent } from "@rmwc/drawer";
-import { DrawerSettings } from "./components/main/DrawerSettings";
+import { DrawerSettings } from "./components/input/DrawerSettings";
 import "./App.scss";
 import "normalize.css";
+import { Provider } from "react-redux";
+import store from "./app/store";
 
 function App() {
-  const getData = (month = "2020-02", lat = "52.629729", lng = "-1.131592") => {
+  const getData = (month: string, lat: string, lng: string) => {
     setLoading(true);
     fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
       .then((response) => response.json())
@@ -19,10 +21,10 @@ function App() {
   };
   const [loading, setLoading] = useState(false);
   return (
-    <>
+    <Provider store={store}>
       <DrawerSettings loading={loading} getData={getData} />
       <DrawerAppContent></DrawerAppContent>
-    </>
+    </Provider>
   );
 }
 export default App;

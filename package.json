@@ -15,6 +15,7 @@
     "build": "webpack"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.5.1",
     "@rmwc/button": "^6.1.4",
     "@rmwc/drawer": "^6.1.4",
     "@rmwc/icon-button": "^6.1.4",
@@ -23,7 +24,8 @@
     "classnames": "^2.3.1",
     "normalize.css": "^8.0.1",
     "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react-dom": "^16.14.0",
+    "react-redux": "^7.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
