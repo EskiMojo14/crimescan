@@ -48,8 +48,14 @@
         display: flex;
         flex-direction: column;
         margin-bottom: 16px;
-        &:last-child {
-          margin-bottom: 0;
+      }
+      .guide-chips {
+        display: flex;
+        justify-content: center;
+        margin-top: -16px;
+        padding: 8px;
+        .mdc-chip {
+          margin: 0 8px;
         }
       }
       .map-container {

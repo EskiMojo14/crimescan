@@ -5,6 +5,7 @@ import { selectLocation, selectQueryLocation } from "../display/dataSlice";
 import classNames from "classnames";
 import { iconObject } from "../../util/functions";
 import { Button } from "@rmwc/button";
+import { Chip } from "@rmwc/chip";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
 import { Icon } from "@rmwc/icon";
 import { IconButton } from "@rmwc/icon-button";
@@ -142,8 +143,14 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
               }}
             />
           </div>
+          <div className="guide-chips">
+            {validLocation ? <Chip icon="location_on" label="Query" className="query-chip non-interactive" /> : null}
+            {resultLocation && queryLocation === latLng ? (
+              <Chip icon="location_on" label="Result" className="result-chip non-interactive" />
+            ) : null}
+          </div>
           <div className={classNames("map-container", { image: validLocation })}>
-            {latLngRegex.test(lat) && latLngRegex.test(lng) ? (
+            {validLocation ? (
               <img
                 className="map-image"
                 src={`https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}${
