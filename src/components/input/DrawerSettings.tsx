@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { inputSet, selectLat, selectLng, selectMonth } from "./inputSlice";
 import classNames from "classnames";
 import { iconObject } from "../../util/functions";
+import { ProcessedData } from "../../util/types";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
 import { Icon } from "@rmwc/icon";
@@ -15,6 +16,7 @@ import "./DrawerSettings.scss";
 type DrawerSettingsProps = {
   loading: boolean;
   getData: (month: string, lat: string, lng: string) => void;
+  data: ProcessedData;
 };
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
@@ -41,6 +43,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
     dispatch(inputSet({ key: name, value: value }));
   };
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
+  const latLng = `${lat},${lng}`;
   const formFilled = monthRegex.test(month) && latLngRegex.test(lat) && latLngRegex.test(lng);
   const submit = () => {
     if (formFilled) {
@@ -130,7 +133,11 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
             {latLngRegex.test(lat) && latLngRegex.test(lng) ? (
               <img
                 className="map-image"
-                src={`https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=13&size=448x448&key=${process.env.GOOGLE_MAPS_KEY}&markers=color:red|${lat},${lng}`}
+                src={`https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}${
+                  props.data.location && props.data.queryLocation === latLng
+                    ? `&markers=color:red|${props.data.location}`
+                    : ""
+                }&markers=color:green|${lat},${lng}`}
               />
             ) : null}
             <Icon icon={{ icon: "map", size: "large" }} className="map-icon" />
