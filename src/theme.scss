@@ -1,5 +1,6 @@
 @use "@material/drawer";
 @use "@material/icon-button";
+@use "@material/linear-progress";
 @use "@material/theme/color-palette" as palette;
 
 // 1 - card, switch
@@ -130,7 +131,7 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     color: map-get($variables, on-surface);
   }
   ::selection {
-    background: rgba(map-get($variables, secondary), 0.45);
+    background: rgba(map-get($variables, primary), 0.45);
     color: inherit;
   }
   .mdc-drawer {
@@ -163,5 +164,16 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     &--on.favorite {
       @include icon-button.ink-color(map-get($variables, secondary));
     }
+  }
+
+  .mdc-linear-progress {
+    @include linear-progress.bar-color(map-get($variables, primary));
+    @include linear-progress.buffer-color(
+      mix(
+        map-get($variables, on-surface),
+        if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface)),
+        10%
+      )
+    );
   }
 }

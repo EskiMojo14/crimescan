@@ -1,14 +1,24 @@
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes, useEffect, useState } from "react";
 import classNames from "classnames";
 import "./Logo.scss";
 
 type LogoProps = HTMLAttributes<HTMLDivElement> & {
   rotate?: boolean;
-  paused?: boolean;
 };
 
 export const Logo = (props: LogoProps) => {
-  const { className, rotate, paused, ...filteredProps } = props;
+  const { className, rotate, ...filteredProps } = props;
+  const [rotating, setRotating] = useState(false);
+  useEffect(() => {
+    if (rotate) {
+      setRotating(true);
+    }
+  }, [rotate]);
+  const handleAnimationIteration = () => {
+    if (!rotate) {
+      setRotating(false);
+    }
+  };
   return (
     <div className={`logo ${className}`} {...filteredProps}>
       <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 192 192">
@@ -47,7 +57,7 @@ export const Logo = (props: LogoProps) => {
             fill="#fff"
             opacity="0.2"
           />
-          <g className={classNames("radar", { rotate: rotate, paused: paused })}>
+          <g className={classNames("radar", { rotate: rotating })} onAnimationIteration={handleAnimationIteration}>
             <g clipPath="url(#clip-path)">
               <image
                 width="618"

@@ -10,6 +10,7 @@
     }
   }
   .mdc-drawer__header {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 16px;
@@ -24,6 +25,12 @@
       font-family: "Nova Flat", sans-serif;
       font-size: 22 / 16 * 1rem;
       flex-grow: 1;
+    }
+    .mdc-linear-progress {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
   }
 }
