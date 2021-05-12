@@ -11,6 +11,7 @@ import { Icon } from "@rmwc/icon";
 import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
+import { Typography } from "@rmwc/Typography";
 import { Logo } from "../util/Logo";
 import "./DrawerSettings.scss";
 
@@ -74,6 +75,9 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
       </DrawerHeader>
       <DrawerContent>
         <div className="month-group">
+          <Typography use="overline" tag="div" className="subheader">
+            Date
+          </Typography>
           <TextField
             outlined
             label="Month"
@@ -87,6 +91,9 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
           />
         </div>
         <div className="location-group">
+          <Typography use="overline" tag="div" className="subheader">
+            Location
+          </Typography>
           <div className="field">
             <TextField
               outlined
@@ -168,6 +175,16 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
             <div className="map-icon">
               <Icon icon={{ icon: "map", size: "large" }} />
             </div>
+          </div>
+          <div className="disclaimer-container">
+            <Typography use="caption">
+              Information provided by{" "}
+              <a href="https://data.police.uk/" target="_blank" rel="noreferrer">
+                https://data.police.uk/
+              </a>
+              . Note that crime levels in Scotland may appear much lower than true values, as only the British Transport
+              Police provide data for Scotland.
+            </Typography>
           </div>
         </div>
       </DrawerContent>

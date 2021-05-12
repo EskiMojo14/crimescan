@@ -34,6 +34,9 @@
     }
   }
   .mdc-drawer__content {
+    .subheader {
+      margin-bottom: 8px;
+    }
     .month-group {
       display: flex;
       flex-direction: column;
@@ -79,6 +82,9 @@
             display: none;
           }
         }
+      }
+      .disclaimer-container {
+        margin-top: 16px;
       }
     }
   }
