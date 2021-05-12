@@ -3,6 +3,9 @@
     &.rotate {
       transform-origin: center;
       animation: rotate 3s infinite linear;
+      &.paused {
+        animation-play-state: paused;
+      }
     }
   }
 }
