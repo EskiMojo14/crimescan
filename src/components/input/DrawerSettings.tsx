@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { inputSet, selectLat, selectLng, selectMonth } from "./inputSlice";
+import { selectLocation, selectQueryLocation } from "../display/dataSlice";
 import classNames from "classnames";
 import { iconObject } from "../../util/functions";
-import { ProcessedData } from "../../util/types";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
 import { Icon } from "@rmwc/icon";
@@ -16,7 +16,6 @@ import "./DrawerSettings.scss";
 type DrawerSettingsProps = {
   loading: boolean;
   getData: (month: string, lat: string, lng: string) => void;
-  data: ProcessedData;
 };
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
@@ -33,6 +32,9 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const month = useAppSelector(selectMonth);
   const lat = useAppSelector(selectLat);
   const lng = useAppSelector(selectLng);
+
+  const resultLocation = useAppSelector(selectLocation);
+  const queryLocation = useAppSelector(selectQueryLocation);
 
   const dispatch = useAppDispatch();
 
@@ -134,9 +136,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
               <img
                 className="map-image"
                 src={`https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}${
-                  props.data.location && props.data.queryLocation === latLng
-                    ? `&markers=color:red|${props.data.location}`
-                    : ""
+                  resultLocation && queryLocation === latLng ? `&markers=color:red|${resultLocation}` : ""
                 }&markers=color:green|${lat},${lng}`}
               />
             ) : null}
