@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { ProcessedData } from "../../util/types";
 
-const initialState: ProcessedData = { location: "", queryLocation: "", count: 0 };
+const initialState = { type: "month", location: "", queryLocation: "", count: 0 } as ProcessedData;
 
 export const displaySlice = createSlice({
   name: "data",
@@ -10,9 +10,6 @@ export const displaySlice = createSlice({
   reducers: {
     setAll: (state, action: PayloadAction<ProcessedData>) => {
       return { ...action.payload };
-    },
-    merge: (state, action: PayloadAction<Partial<ProcessedData>>) => {
-      return { ...state, ...action.payload };
     },
     setKey: <T extends keyof ProcessedData>(
       state: ProcessedData,
@@ -24,7 +21,7 @@ export const displaySlice = createSlice({
   },
 });
 
-export const { setAll, merge, setKey } = displaySlice.actions;
+export const { setAll, setKey } = displaySlice.actions;
 
 export const selectLocation = (state: RootState) => state.data.location;
 

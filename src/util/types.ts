@@ -30,8 +30,18 @@ export type CrimeEntry = {
 
 /** Processed statistics data */
 
-export type ProcessedData = {
+export type MonthData = {
+  type: "month";
   location: string;
   queryLocation: string;
   count: number;
 };
+
+export type YearData = {
+  type: "year";
+  location: string;
+  queryLocation: string;
+  count: number[];
+};
+
+export type ProcessedData = MonthData | YearData;
