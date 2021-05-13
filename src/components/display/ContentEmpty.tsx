@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import emptyImg from "../../media/empty.svg";
 import { Typography } from "@rmwc/typography";
-import { TopAppBar, TopAppBarRow } from "@rmwc/top-app-bar";
+import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
 import "./ContentEmpty.scss";
 
 type ContentEmptyProps = {
@@ -18,9 +18,7 @@ export const ContentEmpty = (props: ContentEmptyProps) => {
   }, [props.open]);
   return open ? (
     <div className={classNames("empty-container", { open: props.open })}>
-      <TopAppBar>
-        <TopAppBarRow />
-      </TopAppBar>
+      <TopAppBarFixedAdjust />
       <div className="content">
         <img className="image" src={emptyImg} alt="Empty" />
         <Typography className="title" use="headline6" tag="h3">

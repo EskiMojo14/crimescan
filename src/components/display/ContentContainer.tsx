@@ -1,10 +1,11 @@
 import React from "react";
-import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
-import "./ContentContainer.scss";
 import { useAppSelector } from "../../app/hooks";
+import { queryIcons } from "../../util/constants";
 import { selectQuery } from "./dataSlice";
 import { Chip } from "@rmwc/chip";
-import { queryIcons } from "../../util/constants";
+import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
+import { CategoryCard } from "./CategoryCard";
+import "./ContentContainer.scss";
 
 export const ContentContainer = () => {
   const query = useAppSelector(selectQuery);
@@ -22,6 +23,16 @@ export const ContentContainer = () => {
         <Chip label={query.lng} icon={queryIcons.lng} className="non-interactive" />
       </TopAppBarSection>
     ) : null;
+  const content =
+    query.type === "month" ? (
+      <>
+        <CategoryCard />
+      </>
+    ) : (
+      <>
+        <CategoryCard />
+      </>
+    );
   return (
     <div className="content-container">
       <TopAppBar fixed>
@@ -33,7 +44,7 @@ export const ContentContainer = () => {
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
-      <div className="content-grid"></div>
+      <div className="content-grid">{content}</div>
     </div>
   );
 };

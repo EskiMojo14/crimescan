@@ -182,8 +182,38 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     }
   }
 
+  .mdc-card {
+    background-color: if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface));
+    &__primary-action {
+      @include ripple.states(map-get($variables, on-surface));
+      @include ripple.states-selected(map-get($variables, primary));
+      @include ripple.states-activated(map-get($variables, primary));
+    }
+    &__action--icon {
+      &:not(:disabled) {
+        color: map-get($variables, text-medium);
+      }
+      &:disabled {
+        color: map-get($variables, text-disabled);
+      }
+    }
+  }
+
   .mdc-chip {
     @include chips.fill-color-accessible(mix(map-get($variables, on-surface), map-get($variables, surface), 12%));
+  }
+
+  .mdc-data-table {
+    color: map-get($variables, text-high);
+    &__cell {
+      color: map-get($variables, text-high);
+    }
+    &__header-cell {
+      color: map-get($variables, text-high);
+    }
+    &__row:hover:not(.mdc-data-table__row--selected):not(.mdc-data-table__row--activated) {
+      background-color: rgba(map-get($variables, on-surface), 0.04);
+    }
   }
 
   .mdc-drawer {
@@ -237,23 +267,6 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
           .mdc-chip__icon {
             color: map-get($variables, secondary);
           }
-        }
-      }
-    }
-
-    .mdc-card {
-      background-color: if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface));
-      &__primary-action {
-        @include ripple.states(map-get($variables, on-surface));
-        @include ripple.states-selected(map-get($variables, primary));
-        @include ripple.states-activated(map-get($variables, primary));
-      }
-      &__action--icon {
-        &:not(:disabled) {
-          color: map-get($variables, text-medium);
-        }
-        &:disabled {
-          color: map-get($variables, text-disabled);
         }
       }
     }
@@ -355,6 +368,15 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     );
     @include top-app-bar.ink-color(if($dark, map-get($variables, text-high), map-get($variables, on-primary)));
     @include top-app-bar.icon-ink-color(if($dark, map-get($variables, text-high), map-get($variables, on-primary)));
+    .mdc-chip {
+      @include chips.fill-color-accessible(
+        mix(
+          map-get($variables, on-surface),
+          if($dark, overlay-elevation(map-get($variables, surface), 4), map-get($variables, primary)),
+          12%
+        )
+      );
+    }
   }
 
   .segmented-button {
@@ -382,6 +404,16 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         @include button.ink-color(map-get($variables, text-disabled));
         @include button.outline-color(map-get($variables, text-disabled));
       }
+    }
+  }
+
+  .empty-container {
+    background-color: map-get($variables, background);
+    .title {
+      color: map-get($variables, text-high);
+    }
+    .subtitle {
+      color: map-get($variables, text-medium);
     }
   }
 }

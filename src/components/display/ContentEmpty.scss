@@ -3,14 +3,12 @@
   width: 100%;
   opacity: 0;
   transition: opacity 200ms linear;
+  z-index: 1;
   &.open {
     opacity: 1;
   }
-  .mdc-top-app-bar {
-    position: static;
-    &__row {
-      height: 72px;
-    }
+  .mdc-top-app-bar--fixed-adjust {
+    padding-top: 72px;
   }
   .content {
     box-sizing: border-box;

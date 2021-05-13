@@ -31,9 +31,11 @@
 @use "@material/drawer/mdc-drawer";
 @use "@material/icon-button/mdc-icon-button";
 @use "@material/linear-progress/mdc-linear-progress";
+@use "@material/data-table/mdc-data-table";
 @use "@material/snackbar/mdc-snackbar";
 @use "@material/textfield/mdc-text-field";
 @use "@material/top-app-bar/mdc-top-app-bar";
+@use "@rmwc/data-table/data-table";
 @use "@rmwc/icon/icon";
 
 @use "@material/theme/color-palette" as palette;
@@ -66,6 +68,31 @@ svg.material-icons,
       display: none;
     }
     cursor: auto;
+  }
+}
+
+.mdc-data-table {
+  background-color: transparent;
+  .mdc-data-table__header-row {
+    .mdc-data-table__header-cell {
+      @include typography.typography(subtitle2);
+      font-weight: bold;
+      vertical-align: middle;
+      .rmwc-data-table__sort-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+  .mdc-data-table__row {
+    transition: background-color 100ms;
+    .mdc-data-table__cell {
+      @include typography.typography(body2);
+      overflow: visible;
+      .vendor-container {
+        @include shape.radius(small);
+      }
+    }
   }
 }
 

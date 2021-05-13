@@ -13,4 +13,10 @@
       @include rtl.reflexive-box(margin, left, 8px);
     }
   }
+  .content-grid {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
