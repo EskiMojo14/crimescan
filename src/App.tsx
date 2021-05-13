@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { exampleData } from "./util/constants";
+import { MonthQuery, YearQuery } from "./util/types";
 import { useAppDispatch } from "./app/hooks";
-import { processData } from "./app/processData";
+import { getCrimeCategories, getMonthData, getYearData } from "./app/getData";
+import { processMonthData } from "./app/processData";
 import { setAll } from "./components/display/dataSlice";
 import { queue } from "./app/snackbarQueue";
 import { SnackbarQueue } from "@rmwc/snackbar";
@@ -12,36 +14,27 @@ import "normalize.css";
 
 function App() {
   const dispatch = useAppDispatch();
-  const getData = (month: string, lat: string, lng: string) => {
-    setLoading(true);
-    fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        const data = processData(result, { month, lat, lng });
-        console.log(data);
-        dispatch(setAll(data));
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        queue.notify({ title: "Failed to get crime data: " + error });
-        setLoading(false);
-      });
+  const getData = (query: MonthQuery | YearQuery) => {
+    if (query.type === "month") {
+      getMonthData(query);
+    } else {
+      getYearData(query);
+    }
   };
+
+  useEffect(getCrimeCategories, []);
 
   // Process dummy data instead of calling API every time.
   const createData = () => {
-    const data = processData(exampleData, { month: "2020-04", lat: "51.378370", lng: "-2.359207" });
+    const data = processMonthData(exampleData, { type: "month", month: "2020-04", lat: "51.378370", lng: "-2.359207" });
     dispatch(setAll(data));
     console.log(data);
   };
   useEffect(createData, []);
 
-  const [loading, setLoading] = useState(false);
   return (
     <>
-      <DrawerSettings loading={loading} getData={getData} />
+      <DrawerSettings getData={getData} />
       <DrawerAppContent></DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>

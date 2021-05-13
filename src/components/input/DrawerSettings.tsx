@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { inputSet, selectLat, selectLng, selectMonth } from "./inputSlice";
+import { initialState, inputSet, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "./inputSlice";
 import { selectLocation, selectQueryLocation } from "../display/dataSlice";
+import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
 import classNames from "classnames";
-import { iconObject } from "../../util/functions";
+import { hasKey, iconObject } from "../../util/functions";
+import { MonthQuery, YearQuery } from "../../util/types";
 import { Button } from "@rmwc/button";
 import { Chip } from "@rmwc/chip";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
@@ -13,6 +15,7 @@ import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/Typography";
 import { Logo } from "../util/Logo";
+import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
 import "./DrawerSettings.scss";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
@@ -30,23 +33,16 @@ const pinColors = {
 } as const;
 
 type DrawerSettingsProps = {
-  loading: boolean;
-  getData: (month: string, lat: string, lng: string) => void;
+  getData: (query: MonthQuery | YearQuery) => void;
 };
 
 export const DrawerSettings = (props: DrawerSettingsProps) => {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const changeTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.documentElement.className = newTheme;
-    const meta = document.querySelector("meta[name=theme-color]");
-    if (meta) {
-      meta.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
-    }
-  };
+  const theme = useAppSelector(selectTheme);
+  const loading = useAppSelector(selectLoading);
 
+  const dateMode = useAppSelector(selectDateMode);
   const month = useAppSelector(selectMonth);
+  const year = useAppSelector(selectYear);
   const lat = useAppSelector(selectLat);
   const lng = useAppSelector(selectLng);
 
@@ -56,43 +52,85 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.persist();
     const name = e.target.name;
     const value = e.target.value;
-    dispatch(inputSet({ key: name, value: value }));
-  };
-  const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
-  const latLng = `${lat},${lng}`;
-  const formFilled = monthRegex.test(month) && latLngRegex.test(lat) && latLngRegex.test(lng);
-  const submit = () => {
-    if (formFilled) {
-      props.getData(month, lat, lng);
+    if (hasKey(initialState, name)) {
+      dispatch(inputSet({ key: name, value: value }));
     }
   };
+
+  const changeDateMode = (mode: "month" | "year") => {
+    dispatch(inputSet({ key: "dateMode", value: mode }));
+  };
+  const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
+  const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
+  const latLng = `${lat},${lng}`;
+  const formFilled = validDate && validLocation;
+  const submit = () => {
+    if (formFilled) {
+      if (dateMode === "month") {
+        props.getData({ type: dateMode, month, lat, lng });
+      } else {
+        props.getData({ type: dateMode, year, lat, lng });
+      }
+    }
+  };
+
+  const dateInput =
+    dateMode === "month" ? (
+      <TextField
+        outlined
+        label="Month"
+        icon="date_range"
+        name="month"
+        required
+        pattern="^\d{4}-(0[1-9]|1[012])$"
+        value={month}
+        onChange={handleChange}
+        helpText={{ persistent: true, validationMsg: true, children: "Format: YYYY-MM" }}
+      />
+    ) : (
+      <TextField
+        outlined
+        label="Year"
+        icon="date_range"
+        name="year"
+        required
+        pattern="^\d{4}$"
+        value={year}
+        onChange={handleChange}
+        helpText={{ persistent: true, validationMsg: true, children: "Format: YYYY" }}
+      />
+    );
+
   return (
     <Drawer dismissible open className="drawer-settings">
       <DrawerHeader>
-        <Logo className="drawer-logo" rotate={props.loading} />
+        <Logo className="drawer-logo" rotate={loading} />
         <div className="logo-text">CrimeScan</div>
-        <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={changeTheme} />
-        <LinearProgress closed={!props.loading} />
+        <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={() => dispatch(toggleTheme())} />
+        <LinearProgress closed={!loading} />
       </DrawerHeader>
       <DrawerContent>
         <div className="month-group">
           <Typography use="overline" tag="div" className="subheader">
             Date
           </Typography>
-          <TextField
-            outlined
-            label="Month"
-            icon="date_range"
-            name="month"
-            required
-            pattern="^\d{4}-(0[1-9]|1[012])$"
-            value={month}
-            onChange={handleChange}
-            helpText={{ persistent: true, validationMsg: true, children: "Format: YYYY-MM" }}
-          />
+          <div className="segmented-button-container">
+            <SegmentedButton toggle>
+              <SegmentedButtonSegment
+                label="Month"
+                selected={dateMode === "month"}
+                onClick={() => changeDateMode("month")}
+              />
+              <SegmentedButtonSegment
+                label="Year"
+                selected={dateMode === "year"}
+                onClick={() => changeDateMode("year")}
+              />
+            </SegmentedButton>
+          </div>
+          {dateInput}
         </div>
         <div className="location-group">
           <Typography use="overline" tag="div" className="subheader">

@@ -42,6 +42,9 @@
       flex-direction: column;
       padding: 16px;
       @include util.divider-border(bottom);
+      .segmented-button-container {
+        margin-bottom: 16px;
+      }
     }
     .location-group {
       display: flex;

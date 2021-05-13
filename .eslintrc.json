@@ -22,6 +22,10 @@
         "react": {
             "version": "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
         }
-    }
+    },
+    "ignorePatterns": [
+        "node_modules/*",
+        "build/*"
+    ]
 }
 // https://www.sitepoint.com/react-with-typescript-best-practices/
