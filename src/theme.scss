@@ -315,6 +315,13 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
   }
 
   .mdc-text-field {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: map-get($variables, on-surface);
+    }
     &:not(.mdc-text-field--focused) {
       @include text-field-icon.leading-icon-color(map-get($variables, text-medium));
       @include text-field-icon.trailing-icon-color(map-get($variables, text-medium));
@@ -417,10 +424,38 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     }
   }
 
+  .ct-chart {
+    .ct-axis-title {
+      fill: map-get($variables, text-high);
+    }
+    .ct-label {
+      color: map-get($variables, text-medium);
+    }
+    .ct-chart-pie {
+      .ct-label {
+        fill: if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface));
+      }
+    }
+  }
+
   @each $letter in $letters {
     $color: if($dark, nth($graph-colors-dark, index($letters, $letter)), nth($graph-colors, index($letters, $letter)));
     .mdc-data-table__cell.indicator.series-#{$letter}::before {
       background-color: $color;
+    }
+    .ct-series-#{$letter} {
+      .ct-point,
+      .ct-line,
+      .ct-bar,
+      .ct-slice-donut {
+        stroke: $color;
+      }
+      .ct-slice-pie,
+      .ct-donut-solid,
+      .ct-area,
+      .ct-stroked-point {
+        fill: $color;
+      }
     }
   }
 }

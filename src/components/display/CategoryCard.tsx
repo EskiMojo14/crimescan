@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { months } from "../../util/constants";
+import { iconObject } from "../../util/functions";
+import ChartistGraph from "react-chartist";
 import { Card } from "@rmwc/card";
 import {
   DataTable,
@@ -12,25 +14,43 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
+import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
 import "./CategoryCard.scss";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCard = () => {
   const data = useAppSelector((state) => state.data);
+
+  const [chartType, setChartType] = useState<"Bar" | "Line">("Bar");
+
   if (data.type === "month") {
     const { allCategories, categoryCount } = data;
+    const chartData = {
+      labels: [],
+      series: categoryCount,
+    };
+    const chartOptions = {
+      labelInterpolationFnc: function (value: number) {
+        return Math.round((value / chartData.series.reduce((a, b) => a + b)) * 100) + "%";
+      },
+    };
     return (
       <Card className="category-card">
-        <Typography use="headline5" tag="h3">
-          Categories
-        </Typography>
+        <div className="title-container">
+          <Typography use="headline5" tag="h3">
+            Categories
+          </Typography>
+        </div>
+        <div className="chart-container">
+          <ChartistGraph data={chartData} options={chartOptions} type={"Pie"} className="ct-square" />
+        </div>
         <div className="table-container">
           <DataTable>
             <DataTableContent>
               <DataTableHead>
                 <DataTableRow>
-                  <DataTableHeadCell>Category</DataTableHeadCell>
+                  <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
                   <DataTableHeadCell isNumeric>Count</DataTableHeadCell>
                 </DataTableRow>
               </DataTableHead>
@@ -38,7 +58,9 @@ export const CategoryCard = () => {
                 {allCategories.map((category, index) => {
                   return (
                     <DataTableRow key={category}>
-                      <DataTableCell>{category}</DataTableCell>
+                      <DataTableCell className={"right-border indicator series-" + letters[index]}>
+                        {category}
+                      </DataTableCell>
                       <DataTableCell isNumeric>{categoryCount[index]}</DataTableCell>
                     </DataTableRow>
                   );
@@ -53,24 +75,58 @@ export const CategoryCard = () => {
     const { allCategories, categoryCount } = data;
     return (
       <Card className="category-card">
-        <Typography use="headline5" tag="h3">
-          Categories
-        </Typography>
+        <div className="title-container">
+          <Typography use="headline5" tag="h3">
+            Categories
+          </Typography>
+          <SegmentedButton toggle>
+            <SegmentedButtonSegment
+              icon={iconObject(
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  version="1.1"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M18,14H22V16H18V14M12,6H16V9H12V6M16,15H12V10H16V15M6,10H10V12H6V10M10,16H6V13H10V16Z" />
+                </svg>
+              )}
+              selected={chartType === "Bar"}
+              onClick={() => setChartType("Bar")}
+            />
+            <SegmentedButtonSegment
+              icon={iconObject(
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  version="1.1"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z" />
+                </svg>
+              )}
+              selected={chartType === "Line"}
+              onClick={() => setChartType("Line")}
+            />
+          </SegmentedButton>
+        </div>
         <div className="table-container">
           <DataTable>
             <DataTableContent>
               <DataTableHead>
                 <DataTableRow>
                   <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
-                  {Array(12)
-                    .fill("")
-                    .map((i, index) => {
-                      return (
-                        <DataTableHeadCell isNumeric key={months[index]}>
-                          {months[index]}
-                        </DataTableHeadCell>
-                      );
-                    })}
+                  {months.map((month) => {
+                    return (
+                      <DataTableHeadCell isNumeric key={month}>
+                        {month}
+                      </DataTableHeadCell>
+                    );
+                  })}
                 </DataTableRow>
               </DataTableHead>
               <DataTableBody>
@@ -80,15 +136,13 @@ export const CategoryCard = () => {
                       <DataTableCell className={"right-border indicator series-" + letters[catIndex]}>
                         {category}
                       </DataTableCell>
-                      {Array(12)
-                        .fill("")
-                        .map((i, index) => {
-                          return (
-                            <DataTableHeadCell isNumeric key={months[index]}>
-                              {categoryCount[catIndex][index] > 0 ? categoryCount[catIndex][index] : ""}
-                            </DataTableHeadCell>
-                          );
-                        })}
+                      {months.map((month, index) => {
+                        return (
+                          <DataTableHeadCell isNumeric key={month}>
+                            {categoryCount[catIndex][index] > 0 ? categoryCount[catIndex][index] : ""}
+                          </DataTableHeadCell>
+                        );
+                      })}
                     </DataTableRow>
                   );
                 })}

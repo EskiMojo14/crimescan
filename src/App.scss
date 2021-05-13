@@ -25,6 +25,8 @@
 
 @use "theme";
 
+@use "chartist/dist/scss/chartist";
+
 @use "@material/button/mdc-button";
 @use "@material/card/mdc-card";
 @use "@material/chips/mdc-chips";
@@ -56,6 +58,16 @@
 .mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title,
 .mdc-dialog.mdc-dialog--scrollable .mdc-dialog__actions {
   border-color: var(--divider-color);
+}
+
+.ct-chart {
+  .ct-grid {
+    stroke: var(--divider-color);
+    stroke-dasharray: 4px;
+  }
+  .ct-axis-title {
+    @include typography.typography(caption);
+  }
 }
 
 svg.material-icons,
