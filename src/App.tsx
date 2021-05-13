@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { exampleData } from "./util/constants";
-import { MonthQuery, YearQuery } from "./util/types";
 import { useAppDispatch } from "./app/hooks";
-import { getCrimeCategories, getMonthData, getYearData } from "./app/getData";
+import { getCrimeCategories } from "./app/getData";
 import { processMonthData } from "./app/processData";
 import { setAll } from "./components/display/dataSlice";
 import { queue } from "./app/snackbarQueue";
@@ -14,13 +13,6 @@ import "normalize.css";
 
 function App() {
   const dispatch = useAppDispatch();
-  const getData = (query: MonthQuery | YearQuery) => {
-    if (query.type === "month") {
-      getMonthData(query);
-    } else {
-      getYearData(query);
-    }
-  };
 
   useEffect(getCrimeCategories, []);
 
@@ -34,7 +26,7 @@ function App() {
 
   return (
     <>
-      <DrawerSettings getData={getData} />
+      <DrawerSettings />
       <DrawerAppContent></DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>

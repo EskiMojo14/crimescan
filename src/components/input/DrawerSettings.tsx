@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getMonthData, getYearData } from "../../app/getData";
 import { initialState, inputSet, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "./inputSlice";
 import { selectLocation, selectQueryLocation } from "../display/dataSlice";
 import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
@@ -32,11 +33,7 @@ const pinColors = {
   },
 } as const;
 
-type DrawerSettingsProps = {
-  getData: (query: MonthQuery | YearQuery) => void;
-};
-
-export const DrawerSettings = (props: DrawerSettingsProps) => {
+export const DrawerSettings = () => {
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
 
@@ -69,9 +66,9 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const submit = () => {
     if (formFilled) {
       if (dateMode === "month") {
-        props.getData({ type: dateMode, month, lat, lng });
+        getMonthData({ type: dateMode, month, lat, lng });
       } else {
-        props.getData({ type: dateMode, year, lat, lng });
+        getYearData({ type: dateMode, year, lat, lng });
       }
     }
   };
