@@ -4,7 +4,7 @@ import { ProcessedData } from "../../util/types";
 
 const initialState = { type: "month", location: "", queryLocation: "", count: 0 } as ProcessedData;
 
-export const displaySlice = createSlice({
+export const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
@@ -21,7 +21,7 @@ export const displaySlice = createSlice({
   },
 });
 
-export const { setAll, setKey } = displaySlice.actions;
+export const { setAll, setKey } = dataSlice.actions;
 
 export const selectLocation = (state: RootState) => state.data.location;
 
@@ -29,4 +29,4 @@ export const selectQueryLocation = (state: RootState) => state.data.queryLocatio
 
 export const selectCount = (state: RootState) => state.data.count;
 
-export default displaySlice.reducer;
+export default dataSlice.reducer;

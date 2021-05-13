@@ -28,6 +28,22 @@ export type CrimeEntry = {
   month: string;
 };
 
+/** Query types */
+
+export type MonthQuery = {
+  type: "month";
+  month: string;
+  lat: string;
+  lng: string;
+};
+
+export type YearQuery = {
+  type: "year";
+  year: string;
+  lat: string;
+  lng: string;
+};
+
 /** Processed statistics data */
 
 export type MonthData = {
