@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { exampleData } from "./util/constants";
 import { MonthQuery, YearQuery } from "./util/types";
 import { useAppDispatch } from "./app/hooks";
 import { processMonthData } from "./app/processData";
 import { setAll } from "./components/display/dataSlice";
+import { setLoading } from "./components/display/displaySlice";
 import { queue } from "./app/snackbarQueue";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
@@ -16,7 +17,7 @@ function App() {
   const getData = (query: MonthQuery | YearQuery) => {
     if (query.type === "month") {
       const { month, lat, lng } = query;
-      setLoading(true);
+      dispatch(setLoading(true));
       fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
         .then((response) => response.json())
         .then((result) => {
@@ -24,12 +25,12 @@ function App() {
           const data = processMonthData(result, query);
           console.log(data);
           dispatch(setAll(data));
-          setLoading(false);
+          dispatch(setLoading(false));
         })
         .catch((error) => {
           console.log(error);
           queue.notify({ title: "Failed to get crime data: " + error });
-          setLoading(false);
+          dispatch(setLoading(false));
         });
     }
   };
@@ -42,10 +43,9 @@ function App() {
   };
   useEffect(createData, []);
 
-  const [loading, setLoading] = useState(false);
   return (
     <>
-      <DrawerSettings loading={loading} getData={getData} />
+      <DrawerSettings getData={getData} />
       <DrawerAppContent></DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>

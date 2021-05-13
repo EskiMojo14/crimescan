@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { initialState, inputSet, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "./inputSlice";
 import { selectLocation, selectQueryLocation } from "../display/dataSlice";
+import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
 import classNames from "classnames";
 import { hasKey, iconObject } from "../../util/functions";
 import { MonthQuery, YearQuery } from "../../util/types";
@@ -32,21 +33,12 @@ const pinColors = {
 } as const;
 
 type DrawerSettingsProps = {
-  loading: boolean;
   getData: (query: MonthQuery | YearQuery) => void;
 };
 
 export const DrawerSettings = (props: DrawerSettingsProps) => {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const changeTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.documentElement.className = newTheme;
-    const meta = document.querySelector("meta[name=theme-color]");
-    if (meta) {
-      meta.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
-    }
-  };
+  const theme = useAppSelector(selectTheme);
+  const loading = useAppSelector(selectLoading);
 
   const dateMode = useAppSelector(selectDateMode);
   const month = useAppSelector(selectMonth);
@@ -114,10 +106,10 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   return (
     <Drawer dismissible open className="drawer-settings">
       <DrawerHeader>
-        <Logo className="drawer-logo" rotate={props.loading} />
+        <Logo className="drawer-logo" rotate={loading} />
         <div className="logo-text">CrimeScan</div>
-        <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={changeTheme} />
-        <LinearProgress closed={!props.loading} />
+        <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={() => dispatch(toggleTheme())} />
+        <LinearProgress closed={!loading} />
       </DrawerHeader>
       <DrawerContent>
         <div className="month-group">
