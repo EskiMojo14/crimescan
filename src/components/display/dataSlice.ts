@@ -9,12 +9,22 @@ export const displaySlice = createSlice({
   initialState,
   reducers: {
     setAll: (state, action: PayloadAction<ProcessedData>) => {
+      return { ...action.payload };
+    },
+    merge: (state, action: PayloadAction<Partial<ProcessedData>>) => {
       return { ...state, ...action.payload };
+    },
+    setKey: <T extends keyof ProcessedData>(
+      state: ProcessedData,
+      action: PayloadAction<{ key: T; value: ProcessedData[T] }>
+    ) => {
+      const { key, value } = action.payload;
+      state[key] = value;
     },
   },
 });
 
-export const { setAll } = displaySlice.actions;
+export const { setAll, merge, setKey } = displaySlice.actions;
 
 export const selectLocation = (state: RootState) => state.data.location;
 
