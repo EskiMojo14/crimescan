@@ -2,7 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { ProcessedData } from "../../util/types";
 
-const initialState = { type: "month", location: "", queryLocation: "", count: 0 } as ProcessedData;
+const initialState = {
+  type: "month",
+  location: "",
+  queryLocation: "",
+  allCategories: [],
+  count: 0,
+  categoryCount: [],
+} as ProcessedData;
 
 export const dataSlice = createSlice({
   name: "data",

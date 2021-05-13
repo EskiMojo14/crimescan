@@ -1,5 +1,5 @@
 import type { CrimeEntry, MonthQuery, ProcessedData, YearQuery } from "../util/types";
-import { uniqueArray, alphabeticalSort, hasKey } from "../util/functions";
+import { uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
 import store from "./store";
 
 export const formatCategory = (category: string) => {
@@ -23,12 +23,21 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): Process
   const allCategories = alphabeticalSort(uniqueArray(formattedEntries.map((entry) => entry.category)));
 
   const count = data.length;
+
+  const categoryCount = allCategories.map((category) =>
+    countInArray(
+      formattedEntries.map((entry) => entry.category),
+      category
+    )
+  );
+
   return {
     type: "month",
     location: location,
     queryLocation: queryLocation,
     allCategories: allCategories,
     count: count,
+    categoryCount: categoryCount,
   };
 };
 
@@ -49,5 +58,21 @@ export const processYearData = (data: CrimeEntry[][], query: YearQuery): Process
 
   const count = data.map((arr) => arr.length);
 
-  return { type: "year", location: location, queryLocation: queryLocation, allCategories: allCategories, count: count };
+  const categoryCount = allCategories.map((category) =>
+    formattedEntries.map((entries) =>
+      countInArray(
+        entries.map((entry) => entry.category),
+        category
+      )
+    )
+  );
+
+  return {
+    type: "year",
+    location: location,
+    queryLocation: queryLocation,
+    allCategories: allCategories,
+    count: count,
+    categoryCount: categoryCount,
+  };
 };

@@ -52,6 +52,7 @@ export type MonthData = {
   queryLocation: string;
   allCategories: string[];
   count: number;
+  categoryCount: number[];
 };
 
 export type YearData = {
@@ -60,6 +61,7 @@ export type YearData = {
   queryLocation: string;
   allCategories: string[];
   count: number[];
+  categoryCount: number[][];
 };
 
 export type ProcessedData = MonthData | YearData;

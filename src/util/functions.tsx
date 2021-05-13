@@ -22,6 +22,17 @@ export function uniqueArray<T>(array: T[]): T[] {
 }
 
 /**
+ * Counts occurrences of specified value within provided array.
+ * @param arr Array to be checked.
+ * @param val Value to be counted.
+ * @returns Amount of items within `arr` equal to `val`.
+ */
+
+export function countInArray<T>(arr: T[], val: T): number {
+  return arr.reduce((count, item) => count + (item === val ? 1 : 0), 0);
+}
+
+/**
  * Sorts an array of strings in alphabetical order.
  * @param array Array of strings to be sorted.
  * @param descending Whether to sort the `array` in descending order. Defaults to false.
