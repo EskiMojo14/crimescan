@@ -62,10 +62,10 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const changeDateMode = (mode: "month" | "year") => {
     dispatch(inputSet({ key: "dateMode", value: mode }));
   };
-
+  const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
   const latLng = `${lat},${lng}`;
-  const formFilled = monthRegex.test(month) && latLngRegex.test(lat) && latLngRegex.test(lng);
+  const formFilled = validDate && validLocation;
   const submit = () => {
     if (formFilled) {
       if (dateMode === "month") {

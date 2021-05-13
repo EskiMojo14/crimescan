@@ -12,6 +12,20 @@ export function hasKey<O>(obj: O, key: keyof any): key is keyof O {
 }
 
 /**
+ * Delays for specified amount of milliseconds, then returns a promise.
+ * Taken from https://stackoverflow.com/a/39538518
+ * @param t Milliseconds to delay.
+ * @param v Optional value to resolve with.
+ * @returns Resolved promise with `v` if provided.
+ */
+
+export function delay(t: number, v?: any) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve.bind(null, v), t);
+  });
+}
+
+/**
  * Converts JSX to RMWC icon object parameter.
  * @param jsx JSX of icon component.
  * @returns Object with `strategy` set to `"component"` and `icon` set to the value of `jsx`.

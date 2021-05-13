@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { exampleData } from "./util/constants";
 import { MonthQuery, YearQuery } from "./util/types";
 import { useAppDispatch } from "./app/hooks";
-import { getMonthData } from "./app/getData";
+import { getMonthData, getYearData } from "./app/getData";
 import { processMonthData } from "./app/processData";
 import { setAll } from "./components/display/dataSlice";
 import { queue } from "./app/snackbarQueue";
@@ -17,6 +17,8 @@ function App() {
   const getData = (query: MonthQuery | YearQuery) => {
     if (query.type === "month") {
       getMonthData(query);
+    } else {
+      getYearData(query);
     }
   };
 
