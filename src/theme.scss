@@ -149,12 +149,6 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     color: inherit;
   }
 
-  .logo {
-    .background {
-      fill: if($dark, palette.$grey-800, palette.$grey-300);
-    }
-  }
-
   .mdc-button {
     @include button.ink-color(map-get($variables, primary));
     @include ripple.states(map-get($variables, primary), false, feature-targeting.all(), ".mdc-button__ripple");

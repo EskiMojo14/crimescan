@@ -14,7 +14,7 @@ import { Icon } from "@rmwc/icon";
 import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
-import { Typography } from "@rmwc/Typography";
+import { Typography } from "@rmwc/typography";
 import { Logo } from "../util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
 import "./DrawerSettings.scss";
