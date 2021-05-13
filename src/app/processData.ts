@@ -14,7 +14,6 @@ export const formatCategory = (category: string) => {
 export const processMonthData = (data: CrimeEntry[], query: MonthQuery): ProcessedData => {
   const firstEntry = data[0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
-  const queryLocation = `${query.lat},${query.lng}`;
 
   const formattedEntries: CrimeEntry[] = data.map((entry) => {
     return { ...entry, category: formatCategory(entry.category) };
@@ -34,7 +33,7 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): Process
   return {
     type: "month",
     location: location,
-    queryLocation: queryLocation,
+    query: query,
     allCategories: allCategories,
     count: count,
     categoryCount: categoryCount,
@@ -44,7 +43,6 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): Process
 export const processYearData = (data: CrimeEntry[][], query: YearQuery): ProcessedData => {
   const firstEntry = data[0][0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
-  const queryLocation = `${query.lat},${query.lng}`;
 
   const formattedEntries: CrimeEntry[][] = data.map((entries) =>
     entries.map((entry) => {
@@ -70,7 +68,7 @@ export const processYearData = (data: CrimeEntry[][], query: YearQuery): Process
   return {
     type: "year",
     location: location,
-    queryLocation: queryLocation,
+    query: query,
     allCategories: allCategories,
     count: count,
     categoryCount: categoryCount,

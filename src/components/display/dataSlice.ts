@@ -5,7 +5,12 @@ import { ProcessedData } from "../../util/types";
 const initialState = {
   type: "month",
   location: "",
-  queryLocation: "",
+  query: {
+    type: "month",
+    month: "",
+    lat: "",
+    lng: "",
+  },
   allCategories: [],
   count: 0,
   categoryCount: [],
@@ -32,7 +37,7 @@ export const { setAll, setKey } = dataSlice.actions;
 
 export const selectLocation = (state: RootState) => state.data.location;
 
-export const selectQueryLocation = (state: RootState) => state.data.queryLocation;
+export const selectQuery = (state: RootState) => state.data.query;
 
 export const selectCount = (state: RootState) => state.data.count;
 
