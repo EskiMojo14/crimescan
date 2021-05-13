@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { exampleData } from "./util/constants";
 import { MonthQuery, YearQuery } from "./util/types";
 import { useAppDispatch } from "./app/hooks";
-import { getMonthData, getYearData } from "./app/getData";
+import { getCrimeCategories, getMonthData, getYearData } from "./app/getData";
 import { processMonthData } from "./app/processData";
 import { setAll } from "./components/display/dataSlice";
 import { queue } from "./app/snackbarQueue";
@@ -21,6 +21,8 @@ function App() {
       getYearData(query);
     }
   };
+
+  useEffect(getCrimeCategories, []);
 
   // Process dummy data instead of calling API every time.
   const createData = () => {

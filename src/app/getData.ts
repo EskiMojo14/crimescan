@@ -1,10 +1,26 @@
 import { setAll } from "../components/display/dataSlice";
-import { setLoading } from "../components/display/displaySlice";
+import { setCategories, setLoading } from "../components/display/displaySlice";
 import { delay } from "../util/functions";
 import { MonthQuery, YearQuery } from "../util/types";
 import { processMonthData, processYearData } from "./processData";
 import { queue } from "./snackbarQueue";
 import store from "./store";
+
+export const getCrimeCategories = () => {
+  const { dispatch } = store;
+  fetch("https://data.police.uk/api/crime-categories")
+    .then((response) => response.json())
+    .then((value) => {
+      console.log(value);
+      const keyObject: Record<string, string> = value.reduce(
+        (acc: Record<string, string>, item: { url: string; name: string }) => {
+          return { ...acc, [item.url]: item.name };
+        },
+        {}
+      );
+      dispatch(setCategories(keyObject));
+    });
+};
 
 export const getMonthData = (query: MonthQuery) => {
   const { dispatch } = store;
