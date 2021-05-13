@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { exampleData } from "./util/constants";
 import { MonthQuery, YearQuery } from "./util/types";
 import { useAppDispatch } from "./app/hooks";
+import { getMonthData } from "./app/getData";
 import { processMonthData } from "./app/processData";
 import { setAll } from "./components/display/dataSlice";
-import { setLoading } from "./components/display/displaySlice";
 import { queue } from "./app/snackbarQueue";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
@@ -16,22 +16,7 @@ function App() {
   const dispatch = useAppDispatch();
   const getData = (query: MonthQuery | YearQuery) => {
     if (query.type === "month") {
-      const { month, lat, lng } = query;
-      dispatch(setLoading(true));
-      fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          const data = processMonthData(result, query);
-          console.log(data);
-          dispatch(setAll(data));
-          dispatch(setLoading(false));
-        })
-        .catch((error) => {
-          console.log(error);
-          queue.notify({ title: "Failed to get crime data: " + error });
-          dispatch(setLoading(false));
-        });
+      getMonthData(query);
     }
   };
 
