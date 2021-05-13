@@ -4,6 +4,7 @@ import { queryIcons } from "../../util/constants";
 import { selectQuery } from "./dataSlice";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
+import { CountCard } from "./CountCard";
 import { CategoryCard } from "./CategoryCard";
 import "./ContentContainer.scss";
 
@@ -23,16 +24,6 @@ export const ContentContainer = () => {
         <Chip label={query.lng} icon={queryIcons.lng} className="non-interactive" />
       </TopAppBarSection>
     ) : null;
-  const content =
-    query.type === "month" ? (
-      <>
-        <CategoryCard />
-      </>
-    ) : (
-      <>
-        <CategoryCard />
-      </>
-    );
   return (
     <div className="content-container">
       <TopAppBar fixed>
@@ -44,7 +35,10 @@ export const ContentContainer = () => {
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
-      <div className="content-grid">{content}</div>
+      <div className="content-grid">
+        <CountCard />
+        <CategoryCard />
+      </div>
     </div>
   );
 };
