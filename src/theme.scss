@@ -1,10 +1,12 @@
 @use "@material/button";
+@use "@material/card";
 @use "@material/chips";
 @use "@material/drawer";
 @use "@material/icon-button";
 @use "@material/linear-progress";
 @use "@material/ripple";
 @use "@material/snackbar";
+@use "@material/top-app-bar";
 @use "@material/textfield/mixins" as text-field;
 @use "@material/textfield/helper-text/" as text-field-helper-text;
 @use "@material/textfield/icon/" as text-field-icon;
@@ -244,6 +246,24 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         }
       }
     }
+
+    .mdc-card {
+      background-color: if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface));
+      &__primary-action {
+        @include ripple.states(map-get($variables, on-surface));
+        @include ripple.states-selected(map-get($variables, primary));
+        @include ripple.states-activated(map-get($variables, primary));
+      }
+      &__action--icon {
+        &:not(:disabled) {
+          color: map-get($variables, text-medium);
+        }
+        &:disabled {
+          color: map-get($variables, text-disabled);
+        }
+      }
+    }
+
     .mdc-chip {
       @include chips.fill-color-accessible(
         mix(
@@ -333,6 +353,14 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         border-color: rgba(map-get($variables, on-surface), 0.06);
       }
     }
+  }
+
+  .mdc-top-app-bar {
+    @include top-app-bar.fill-color(
+      if($dark, overlay-elevation(map-get($variables, surface), 4), map-get($variables, primary))
+    );
+    @include top-app-bar.ink-color(if($dark, map-get($variables, text-high), map-get($variables, on-primary)));
+    @include top-app-bar.icon-ink-color(if($dark, map-get($variables, text-high), map-get($variables, on-primary)));
   }
 
   .segmented-button {
