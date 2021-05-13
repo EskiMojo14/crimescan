@@ -31,7 +31,7 @@ const pinColors = {
 
 type DrawerSettingsProps = {
   loading: boolean;
-  getData: (month: string, lat: string, lng: string) => void;
+  getData: (query: { month: string; lat: string; lng: string }) => void;
 };
 
 export const DrawerSettings = (props: DrawerSettingsProps) => {
@@ -66,7 +66,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const formFilled = monthRegex.test(month) && latLngRegex.test(lat) && latLngRegex.test(lng);
   const submit = () => {
     if (formFilled) {
-      props.getData(month, lat, lng);
+      props.getData({ month, lat, lng });
     }
   };
   return (

@@ -12,13 +12,14 @@ import "normalize.css";
 
 function App() {
   const dispatch = useAppDispatch();
-  const getData = (month: string, lat: string, lng: string) => {
+  const getData = (query: { month: string; lat: string; lng: string }) => {
+    const { month, lat, lng } = query;
     setLoading(true);
     fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        const data = processData(result, { month, lat, lng });
+        const data = processData(result, query);
         console.log(data);
         dispatch(setAll(data));
         setLoading(false);
