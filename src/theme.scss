@@ -416,4 +416,11 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       color: map-get($variables, text-medium);
     }
   }
+
+  @each $letter in $letters {
+    $color: if($dark, nth($graph-colors-dark, index($letters, $letter)), nth($graph-colors, index($letters, $letter)));
+    .mdc-data-table__cell.indicator.series-#{$letter}::before {
+      background-color: $color;
+    }
+  }
 }

@@ -14,6 +14,8 @@ import {
 import { Typography } from "@rmwc/typography";
 import "./CategoryCard.scss";
 
+const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+
 export const CategoryCard = () => {
   const data = useAppSelector((state) => state.data);
   if (data.type === "month") {
@@ -59,7 +61,7 @@ export const CategoryCard = () => {
             <DataTableContent>
               <DataTableHead>
                 <DataTableRow>
-                  <DataTableHeadCell>Category</DataTableHeadCell>
+                  <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
                   {Array(12)
                     .fill("")
                     .map((i, index) => {
@@ -75,7 +77,9 @@ export const CategoryCard = () => {
                 {allCategories.map((category, catIndex) => {
                   return (
                     <DataTableRow key={category}>
-                      <DataTableCell>{category}</DataTableCell>
+                      <DataTableCell className={"right-border indicator series-" + letters[catIndex]}>
+                        {category}
+                      </DataTableCell>
                       {Array(12)
                         .fill("")
                         .map((i, index) => {

@@ -39,6 +39,7 @@
 @use "@rmwc/icon/icon";
 
 @use "@material/theme/color-palette" as palette;
+@use "@material/rtl";
 
 @include typography.core-styles();
 
@@ -78,10 +79,6 @@ svg.material-icons,
       @include typography.typography(subtitle2);
       font-weight: bold;
       vertical-align: middle;
-      .rmwc-data-table__sort-icon {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
     }
   }
   .mdc-data-table__row {
@@ -89,15 +86,24 @@ svg.material-icons,
     .mdc-data-table__cell {
       @include typography.typography(body2);
       overflow: visible;
-      .vendor-container {
-        @include shape.radius(small);
-      }
     }
   }
-}
-
-.mdc-drawer {
-  border-color: var(--divider-color);
+  &__cell,
+  &__header-cell {
+    &.right-border {
+      border: 0 solid var(--divider-color);
+      @include rtl.reflexive(border-left-width, 0, border-right-width, 1px);
+    }
+    &.indicator::before {
+      content: "";
+      position: absolute;
+      @include rtl.reflexive-position(right, 0);
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background-color: var(--lighter-color);
+    }
+  }
 }
 
 .light {
