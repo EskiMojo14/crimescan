@@ -27,7 +27,6 @@
     "@rmwc/textfield": "^6.1.4",
     "@rmwc/top-app-bar": "^6.1.4",
     "@rmwc/typography": "^6.1.4",
-    "chartist": "^0.10.1",
     "chartist-plugin-axistitle": "^0.0.7",
     "classnames": "^2.3.1",
     "normalize.css": "^8.0.1",

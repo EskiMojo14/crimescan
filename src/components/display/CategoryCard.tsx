@@ -3,6 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 import { months } from "../../util/constants";
 import { iconObject } from "../../util/functions";
 import ChartistGraph from "react-chartist";
+import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import { Card } from "@rmwc/card";
 import {
   DataTable,
@@ -16,16 +17,19 @@ import {
 import { Typography } from "@rmwc/typography";
 import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
 import "./CategoryCard.scss";
+import { selectType, selectMonthData, selectYearData } from "./dataSlice";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCard = () => {
-  const data = useAppSelector((state) => state.data);
+  const dataType = useAppSelector(selectType);
+  const monthData = useAppSelector(selectMonthData);
+  const yearData = useAppSelector(selectYearData);
 
   const [chartType, setChartType] = useState<"Bar" | "Line">("Bar");
 
-  if (data.type === "month") {
-    const { allCategories, categoryCount } = data;
+  if (dataType === "month") {
+    const { allCategories, categoryCount } = monthData;
     const chartData = {
       labels: [],
       series: categoryCount,
@@ -72,7 +76,47 @@ export const CategoryCard = () => {
       </Card>
     );
   } else {
-    const { allCategories, categoryCount } = data;
+    const { allCategories, categoryCount } = yearData;
+    const chartData = {
+      labels: months,
+      series: categoryCount,
+    };
+    const chartOptions = {
+      showArea: true,
+      stackBars: true,
+      low: 0,
+      axisY: {
+        onlyInteger: true,
+      },
+      chartPadding: {
+        top: 16,
+        right: 0,
+        bottom: 32,
+        left: 16,
+      },
+      plugins: [
+        chartistPluginAxisTitle({
+          axisX: {
+            axisTitle: "Month",
+            axisClass: "ct-axis-title",
+            offset: {
+              x: 0,
+              y: 48,
+            },
+            textAnchor: "middle",
+          },
+          axisY: {
+            axisTitle: "Count",
+            axisClass: "ct-axis-title",
+            offset: {
+              x: 0,
+              y: 24,
+            },
+            flipTitle: true,
+          },
+        }),
+      ],
+    };
     return (
       <Card className="category-card">
         <div className="title-container">

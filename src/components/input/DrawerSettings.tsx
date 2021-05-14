@@ -2,7 +2,7 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getMonthData, getYearData } from "../../app/getData";
 import { initialState, inputSet, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "./inputSlice";
-import { selectLocation, selectQuery } from "../display/dataSlice";
+import { selectQuery, selectLocation } from "../display/dataSlice";
 import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
 import classNames from "classnames";
 import { queryIcons } from "../../util/constants";

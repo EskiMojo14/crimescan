@@ -1,6 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
 import { months } from "../../util/constants";
+import { selectType, selectYearData } from "./dataSlice";
 import { Card } from "@rmwc/card";
 import {
   DataTable,
@@ -15,8 +16,9 @@ import { Typography } from "@rmwc/typography";
 import "./CountCard.scss";
 
 export const CountCard = () => {
-  const data = useAppSelector((state) => state.data);
-  if (data.type === "year") {
+  const dataType = useAppSelector(selectType);
+  const data = useAppSelector(selectYearData);
+  if (dataType === "year") {
     const { count } = data;
     return (
       <Card className="count-card">

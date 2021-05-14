@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { ProcessedData } from "../../util/types";
+import { MonthData, YearData } from "../../util/types";
 
-const initialState = {
+const blankMonth: MonthData = {
   type: "month",
   location: "",
   query: {
@@ -14,31 +14,63 @@ const initialState = {
   allCategories: [],
   count: 0,
   categoryCount: [],
-} as ProcessedData;
+};
+
+const blankYear: YearData = {
+  type: "year",
+  location: "",
+  query: {
+    type: "year",
+    year: "",
+    lat: "",
+    lng: "",
+  },
+  allCategories: [],
+  count: [],
+  categoryCount: [[]],
+};
+
+type DataState = {
+  type: "month" | "year";
+  month: MonthData;
+  year: YearData;
+};
+
+const initialState: DataState = {
+  type: "month",
+  month: blankMonth,
+  year: blankYear,
+};
 
 export const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
-    setAll: (state, action: PayloadAction<ProcessedData>) => {
-      return { ...action.payload };
+    setMonth: (state, action: PayloadAction<MonthData>) => {
+      state.type = "month";
+      state.month = action.payload;
+      state.year = blankYear;
     },
-    setKey: <T extends keyof ProcessedData>(
-      state: ProcessedData,
-      action: PayloadAction<{ key: T; value: ProcessedData[T] }>
-    ) => {
-      const { key, value } = action.payload;
-      state[key] = value;
+    setYear: (state, action: PayloadAction<YearData>) => {
+      state.type = "year";
+      state.year = action.payload;
+      state.month = blankMonth;
     },
   },
 });
 
-export const { setAll, setKey } = dataSlice.actions;
+export const { setMonth, setYear } = dataSlice.actions;
 
-export const selectLocation = (state: RootState) => state.data.location;
+export const selectType = (state: RootState) => state.data.type;
 
-export const selectQuery = (state: RootState) => state.data.query;
+export const selectMonthData = (state: RootState) => state.data.month;
 
-export const selectCount = (state: RootState) => state.data.count;
+export const selectYearData = (state: RootState) => state.data.year;
+
+export const selectQuery = (state: RootState) =>
+  state.data.type === "month" ? state.data.month.query : state.data.year.query;
+
+export const selectLocation = (state: RootState) =>
+  state.data.type === "month" ? state.data.month.location : state.data.year.location;
 
 export default dataSlice.reducer;

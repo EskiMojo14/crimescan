@@ -1,4 +1,4 @@
-import type { CrimeEntry, MonthQuery, ProcessedData, YearQuery } from "../util/types";
+import type { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "../util/types";
 import { uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
 import store from "./store";
 
@@ -11,7 +11,7 @@ export const formatCategory = (category: string) => {
   return category;
 };
 
-export const processMonthData = (data: CrimeEntry[], query: MonthQuery): ProcessedData => {
+export const processMonthData = (data: CrimeEntry[], query: MonthQuery): MonthData => {
   const firstEntry = data[0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
 
@@ -40,7 +40,7 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): Process
   };
 };
 
-export const processYearData = (data: CrimeEntry[][], query: YearQuery): ProcessedData => {
+export const processYearData = (data: CrimeEntry[][], query: YearQuery): YearData => {
   const firstEntry = data[0][0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
 
