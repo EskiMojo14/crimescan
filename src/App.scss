@@ -65,7 +65,8 @@
     stroke: var(--divider-color);
     stroke-dasharray: 4px;
   }
-  .ct-axis-title {
+  .ct-axis-title,
+  .ct-label {
     @include typography.typography(caption);
   }
 }

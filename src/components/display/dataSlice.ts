@@ -11,9 +11,9 @@ const blankMonth: MonthData = {
     lat: "",
     lng: "",
   },
-  allCategories: [],
+  allCategories: [""],
   count: 0,
-  categoryCount: [],
+  categoryCount: [0],
 };
 
 const blankYear: YearData = {
@@ -25,9 +25,9 @@ const blankYear: YearData = {
     lat: "",
     lng: "",
   },
-  allCategories: [],
-  count: [],
-  categoryCount: [[]],
+  allCategories: [""],
+  count: [0],
+  categoryCount: [[0]],
 };
 
 type DataState = {
@@ -48,12 +48,12 @@ export const dataSlice = createSlice({
   reducers: {
     setMonth: (state, action: PayloadAction<MonthData>) => {
       state.type = "month";
-      state.month = action.payload;
+      state.month = { ...state.month, ...action.payload };
       state.year = blankYear;
     },
     setYear: (state, action: PayloadAction<YearData>) => {
       state.type = "year";
-      state.year = action.payload;
+      state.year = { ...state.year, ...action.payload };
       state.month = blankMonth;
     },
   },
