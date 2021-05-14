@@ -20,7 +20,6 @@ import {
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
 import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
-import "./OutcomeCard.scss";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 

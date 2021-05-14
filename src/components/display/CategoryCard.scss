@@ -13,6 +13,13 @@
   }
   .chart-container {
     margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    .ct-chart {
+      &.ct-square {
+        max-width: 320px;
+      }
+    }
   }
   .table-container {
     display: flex;
