@@ -25,6 +25,7 @@ export const ContentContainer = () => {
         <Chip label={query.lng} icon={queryIcons.lng} className="non-interactive" />
       </TopAppBarSection>
     ) : null;
+  const countCard = dataType === "year" ? <CountCard /> : null;
   const categoryCard = dataType === "month" ? <CategoryCardMonth /> : <CategoryCardYear />;
   return (
     <div className="content-container">
@@ -38,7 +39,7 @@ export const ContentContainer = () => {
       </TopAppBar>
       <TopAppBarFixedAdjust />
       <div className="content-grid">
-        <CountCard />
+        {countCard}
         {categoryCard}
       </div>
     </div>

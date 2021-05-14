@@ -436,6 +436,36 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         fill: if($dark, overlay-elevation(map-get($variables, surface), 1), map-get($variables, surface));
       }
     }
+    &.themed {
+      .ct-series-a {
+        .ct-point,
+        .ct-line,
+        .ct-bar,
+        .ct-slice-donut {
+          stroke: map-get($variables, secondary);
+        }
+        .ct-slice-pie,
+        .ct-donut-solid,
+        .ct-area,
+        .ct-stroked-point {
+          fill: map-get($variables, secondary);
+        }
+      }
+      .ct-series-b {
+        .ct-point,
+        .ct-line,
+        .ct-bar,
+        .ct-slice-donut {
+          stroke: map-get($variables, primary);
+        }
+        .ct-slice-pie,
+        .ct-donut-solid,
+        .ct-area,
+        .ct-stroked-point {
+          fill: map-get($variables, primary);
+        }
+      }
+    }
   }
 
   @each $letter in $letters {

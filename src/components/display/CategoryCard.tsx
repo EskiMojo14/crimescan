@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { months } from "../../util/constants";
 import { iconObject } from "../../util/functions";
+import { selectMonthData, selectYearData } from "./dataSlice";
+import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import { Card } from "@rmwc/card";
@@ -17,8 +19,6 @@ import {
 import { Typography } from "@rmwc/typography";
 import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
 import "./CategoryCard.scss";
-import { selectMonthData, selectYearData } from "./dataSlice";
-import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
