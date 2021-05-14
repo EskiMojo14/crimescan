@@ -17,7 +17,7 @@
     justify-content: center;
     .ct-chart {
       &.ct-square {
-        max-width: 320px;
+        width: 320px;
       }
     }
   }
@@ -25,5 +25,8 @@
     display: flex;
     align-items: center;
     overflow-x: auto;
+    .mdc-data-table {
+      flex-grow: 1;
+    }
   }
 }
