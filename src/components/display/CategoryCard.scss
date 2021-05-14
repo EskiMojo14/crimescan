@@ -13,10 +13,20 @@
   }
   .chart-container {
     margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    .ct-chart {
+      &.ct-square {
+        width: 320px;
+      }
+    }
   }
   .table-container {
     display: flex;
     align-items: center;
     overflow-x: auto;
+    .mdc-data-table {
+      flex-grow: 1;
+    }
   }
 }
