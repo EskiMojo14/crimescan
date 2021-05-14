@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "^1.5.1",
     "@rmwc/button": "^6.1.4",
     "@rmwc/card": "^6.1.4",
+    "@rmwc/checkbox": "^6.1.4",
     "@rmwc/chip": "^6.1.4",
     "@rmwc/data-table": "^6.1.4",
     "@rmwc/drawer": "^6.1.4",

@@ -29,6 +29,7 @@
 
 @use "@material/button/mdc-button";
 @use "@material/card/mdc-card";
+@use "@material/checkbox/mdc-checkbox";
 @use "@material/chips/mdc-chips";
 @use "@material/drawer/mdc-drawer";
 @use "@material/icon-button/mdc-icon-button";
@@ -74,6 +75,12 @@
 svg.material-icons,
 .material-icons svg {
   fill: currentColor;
+}
+
+.mdc-checkbox {
+  &__background {
+    @include shape.radius(small);
+  }
 }
 
 .mdc-chip {

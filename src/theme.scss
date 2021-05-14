@@ -1,6 +1,7 @@
 @use "@material/button";
 @use "@material/card";
 @use "@material/chips";
+@use "@material/checkbox";
 @use "@material/drawer";
 @use "@material/icon-button";
 @use "@material/linear-progress";
@@ -196,6 +197,27 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       &:disabled {
         color: map-get($variables, text-disabled);
       }
+    }
+  }
+
+  .mdc-checkbox {
+    @include checkbox.container-colors(
+      map-get($variables, text-medium),
+      transparent,
+      map-get($variables, secondary),
+      map-get($variables, secondary)
+    );
+    @include checkbox.disabled-container-colors(
+      rgba(map-get($variables, on-surface), 0.26),
+      transparent,
+      transparent,
+      rgba(map-get($variables, on-surface), 0.26)
+    );
+    @include checkbox.ink-color(map-get($variables, on-surface));
+    @include checkbox.disabled-ink-color(map-get($variables, on-surface));
+    @include ripple.states(map-get($variables, on-surface), false, feature-targeting.all(), ".mdc-checkbox__ripple");
+    &.mdc-checkbox--selected {
+      @include ripple.states(map-get($variables, secondary), false, feature-targeting.all(), ".mdc-checkbox__ripple");
     }
   }
 
@@ -470,9 +492,44 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
 
   @each $letter in $letters {
     $color: if($dark, nth($graph-colors-dark, index($letters, $letter)), nth($graph-colors, index($letters, $letter)));
-    .mdc-data-table__cell.indicator.series-#{$letter}::before {
-      background-color: $color;
+    .series-#{$letter} {
+      .mdc-data-table__cell {
+        &.indicator::before {
+          background-color: $color;
+        }
+
+        .mdc-checkbox {
+          @include checkbox.container-colors(map-get($variables, text-medium), transparent, $color, $color);
+          @include checkbox.disabled-container-colors(
+            rgba(map-get($variables, on-surface), 0.26),
+            transparent,
+            transparent,
+            rgba(map-get($variables, on-surface), 0.26)
+          );
+          @include checkbox.ink-color(map-get($variables, on-surface));
+          @include checkbox.disabled-ink-color(map-get($variables, on-surface));
+          @include ripple.states(
+            map-get($variables, on-surface),
+            false,
+            feature-targeting.all(),
+            ".mdc-checkbox__ripple"
+          );
+          &.mdc-checkbox--selected {
+            @include ripple.states($color, false, feature-targeting.all(), ".mdc-checkbox__ripple");
+          }
+        }
+      }
     }
+
+    .focused:not(.focused-#{$letter}) .series-#{$letter} {
+      .mdc-data-table__cell {
+        color: map-get($variables, disabled);
+        &.indicator::before {
+          background-color: rgba($color, 0.05);
+        }
+      }
+    }
+
     .ct-series-#{$letter} {
       .ct-point,
       .ct-line,
@@ -485,6 +542,21 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       .ct-area,
       .ct-stroked-point {
         fill: $color;
+      }
+    }
+
+    .focused:not(.focused-#{$letter}) .ct-series-#{$letter} {
+      .ct-point,
+      .ct-line,
+      .ct-bar,
+      .ct-slice-donut {
+        stroke: rgba($color, 0.05);
+      }
+      .ct-slice-pie,
+      .ct-donut-solid,
+      .ct-area,
+      .ct-stroked-point {
+        fill: rgba($color, 0.05);
       }
     }
   }
