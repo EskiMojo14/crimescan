@@ -25,16 +25,24 @@
 
 @use "theme";
 
+@use "chartist/dist/scss/chartist";
+
 @use "@material/button/mdc-button";
+@use "@material/card/mdc-card";
+@use "@material/checkbox/mdc-checkbox";
 @use "@material/chips/mdc-chips";
 @use "@material/drawer/mdc-drawer";
 @use "@material/icon-button/mdc-icon-button";
 @use "@material/linear-progress/mdc-linear-progress";
+@use "@material/data-table/mdc-data-table";
 @use "@material/snackbar/mdc-snackbar";
 @use "@material/textfield/mdc-text-field";
+@use "@material/top-app-bar/mdc-top-app-bar";
+@use "@rmwc/data-table/data-table";
 @use "@rmwc/icon/icon";
 
 @use "@material/theme/color-palette" as palette;
+@use "@material/rtl";
 
 @include typography.core-styles();
 
@@ -53,9 +61,26 @@
   border-color: var(--divider-color);
 }
 
+.ct-chart {
+  .ct-grid {
+    stroke: var(--divider-color);
+    stroke-dasharray: 4px;
+  }
+  .ct-axis-title,
+  .ct-label {
+    @include typography.typography(caption);
+  }
+}
+
 svg.material-icons,
 .material-icons svg {
   fill: currentColor;
+}
+
+.mdc-checkbox {
+  &__background {
+    @include shape.radius(small);
+  }
 }
 
 .mdc-chip {
@@ -67,8 +92,38 @@ svg.material-icons,
   }
 }
 
-.mdc-drawer {
-  border-color: var(--divider-color);
+.mdc-data-table {
+  background-color: transparent;
+  .mdc-data-table__header-row {
+    .mdc-data-table__header-cell {
+      @include typography.typography(subtitle2);
+      font-weight: bold;
+      vertical-align: middle;
+    }
+  }
+  .mdc-data-table__row {
+    transition: background-color 100ms;
+    .mdc-data-table__cell {
+      @include typography.typography(body2);
+      overflow: visible;
+    }
+  }
+  &__cell,
+  &__header-cell {
+    &.right-border {
+      border: 0 solid var(--divider-color);
+      @include rtl.reflexive(border-left-width, 0, border-right-width, 1px);
+    }
+    &.indicator::before {
+      content: "";
+      position: absolute;
+      @include rtl.reflexive-position(right, 0);
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background-color: var(--lighter-color);
+    }
+  }
 }
 
 .light {

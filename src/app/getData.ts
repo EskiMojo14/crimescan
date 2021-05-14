@@ -1,4 +1,4 @@
-import { setAll } from "../components/display/dataSlice";
+import { setMonth, setYear } from "../components/display/dataSlice";
 import { setCategories, setLoading } from "../components/display/displaySlice";
 import { delay } from "../util/functions";
 import { MonthQuery, YearQuery } from "../util/types";
@@ -11,7 +11,6 @@ export const getCrimeCategories = () => {
   fetch("https://data.police.uk/api/crime-categories")
     .then((response) => response.json())
     .then((value) => {
-      console.log(value);
       const keyObject: Record<string, string> = value.reduce(
         (acc: Record<string, string>, item: { url: string; name: string }) => {
           return { ...acc, [item.url]: item.name };
@@ -30,10 +29,8 @@ export const getMonthData = (query: MonthQuery) => {
   fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
       const data = processMonthData(result, query);
-      console.log(data);
-      dispatch(setAll(data));
+      dispatch(setMonth(data));
       dispatch(setLoading(false));
     })
     .catch((error) => {
@@ -57,10 +54,8 @@ export const getYearData = (query: YearQuery) => {
   const months = new Array(12).fill("").map((item, index) => index + 1);
   Promise.all(months.map((month) => getMonthData(month)))
     .then((result) => {
-      console.log(result);
       const data = processYearData(result, query);
-      console.log(data);
-      dispatch(setAll(data));
+      dispatch(setYear(data));
       dispatch(setLoading(false));
     })
     .catch((error) => {

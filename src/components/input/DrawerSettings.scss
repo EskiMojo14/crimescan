@@ -5,6 +5,7 @@
 .drawer-settings {
   &.mdc-drawer {
     width: 480px;
+    position: fixed;
     &.mdc-drawer--open.mdc-drawer--dismissible:not(.mdc-drawer--closing) ~ .mdc-drawer-app-content {
       @include rtl.reflexive-property(margin, 480px, 0);
     }

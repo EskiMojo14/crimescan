@@ -49,7 +49,7 @@ export type YearQuery = {
 export type MonthData = {
   type: "month";
   location: string;
-  queryLocation: string;
+  query: MonthQuery;
   allCategories: string[];
   count: number;
   categoryCount: number[];
@@ -58,7 +58,7 @@ export type MonthData = {
 export type YearData = {
   type: "year";
   location: string;
-  queryLocation: string;
+  query: YearQuery;
   allCategories: string[];
   count: number[];
   categoryCount: number[][];

@@ -33,6 +33,25 @@ export function countInArray<T>(arr: T[], val: T): number {
 }
 
 /**
+ * "Toggles" an element in an array.
+ * @param array Array of values.
+ * @param value Value to be added or removed (if already in `array`).
+ * @returns `array` with element added or removed.
+ */
+
+export function addOrRemove<T>(array: T[], value: T): T[] {
+  const newArray: any[] = [...array];
+  const index: number = newArray.indexOf(value);
+
+  if (index === -1) {
+    newArray.push(value);
+  } else {
+    newArray.splice(index, 1);
+  }
+  return newArray;
+}
+
+/**
  * Sorts an array of strings in alphabetical order.
  * @param array Array of strings to be sorted.
  * @param descending Whether to sort the `array` in descending order. Defaults to false.

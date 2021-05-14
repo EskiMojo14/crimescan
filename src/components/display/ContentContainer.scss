@@ -1,0 +1,25 @@
+@use "@material/rtl";
+
+.content-container {
+  .mdc-top-app-bar {
+    width: calc(100vw - 480px);
+    &__row {
+      height: 72px;
+    }
+    &--fixed-adjust {
+      padding-top: 72px;
+    }
+    .mdc-chip {
+      @include rtl.reflexive-box(margin, left, 8px);
+    }
+  }
+  .content-grid {
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    .mdc-card {
+      margin: 8px;
+    }
+  }
+}

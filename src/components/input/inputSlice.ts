@@ -13,8 +13,8 @@ export const initialState: InputState = {
   dateMode: "month",
   month: "",
   year: "",
-  lat: "",
-  lng: "",
+  lat: "52.629729",
+  lng: "-1.131592",
 };
 
 export const inputSlice = createSlice({
