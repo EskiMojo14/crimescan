@@ -71,7 +71,11 @@ export const CategoryCardMonth = () => {
             <DataTableHead>
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
-                  <Checkbox checked={focused.length === allCategories.length} onClick={focusAll} />
+                  <Checkbox
+                    indeterminate={focused.length > 0 && focused.length !== allCategories.length}
+                    checked={focused.length === allCategories.length}
+                    onClick={focusAll}
+                  />
                 </DataTableHeadCell>
                 <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
                 <DataTableHeadCell isNumeric>Count</DataTableHeadCell>
@@ -228,7 +232,11 @@ export const CategoryCardYear = () => {
             <DataTableHead>
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
-                  <Checkbox checked={focused.length === allCategories.length} onClick={focusAll} />
+                  <Checkbox
+                    indeterminate={focused.length > 0 && focused.length !== allCategories.length}
+                    checked={focused.length === allCategories.length}
+                    onClick={focusAll}
+                  />
                 </DataTableHeadCell>
                 <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
                 {months.map((month) => {
