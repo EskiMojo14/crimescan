@@ -1,6 +1,7 @@
 import {
   hasKey,
   uniqueArray,
+  countInArray,
   addOrRemove,
   alphabeticalSort,
   alphabeticalSortProp,
@@ -23,6 +24,12 @@ describe("Removes all duplicate values in an array", () => {
   });
 });
 
+describe("Counts how many of the specified item are in the provided array", () => {
+  it("should return 2 if two of the element exist", () => {
+    expect(countInArray([1, 1, 2, 3], 1)).toBe(2);
+  });
+});
+
 describe(`"Toggles" an element in an array.`, () => {
   it("should add the item if it's not in the array", () => {
     expect(addOrRemove([1, 2], 3)).toEqual([1, 2, 3]);
@@ -34,7 +41,7 @@ describe(`"Toggles" an element in an array.`, () => {
 
 describe("Sorts an array of strings alphabetically", () => {
   it("should sort the array alphabetically in ascending order", () => {
-    expect(alphabeticalSort(["b", "a", "c"])).toEqual(["a", "b", "c"]);
+    expect(alphabeticalSort(["b", "a", "c", "c"])).toEqual(["a", "b", "c", "c"]);
   });
   it("should sort the array alphabetically in descending order if specified", () => {
     expect(alphabeticalSort(["b", "a", "c"], true)).toEqual(["c", "b", "a"]);
@@ -43,9 +50,10 @@ describe("Sorts an array of strings alphabetically", () => {
 
 describe("Sorts an array of objects alphabetically by a specified key", () => {
   it("should sort the array alphabetically by the specified key", () => {
-    expect(alphabeticalSortProp([{ key: "b" }, { key: "a" }, { key: "c" }], "key")).toEqual([
+    expect(alphabeticalSortProp([{ key: "b" }, { key: "a" }, { key: "c" }, { key: "c" }], "key")).toEqual([
       { key: "a" },
       { key: "b" },
+      { key: "c" },
       { key: "c" },
     ]);
   });

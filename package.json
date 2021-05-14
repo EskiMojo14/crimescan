@@ -12,6 +12,7 @@
   "scripts": {
     "start": "webpack serve --open",
     "test": "jest",
+    "test:watch": "jest --watch",
     "build": "webpack"
   },
   "dependencies": {
