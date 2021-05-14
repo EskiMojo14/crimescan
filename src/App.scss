@@ -42,6 +42,7 @@
 @use "@rmwc/icon/icon";
 
 @use "@material/theme/color-palette" as palette;
+@use "@material/theme/functions" as theme-functions;
 @use "@material/rtl";
 
 @include typography.core-styles();
@@ -130,11 +131,11 @@ svg.material-icons,
   $theme: (
     primary: palette.$light-green-700,
     secondary: palette.$red-700,
-    on-primary: black,
-    on-secondary: white,
+    on-primary: if(theme-functions.contrast-tone(palette.$light-green-700) == "dark", black, white),
+    on-secondary: if(theme-functions.contrast-tone(palette.$red-700) == "dark", black, white),
     background: palette.$grey-200,
     error: palette.$deep-orange-500,
-    on-error: black,
+    on-error: if(theme-functions.contrast-tone(palette.$deep-orange-500) == "dark", black, white),
     surface: white,
     on-surface: black,
   );
@@ -145,10 +146,10 @@ svg.material-icons,
   $theme: (
     primary: palette.$light-green-300,
     secondary: palette.$red-400,
-    on-primary: black,
-    on-secondary: black,
+    on-primary: if(theme-functions.contrast-tone(palette.$light-green-300) == "dark", black, white),
+    on-secondary: if(theme-functions.contrast-tone(palette.$red-400) == "dark", black, white),
     background: #121212,
-    error: palette.$deep-orange-400,
+    error: if(theme-functions.contrast-tone(palette.$deep-orange-400) == "dark", black, white),
     on-error: black,
     surface: #121212,
     on-surface: white,
