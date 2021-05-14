@@ -50,18 +50,22 @@ export type MonthData = {
   type: "month";
   location: string;
   query: MonthQuery;
-  allCategories: string[];
   count: number;
+  allCategories: string[];
   categoryCount: number[];
+  allOutcomes: string[];
+  outcomeCount: number[];
 };
 
 export type YearData = {
   type: "year";
   location: string;
   query: YearQuery;
-  allCategories: string[];
   count: number[];
+  allCategories: string[];
   categoryCount: number[][];
+  allOutcomes: string[];
+  outcomeCount: number[][];
 };
 
 export type ProcessedData = MonthData | YearData;

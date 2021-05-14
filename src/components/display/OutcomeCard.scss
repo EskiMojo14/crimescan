@@ -1,0 +1,22 @@
+.category-card {
+  max-width: 100%;
+  padding: 16px;
+  overflow: hidden;
+  .title-container {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    .mdc-typography--headline5 {
+      margin: 0;
+      flex-grow: 1;
+    }
+  }
+  .chart-container {
+    margin-bottom: 16px;
+  }
+  .table-container {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+  }
+}

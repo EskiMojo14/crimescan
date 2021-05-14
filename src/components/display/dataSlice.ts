@@ -11,9 +11,11 @@ const blankMonth: MonthData = {
     lat: "",
     lng: "",
   },
-  allCategories: [""],
   count: 0,
+  allCategories: [""],
   categoryCount: [0],
+  allOutcomes: [""],
+  outcomeCount: [0],
 };
 
 const blankYear: YearData = {
@@ -25,9 +27,11 @@ const blankYear: YearData = {
     lat: "",
     lng: "",
   },
-  allCategories: [""],
   count: [0],
+  allCategories: [""],
   categoryCount: [[0]],
+  allOutcomes: [""],
+  outcomeCount: [[0]],
 };
 
 type DataState = {

@@ -20,16 +20,16 @@ import {
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
 import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
-import "./CategoryCard.scss";
+import "./OutcomeCard.scss";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
-export const CategoryCardMonth = () => {
+export const OutcomeCardMonth = () => {
   const monthData = useAppSelector(selectMonthData);
-  const { allCategories, categoryCount } = monthData;
+  const { allOutcomes, outcomeCount } = monthData;
   const chartData = {
     labels: [],
-    series: categoryCount,
+    series: outcomeCount,
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
@@ -42,10 +42,10 @@ export const CategoryCardMonth = () => {
     setFocused(addOrRemove(focused, letter));
   };
   const focusAll = () => {
-    if (focused.length === allCategories.length) {
+    if (focused.length === allOutcomes.length) {
       setFocused([]);
     } else {
-      setFocused(letters.slice(0, allCategories.length));
+      setFocused(letters.slice(0, allOutcomes.length));
     }
   };
 
@@ -59,7 +59,7 @@ export const CategoryCardMonth = () => {
     >
       <div className="title-container">
         <Typography use="headline5" tag="h3">
-          Categories
+          Outcomes
         </Typography>
       </div>
       <div className="chart-container">
@@ -71,21 +71,21 @@ export const CategoryCardMonth = () => {
             <DataTableHead>
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
-                  <Checkbox checked={focused.length === allCategories.length} onClick={focusAll} />
+                  <Checkbox checked={focused.length === allOutcomes.length} onClick={focusAll} />
                 </DataTableHeadCell>
-                <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
+                <DataTableHeadCell className="right-border">Outcome</DataTableHeadCell>
                 <DataTableHeadCell isNumeric>Count</DataTableHeadCell>
               </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-              {allCategories.map((category, index) => {
+              {allOutcomes.map((category, index) => {
                 return (
                   <DataTableRow className={"series-" + letters[index]} key={category}>
                     <DataTableCell hasFormControl>
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[index]}</DataTableCell>
+                    <DataTableCell isNumeric>{outcomeCount[index]}</DataTableCell>
                   </DataTableRow>
                 );
               })}
@@ -97,15 +97,15 @@ export const CategoryCardMonth = () => {
   );
 };
 
-export const CategoryCardYear = () => {
+export const OutcomeCardYear = () => {
   const yearData = useAppSelector(selectYearData);
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
-  const { allCategories, categoryCount } = yearData;
+  const { allOutcomes, outcomeCount } = yearData;
   const chartData = {
     labels: months,
-    series: categoryCount,
+    series: outcomeCount,
   };
   const chartOptions = {
     low: 0,
@@ -164,10 +164,10 @@ export const CategoryCardYear = () => {
     setFocused(addOrRemove(focused, letter));
   };
   const focusAll = () => {
-    if (focused.length === allCategories.length) {
+    if (focused.length === allOutcomes.length) {
       setFocused([]);
     } else {
-      setFocused(letters.slice(0, allCategories.length));
+      setFocused(letters.slice(0, allOutcomes.length));
     }
   };
 
@@ -181,7 +181,7 @@ export const CategoryCardYear = () => {
     >
       <div className="title-container">
         <Typography use="headline5" tag="h3">
-          Categories
+          Outcomes
         </Typography>
         <SegmentedButton toggle>
           <SegmentedButtonSegment
@@ -228,7 +228,7 @@ export const CategoryCardYear = () => {
             <DataTableHead>
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
-                  <Checkbox checked={focused.length === allCategories.length} onClick={focusAll} />
+                  <Checkbox checked={focused.length === allOutcomes.length} onClick={focusAll} />
                 </DataTableHeadCell>
                 <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
                 {months.map((month) => {
@@ -241,7 +241,7 @@ export const CategoryCardYear = () => {
               </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-              {allCategories.map((category, catIndex) => {
+              {allOutcomes.map((category, catIndex) => {
                 return (
                   <DataTableRow className={"series-" + letters[catIndex]} key={category}>
                     <DataTableCell hasFormControl>
@@ -254,7 +254,7 @@ export const CategoryCardYear = () => {
                     {months.map((month, index) => {
                       return (
                         <DataTableHeadCell isNumeric key={month}>
-                          {categoryCount[catIndex][index] > 0 ? categoryCount[catIndex][index] : ""}
+                          {outcomeCount[catIndex][index] > 0 ? outcomeCount[catIndex][index] : ""}
                         </DataTableHeadCell>
                       );
                     })}

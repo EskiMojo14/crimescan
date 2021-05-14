@@ -6,6 +6,7 @@ import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
 import { CountCard } from "./CountCard";
 import { CategoryCardMonth, CategoryCardYear } from "./CategoryCard";
+import { OutcomeCardMonth, OutcomeCardYear } from "./OutcomeCard";
 import "./ContentContainer.scss";
 
 export const ContentContainer = () => {
@@ -27,6 +28,7 @@ export const ContentContainer = () => {
     ) : null;
   const countCard = dataType === "year" ? <CountCard /> : null;
   const categoryCard = dataType === "month" ? <CategoryCardMonth /> : <CategoryCardYear />;
+  const outcomeCard = dataType === "month" ? <OutcomeCardMonth /> : <OutcomeCardYear />;
   return (
     <div className="content-container">
       <TopAppBar fixed>
@@ -41,6 +43,7 @@ export const ContentContainer = () => {
       <div className="content-grid">
         {countCard}
         {categoryCard}
+        {outcomeCard}
       </div>
     </div>
   );

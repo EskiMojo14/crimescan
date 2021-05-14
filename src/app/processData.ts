@@ -15,18 +15,25 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): MonthDa
   const firstEntry = data[0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
 
-  const formattedEntries: CrimeEntry[] = data.map((entry) => {
-    return { ...entry, category: formatCategory(entry.category) };
-  });
-
-  const allCategories = alphabeticalSort(uniqueArray(formattedEntries.map((entry) => entry.category)));
-
   const count = data.length;
+
+  const allCategories = alphabeticalSort(uniqueArray(data.map((entry) => formatCategory(entry.category))));
 
   const categoryCount = allCategories.map((category) =>
     countInArray(
-      formattedEntries.map((entry) => entry.category),
+      data.map((entry) => formatCategory(entry.category)),
       category
+    )
+  );
+
+  const allOutcomes = alphabeticalSort(
+    uniqueArray(data.map((entry) => (entry.outcome_status ? entry.outcome_status.category : "")))
+  ).filter((val) => Boolean(val));
+
+  const outcomeCount = allOutcomes.map((outcome) =>
+    countInArray(
+      data.map((entry) => (entry.outcome_status ? entry.outcome_status.category : "")),
+      outcome
     )
   );
 
@@ -34,9 +41,11 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): MonthDa
     type: "month",
     location: location,
     query: query,
-    allCategories: allCategories,
     count: count,
+    allCategories: allCategories,
     categoryCount: categoryCount,
+    allOutcomes: allOutcomes,
+    outcomeCount: outcomeCount,
   };
 };
 
@@ -44,22 +53,31 @@ export const processYearData = (data: CrimeEntry[][], query: YearQuery): YearDat
   const firstEntry = data[0][0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
 
-  const formattedEntries: CrimeEntry[][] = data.map((entries) =>
-    entries.map((entry) => {
-      return { ...entry, category: formatCategory(entry.category) };
-    })
-  );
-
-  const allCategories = alphabeticalSort(
-    uniqueArray(formattedEntries.map((entries) => entries.map((entry) => entry.category)).flat(1))
-  );
-
   const count = data.map((arr) => arr.length);
 
+  const allCategories = alphabeticalSort(
+    uniqueArray(data.map((entries) => entries.map((entry) => formatCategory(entry.category))).flat(1))
+  );
+
   const categoryCount = allCategories.map((category) =>
-    formattedEntries.map((entries) =>
+    data.map((entries) =>
       countInArray(
-        entries.map((entry) => entry.category),
+        entries.map((entry) => formatCategory(entry.category)),
+        category
+      )
+    )
+  );
+
+  const allOutcomes = alphabeticalSort(
+    uniqueArray(
+      data.map((entries) => entries.map((entry) => (entry.outcome_status ? entry.outcome_status.category : ""))).flat(1)
+    )
+  ).filter((val) => Boolean(val));
+
+  const outcomeCount = allOutcomes.map((category) =>
+    data.map((entries) =>
+      countInArray(
+        entries.map((entry) => (entry.outcome_status ? entry.outcome_status.category : "")),
         category
       )
     )
@@ -69,8 +87,10 @@ export const processYearData = (data: CrimeEntry[][], query: YearQuery): YearDat
     type: "year",
     location: location,
     query: query,
-    allCategories: allCategories,
     count: count,
+    allCategories: allCategories,
     categoryCount: categoryCount,
+    allOutcomes: allOutcomes,
+    outcomeCount: outcomeCount,
   };
 };
