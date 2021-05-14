@@ -1,9 +1,10 @@
 module.exports = {
-  // The root of your source code, typically /src
-  // `<rootDir>` is a token Jest substitutes
-  roots: ["<rootDir>/src"],
   preset: "ts-jest",
-  testEnvironment: "node",
+  setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
+  moduleNameMapper: {
+    "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+  },
 };
 
 // https://itnext.io/testing-with-jest-in-typescript-cc1cd0095421
+// https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850

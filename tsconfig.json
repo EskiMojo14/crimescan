@@ -24,7 +24,8 @@
     },
     "include": [
         "src/**/*", // *** The files TypeScript should type check ***
-        "index.d.ts"
+        "index.d.ts",
+        "./jest-setup.ts"
     ],
     "exclude": [
         "node_modules",
