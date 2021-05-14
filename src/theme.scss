@@ -14,6 +14,7 @@
 
 @use "@material/feature-targeting";
 @use "@material/theme/color-palette" as palette;
+@use "@material/theme/functions" as theme-functions;
 
 // 1 - card, switch
 // 2 - contained button
@@ -213,7 +214,7 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       transparent,
       rgba(map-get($variables, on-surface), 0.26)
     );
-    @include checkbox.ink-color(map-get($variables, on-surface));
+    @include checkbox.ink-color(map-get($variables, on-secondary));
     @include checkbox.disabled-ink-color(map-get($variables, on-surface));
     @include ripple.states(map-get($variables, on-surface), false, feature-targeting.all(), ".mdc-checkbox__ripple");
     &.mdc-checkbox--selected {
@@ -506,8 +507,9 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
             transparent,
             rgba(map-get($variables, on-surface), 0.26)
           );
-          @include checkbox.ink-color(map-get($variables, on-surface));
-          @include checkbox.disabled-ink-color(map-get($variables, on-surface));
+          $check-color: if(theme-functions.contrast-tone($color) == "dark", black, white);
+          @include checkbox.ink-color($check-color);
+          @include checkbox.disabled-ink-color($check-color);
           @include ripple.states(
             map-get($variables, on-surface),
             false,
