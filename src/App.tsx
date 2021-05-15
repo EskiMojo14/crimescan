@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "./app/hooks";
+import { loadGoogleMapsAPI } from "./app/googleMaps";
 import { getCrimeCategories } from "./app/getData";
 import { selectQuery } from "./components/display/dataSlice";
 import { queue } from "./app/snackbarQueue";
@@ -15,6 +16,7 @@ import "normalize.css";
 
 function App() {
   useEffect(getCrimeCategories, []);
+  useEffect(loadGoogleMapsAPI, []);
 
   const query = useAppSelector(selectQuery);
 
