@@ -293,6 +293,19 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         }
       }
     }
+    &.drawer-search {
+      .subheader {
+        color: map-get($variables, text-medium);
+      }
+      .no-result-display {
+        .title {
+          color: map-get($variables, text-high);
+        }
+        .subtitle {
+          color: map-get($variables, text-medium);
+        }
+      }
+    }
 
     .mdc-chip {
       @include chips.fill-color-accessible(

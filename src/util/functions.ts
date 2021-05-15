@@ -134,3 +134,25 @@ export const iconObject = (jsx: React.ReactNode, config?: Omit<IconOptions, "ico
     ...config,
   };
 };
+
+/**
+ * Adds scroll-lock class to body, to prevent scrolling while modal is open.
+ */
+
+export const openModal = () => {
+  const body = document.querySelector("body");
+  if (body) {
+    body.classList.add("scroll-lock");
+  }
+};
+
+/**
+ * Removes scroll-lock class from body, to allow scrolling once modal is closed.
+ */
+
+export const closeModal = () => {
+  const body = document.querySelector("body");
+  if (body) {
+    body.classList.remove("scroll-lock");
+  }
+};

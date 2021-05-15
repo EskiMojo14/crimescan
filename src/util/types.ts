@@ -68,4 +68,8 @@ export type YearData = {
   outcomeCount: number[][];
 };
 
-export type ProcessedData = MonthData | YearData;
+export type MapResult = {
+  lat: string;
+  lng: string;
+  name: string;
+};

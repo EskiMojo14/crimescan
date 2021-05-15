@@ -1,0 +1,104 @@
+@use "@material/rtl";
+@use "../../util";
+.drawer-search {
+  &.mdc-drawer.drawer-right {
+    width: 400px;
+  }
+  .mdc-drawer {
+    &__header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      padding: 16px;
+      @include util.divider-border(bottom);
+      .mdc-button {
+        @include rtl.reflexive-box(margin, left, 16px);
+      }
+      .mdc-linear-progress {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
+    &__title {
+      flex-grow: 1;
+      margin: 0;
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+    &__content {
+      display: flex;
+      flex-direction: column;
+      .subheader {
+        padding: 16px;
+        padding-bottom: 8px;
+      }
+      .no-result-display {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+        .image {
+          height: 320px;
+          width: 320px;
+        }
+        .title {
+          margin-top: 0;
+          margin-bottom: 4px;
+          font-weight: bold;
+          text-align: center;
+        }
+        .subtitle {
+          margin: 0;
+          text-align: center;
+        }
+      }
+      .result-display {
+        display: flex;
+        flex-direction: column;
+        padding: 0 16px;
+        .name-container {
+          margin-bottom: 16px;
+        }
+        .map-container {
+          position: relative;
+          @include util.divider-border(all);
+          background-size: contain;
+          background-position: center;
+          padding-top: 100%;
+          .map-icon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          &.image {
+            .map-icon {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    @include util.divider-border(bottom);
+    .mdc-text-field {
+      &__icon--trailing {
+        @include rtl.reflexive-box(margin, right, -8px);
+      }
+    }
+  }
+}

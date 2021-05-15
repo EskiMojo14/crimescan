@@ -1,10 +1,18 @@
 import React from "react";
+import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getMonthData, getYearData } from "../../app/getData";
-import { initialState, inputSet, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "./inputSlice";
+import {
+  initialState,
+  inputSetQuery,
+  selectLat,
+  selectLng,
+  selectMonth,
+  selectYear,
+  selectDateMode,
+} from "./inputSlice";
 import { selectQuery, selectLocation } from "../display/dataSlice";
 import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
-import classNames from "classnames";
 import { queryIcons } from "../../util/constants";
 import { hasKey } from "../../util/functions";
 import { Button } from "@rmwc/button";
@@ -33,7 +41,11 @@ const pinColors = {
   },
 } as const;
 
-export const DrawerSettings = () => {
+type DrawerSettingsProps = {
+  openSearch: () => void;
+};
+
+export const DrawerSettings = (props: DrawerSettingsProps) => {
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
 
@@ -51,13 +63,13 @@ export const DrawerSettings = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (hasKey(initialState, name)) {
-      dispatch(inputSet({ key: name, value: value }));
+    if (hasKey(initialState.query, name)) {
+      dispatch(inputSetQuery({ key: name, value: value }));
     }
   };
 
   const changeDateMode = (mode: "month" | "year") => {
-    dispatch(inputSet({ key: "dateMode", value: mode }));
+    dispatch(inputSetQuery({ key: "dateMode", value: mode }));
   };
   const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
@@ -134,6 +146,9 @@ export const DrawerSettings = () => {
           <Typography use="overline" tag="div" className="subheader">
             Location
           </Typography>
+          <div className="button-container">
+            <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
+          </div>
           <div className="double-field">
             <div className="field">
               <TextField
