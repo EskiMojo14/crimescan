@@ -45,10 +45,14 @@ export const inputSlice = createSlice({
       const { key, value } = action.payload;
       state.search[key] = value;
     },
+    setLatLng: (state, action: PayloadAction<{ lat: string; lng: string }>) => {
+      state.query.lat = action.payload.lat;
+      state.query.lng = action.payload.lng;
+    },
   },
 });
 
-export const { inputSetQuery, inputSetSearch } = inputSlice.actions;
+export const { inputSetQuery, inputSetSearch, setLatLng } = inputSlice.actions;
 
 export const selectDateMode = (state: RootState) => state.input.query.dateMode;
 

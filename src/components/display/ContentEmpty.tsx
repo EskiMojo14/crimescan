@@ -25,7 +25,7 @@ export const ContentEmpty = (props: ContentEmptyProps) => {
           No data to display
         </Typography>
         <Typography className="subtitle" use="body1" tag="p">
-          Enter a query to get started.
+          Submit a query to get started.
         </Typography>
       </div>
     </div>

@@ -45,7 +45,7 @@ const getGeocodedResults = (query: string) => {
         dispatch(setLoading(false));
         console.log(status);
         queue.notify({ title: "Failed to get geocoding results: " + statusCodes[status] });
-      } else if (status === "ZERO_RESULTS") {
+      } else if (status === "ZERO_RESULTS" || !results) {
         dispatch(setLoading(false));
         dispatch(setNoResults(true));
       } else if (results) {
