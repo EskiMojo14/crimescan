@@ -50,7 +50,7 @@ export const processMonthData = (data: CrimeEntry[], query: MonthQuery): MonthDa
 };
 
 export const processYearData = (data: CrimeEntry[][], query: YearQuery): YearData => {
-  const firstEntry = data[0][0];
+  const firstEntry = data.filter((entries) => !!entries[0])[0][0];
   const location = firstEntry ? `${firstEntry.location.latitude}, ${firstEntry.location.longitude}` : "";
 
   const count = data.map((arr) => arr.length);
