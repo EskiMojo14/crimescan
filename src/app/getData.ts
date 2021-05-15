@@ -1,4 +1,4 @@
-import { setMonth, setYear } from "../components/display/dataSlice";
+import { setEmptyData, setMonth, setYear } from "../components/display/dataSlice";
 import { setCategories, setLoading } from "../components/display/displaySlice";
 import { delay } from "../util/functions";
 import { MonthQuery, YearQuery } from "../util/types";
@@ -30,6 +30,7 @@ export const getMonthData = (query: MonthQuery) => {
     .then((response) => response.json())
     .then((result) => {
       const data = processMonthData(result, query);
+      dispatch(setEmptyData(data.count === 0));
       dispatch(setMonth(data));
       dispatch(setLoading(false));
     })
@@ -55,6 +56,7 @@ export const getYearData = (query: YearQuery) => {
   Promise.all(months.map((month) => getMonthData(month)))
     .then((result) => {
       const data = processYearData(result, query);
+      dispatch(setEmptyData(data.count.reduce((a, b) => a + b) === 0));
       dispatch(setYear(data));
       dispatch(setLoading(false));
     })

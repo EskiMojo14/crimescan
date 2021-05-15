@@ -36,12 +36,14 @@ const blankYear: YearData = {
 
 type DataState = {
   type: "month" | "year";
+  emptyData: boolean;
   month: MonthData;
   year: YearData;
 };
 
 const initialState: DataState = {
   type: "month",
+  emptyData: false,
   month: blankMonth,
   year: blankYear,
 };
@@ -60,12 +62,17 @@ export const dataSlice = createSlice({
       state.year = { ...state.year, ...action.payload };
       state.month = blankMonth;
     },
+    setEmptyData: (state, action: PayloadAction<boolean>) => {
+      state.emptyData = action.payload;
+    },
   },
 });
 
-export const { setMonth, setYear } = dataSlice.actions;
+export const { setMonth, setYear, setEmptyData } = dataSlice.actions;
 
 export const selectType = (state: RootState) => state.data.type;
+
+export const selectEmptyData = (state: RootState) => state.data.emptyData;
 
 export const selectMonthData = (state: RootState) => state.data.month;
 

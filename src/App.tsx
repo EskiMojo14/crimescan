@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "./app/hooks";
 import { loadGoogleMapsAPI } from "./app/googleMaps";
 import { getCrimeCategories } from "./app/getData";
-import { selectQuery } from "./components/display/dataSlice";
+import { selectEmptyData, selectQuery } from "./components/display/dataSlice";
 import { queue } from "./app/snackbarQueue";
 import { closeModal, openModal } from "./util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
@@ -20,6 +20,8 @@ function App() {
 
   const query = useAppSelector(selectQuery);
 
+  const emptyData = useAppSelector(selectEmptyData);
+
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const openSearch = () => {
     setSearchDrawerOpen(true);
@@ -35,7 +37,7 @@ function App() {
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} />
       <DrawerSettings openSearch={openSearch} />
       <DrawerAppContent>
-        <ContentEmpty open={!query.lat && !query.lng} />
+        <ContentEmpty open={(!query.lat && !query.lng) || emptyData} />
         <ContentContainer />
       </DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
