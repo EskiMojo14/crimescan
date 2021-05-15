@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { geocodeSearch } from "../../app/googleMaps";
 import { initialState, inputSetSearch, selectSearchQuery } from "./inputSlice";
 import { hasKey } from "../../util/functions";
 import { Button } from "@rmwc/button";
@@ -21,6 +22,9 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
     const value = e.target.value;
     if (hasKey(initialState.search, name)) {
       dispatch(inputSetSearch({ key: name, value: value }));
+      if (name === "query") {
+        geocodeSearch(value);
+      }
     }
   };
   const clearSearch = () => {
