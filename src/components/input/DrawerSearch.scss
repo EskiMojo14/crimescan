@@ -1,0 +1,40 @@
+@use "@material/rtl";
+@use "../../util";
+.drawer-search {
+  &.mdc-drawer.drawer-right {
+    width: 400px;
+  }
+  .mdc-drawer {
+    &__header {
+      display: flex;
+      align-items: center;
+      height: 72px;
+      padding: 16px;
+      @include util.divider-border(bottom);
+      .mdc-button {
+        @include rtl.reflexive-box(margin, left, 16px);
+      }
+    }
+    &__title {
+      flex-grow: 1;
+      margin: 0;
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+    &__content {
+    }
+  }
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    @include util.divider-border(bottom);
+    .mdc-text-field {
+      &__icon--trailing {
+        @include rtl.reflexive-box(margin, right, -8px);
+      }
+    }
+  }
+}

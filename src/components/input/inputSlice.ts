@@ -2,45 +2,64 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
 type InputState = {
-  dateMode: "month" | "year";
-  month: string;
-  year: string;
-  lat: string;
-  lng: string;
+  query: {
+    dateMode: "month" | "year";
+    month: string;
+    year: string;
+    lat: string;
+    lng: string;
+  };
+  search: {
+    query: string;
+  };
 };
 
 export const initialState: InputState = {
-  dateMode: "month",
-  month: "",
-  year: "",
-  lat: "",
-  lng: "",
+  query: {
+    dateMode: "month",
+    month: "",
+    year: "",
+    lat: "",
+    lng: "",
+  },
+  search: {
+    query: "",
+  },
 };
 
 export const inputSlice = createSlice({
   name: "input",
   initialState,
   reducers: {
-    inputSet: <T extends keyof InputState>(
+    inputSetQuery: <T extends keyof InputState["query"]>(
       state: InputState,
-      action: PayloadAction<{ key: T; value: InputState[T] }>
+      action: PayloadAction<{ key: T; value: InputState["query"][T] }>
     ) => {
       const { key, value } = action.payload;
-      state[key] = value;
+      state.query[key] = value;
+    },
+    inputSetSearch: <T extends keyof InputState["search"]>(
+      state: InputState,
+      action: PayloadAction<{ key: T; value: InputState["search"][T] }>
+    ) => {
+      const { key, value } = action.payload;
+      state.search[key] = value;
     },
   },
 });
 
-export const { inputSet } = inputSlice.actions;
+export const { inputSetQuery, inputSetSearch } = inputSlice.actions;
 
-export const selectDateMode = (state: RootState) => state.input.dateMode;
+export const selectDateMode = (state: RootState) => state.input.query.dateMode;
 
-export const selectMonth = (state: RootState) => state.input.month;
+export const selectMonth = (state: RootState) => state.input.query.month;
 
-export const selectYear = (state: RootState) => state.input.year;
+export const selectYear = (state: RootState) => state.input.query.year;
 
-export const selectLat = (state: RootState) => state.input.lat;
+export const selectLat = (state: RootState) => state.input.query.lat;
 
-export const selectLng = (state: RootState) => state.input.lng;
+export const selectLng = (state: RootState) => state.input.query.lng;
+
+export const selectSearchQuery = (state: RootState) => state.input.search.query;
 
 export default inputSlice.reducer;
