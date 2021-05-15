@@ -40,7 +40,6 @@ const getGeocodedResults = (query: string) => {
   const { loaded } = store.getState().maps;
   if (loaded && query) {
     const processResults = (results: google.maps.GeocoderResult[] | null, status: google.maps.GeocoderStatus) => {
-      console.log(results, status);
       if (status !== "OK" && status !== "ZERO_RESULTS") {
         dispatch(setLoading(false));
         console.log(status);
