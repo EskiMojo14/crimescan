@@ -55,12 +55,17 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-body[class^="scroll-lock"], body[class*=" scroll-lock"] {
+body[class^="scroll-lock"],
+body[class*=" scroll-lock"] {
   overflow: hidden;
 }
 
 .material-icons:not(.round) {
   font-family: "Material Icons Sharp";
+}
+
+.mdc-button {
+  line-height: initial;
 }
 
 .mdc-button.mdc-button--outlined,
