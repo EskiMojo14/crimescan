@@ -1,4 +1,4 @@
-import type { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "../util/types";
+import type { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "./slices/data/types";
 import { uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
 import store from "./store";
 

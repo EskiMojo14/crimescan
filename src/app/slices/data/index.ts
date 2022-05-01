@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { MonthData, YearData } from "../../../util/types";
+import { MonthData, YearData } from "./types";
 
 const blankMonth: MonthData = {
   type: "month",

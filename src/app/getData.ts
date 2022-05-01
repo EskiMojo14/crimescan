@@ -1,7 +1,7 @@
 import { setEmptyData, setMonth, setYear } from "./slices/data";
+import { MonthQuery, YearQuery } from "./slices/data/types";
 import { setCategories, setLoading } from "./slices/display";
 import { delay } from "../util/functions";
-import { MonthQuery, YearQuery } from "../util/types";
 import { processMonthData, processYearData } from "./processData";
 import { queue } from "./snackbarQueue";
 import store from "./store";

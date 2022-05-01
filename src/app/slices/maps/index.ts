@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { MapResult } from "../../../util/types";
+import { MapResult } from "./types";
 
 type MapsState = {
   loaded: boolean;

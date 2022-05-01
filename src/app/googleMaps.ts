@@ -3,7 +3,7 @@ import debounce from "lodash.debounce";
 import { queue } from "./snackbarQueue";
 import store from "./store";
 import { setLoaded, setLoading, setNoResults, setResult } from "./slices/maps";
-import { MapResult } from "../util/types";
+import { MapResult } from "./slices/maps/types";
 
 const loader = new Loader({
   apiKey: process.env.GOOGLE_MAPS_KEY as string,
