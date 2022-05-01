@@ -68,7 +68,7 @@
         .map-container {
           position: relative;
           @include util.divider-border(all);
-          background-size: contain;
+          background-size: cover;
           background-position: center;
           padding-top: 100%;
           .map-icon {
