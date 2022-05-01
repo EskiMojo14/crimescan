@@ -1,7 +1,7 @@
 import { setCrimes, setEmptyData, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
 import { setCategories, setLoading } from "../display";
-import { delay, uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
+import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "../util/functions";
 import { queue } from "../../snackbarQueue";
 import store from "../../store";
 
@@ -140,14 +140,13 @@ export const getYearData = (query: YearQuery) => {
   // https://daveceddia.com/access-redux-store-outside-react/#dispatch-actions-outside-a-react-component
   const { year, lat, lng } = query;
   dispatch(setLoading(true));
-  const getMonthData = (month: number) => {
-    // Delay to prevent calling API too fast.
-    return delay((month - 1) * 100)
-      .then(() => fetch(`https://data.police.uk/api/crimes-at-location?date=${year}-${month}&lat=${lat}&lng=${lng}`))
-      .then((response) => response.json());
-  };
+  const getMonthData = (month: number) =>
+    fetch(`https://data.police.uk/api/crimes-at-location?date=${year}-${month}&lat=${lat}&lng=${lng}`).then(
+      (response) => response.json()
+    );
+
   const months = new Array(12).fill("").map((item, index) => index + 1);
-  Promise.all(months.map((month) => getMonthData(month)))
+  promiseAllSeries(months.map((month) => getMonthData(month)))
     .then((result) => {
       dispatch(setCrimes(result.flat()));
       const data = processYearData(result, query);

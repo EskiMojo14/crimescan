@@ -171,3 +171,11 @@ export const openModal = (id = nanoid()) => {
 export const closeModal = (id: string) => {
   document.body.classList.remove(`scroll-lock-${id}`);
 };
+
+export const promiseAllSeries = async <T>(promises: Array<T | PromiseLike<T>>): Promise<Awaited<T>[]> => {
+  const values: any[] = [];
+  for (const promise of promises) {
+    values.push(await promise);
+  }
+  return values as any;
+};
