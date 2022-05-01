@@ -213,7 +213,9 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
                       resultLocation && queryLocation === latLng
                         ? `&markers=color:0x${pinColors[theme].red}|${resultLocation}`
                         : ""
-                    }&markers=color:0x${pinColors[theme].green}|${lat},${lng}")`,
+                    }&markers=color:0x${pinColors[theme].green}|${lat},${lng}${
+                      theme === "dark" ? "&map_id=f3b730e3bc8bf288" : ""
+                    }")`,
                   }
                 : undefined
             }

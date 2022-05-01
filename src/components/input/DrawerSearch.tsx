@@ -79,7 +79,11 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         style={
           validLocation
             ? {
-                backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}&markers=color:0x${pinColors[theme].green}|${result.lat},${result.lng}")`,
+                backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${
+                  process.env.GOOGLE_MAPS_KEY
+                }&markers=color:0x${pinColors[theme].green}|${result.lat},${result.lng}${
+                  theme === "dark" ? "&map_id=f3b730e3bc8bf288" : ""
+                }")`,
               }
             : undefined
         }
