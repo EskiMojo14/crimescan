@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { geocodeSearch } from "../../app/slices/maps/functions";
+import { geocodeSearch, getStaticMapURL } from "../../app/slices/maps/functions";
 import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "../../app/slices/input";
 import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "../../app/slices/maps";
 import { selectTheme } from "../../app/slices/display";
@@ -79,11 +79,9 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         style={
           validLocation
             ? {
-                backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${
-                  process.env.GOOGLE_MAPS_KEY
-                }&markers=color:0x${pinColors[theme].green}|${result.lat},${result.lng}${
-                  theme === "dark" ? "&map_id=f3b730e3bc8bf288" : ""
-                }")`,
+                backgroundImage: `url("${getStaticMapURL("448x448", theme, [
+                  { color: pinColors[theme].green, lat: result.lat, lng: result.lng },
+                ])}")`,
               }
             : undefined
         }

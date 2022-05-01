@@ -55,3 +55,23 @@ const getGeocodedResults = (query: string) => {
 };
 
 export const geocodeSearch = debounce(getGeocodedResults, 400);
+
+export const getStaticMapURL = (
+  size: string,
+  theme?: "light" | "dark",
+  markers?: ({ color: string; lat: string; lng: string } | boolean)[]
+) => {
+  const baseUrl = new URL("https://maps.googleapis.com/maps/api/staticmap");
+  baseUrl.searchParams.set("key", process.env.GOOGLE_MAPS_KEY!);
+  baseUrl.searchParams.set("size", size);
+  if (theme === "dark") {
+    baseUrl.searchParams.set("map_id", "f3b730e3bc8bf288");
+  }
+  markers?.forEach((marker) => {
+    if (typeof marker === "object") {
+      const { color, lat, lng } = marker;
+      baseUrl.searchParams.append("markers", `color:0x${color}|${lat},${lng}`);
+    }
+  });
+  return baseUrl.href;
+};

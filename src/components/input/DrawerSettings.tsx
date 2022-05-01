@@ -26,6 +26,7 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "../util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
 import "./DrawerSettings.scss";
+import { getStaticMapURL } from "../../app/slices/maps/functions";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
@@ -73,6 +74,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   };
   const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
+  const [resultLat, resultLng] = resultLocation.split(", ");
   const latLng = `${lat},${lng}`;
   const queryLocation = `${query.lat},${query.lng}`;
   const formFilled = validDate && validLocation;
@@ -207,15 +209,12 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
             style={
               validLocation
                 ? {
-                    backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${
-                      process.env.GOOGLE_MAPS_KEY
-                    }${
+                    backgroundImage: `url("${getStaticMapURL("448x448", theme, [
                       resultLocation && queryLocation === latLng
-                        ? `&markers=color:0x${pinColors[theme].red}|${resultLocation}`
-                        : ""
-                    }&markers=color:0x${pinColors[theme].green}|${lat},${lng}${
-                      theme === "dark" ? "&map_id=f3b730e3bc8bf288" : ""
-                    }")`,
+                        ? { color: pinColors[theme].red, lat: resultLat, lng: resultLng }
+                        : false,
+                      { color: pinColors[theme].green, lat, lng },
+                    ])}")`,
                   }
                 : undefined
             }
