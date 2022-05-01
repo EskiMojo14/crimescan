@@ -10,9 +10,9 @@ import {
   selectMonth,
   selectYear,
   selectDateMode,
-} from "./inputSlice";
-import { selectQuery, selectLocation } from "../display/dataSlice";
-import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
+} from "../../app/slices/input";
+import { selectQuery, selectLocation } from "../../app/slices/data";
+import { selectLoading, selectTheme, toggleTheme } from "../../app/slices/display";
 import { queryIcons } from "../../util/constants";
 import { hasKey } from "../../util/functions";
 import { Button } from "@rmwc/button";

@@ -3,7 +3,7 @@ import classNames from "classnames";
 import emptyImg from "../../media/empty.svg";
 import emptyCheckImg from "../../media/empty_check.svg";
 import { useAppSelector } from "../../app/hooks";
-import { selectEmptyData } from "./dataSlice";
+import { selectEmptyData } from "../../app/slices/data";
 import { Typography } from "@rmwc/typography";
 import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
 import "./ContentEmpty.scss";

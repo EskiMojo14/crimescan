@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useAppSelector } from "../../app/hooks";
 import { months } from "../../util/constants";
 import { iconObject, addOrRemove } from "../../util/functions";
-import { selectMonthData, selectYearData } from "./dataSlice";
+import { selectMonthData, selectYearData } from "../../app/slices/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";

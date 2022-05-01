@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import inputReducer from "../components/input/inputSlice";
-import mapsReducer from "../components/input/mapsSlice";
-import dataReducer from "../components/display/dataSlice";
-import displayReducer from "../components/display/displaySlice";
+import inputReducer from "./slices/input";
+import mapsReducer from "./slices/maps";
+import dataReducer from "./slices/data";
+import displayReducer from "./slices/display";
 
 export const store = configureStore({
   reducer: {

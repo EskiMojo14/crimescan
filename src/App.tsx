@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "./app/hooks";
 import { loadGoogleMapsAPI } from "./app/googleMaps";
 import { getCrimeCategories } from "./app/getData";
-import { selectEmptyData, selectQuery } from "./components/display/dataSlice";
+import { selectEmptyData, selectQuery } from "./app/slices/data";
 import { queue } from "./app/snackbarQueue";
 import { closeModal, openModal } from "./util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";

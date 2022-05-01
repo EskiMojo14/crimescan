@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { months } from "../../util/constants";
 import { iconObject } from "../../util/functions";
-import { selectYearData } from "./dataSlice";
+import { selectYearData } from "../../app/slices/data";
 import type { IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";

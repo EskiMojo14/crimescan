@@ -2,7 +2,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import debounce from "lodash.debounce";
 import { queue } from "./snackbarQueue";
 import store from "./store";
-import { setLoaded, setLoading, setNoResults, setResult } from "../components/input/mapsSlice";
+import { setLoaded, setLoading, setNoResults, setResult } from "./slices/maps";
 import { MapResult } from "../util/types";
 
 const loader = new Loader({

@@ -1,5 +1,5 @@
-import { setEmptyData, setMonth, setYear } from "../components/display/dataSlice";
-import { setCategories, setLoading } from "../components/display/displaySlice";
+import { setEmptyData, setMonth, setYear } from "./slices/data";
+import { setCategories, setLoading } from "./slices/display";
 import { delay } from "../util/functions";
 import { MonthQuery, YearQuery } from "../util/types";
 import { processMonthData, processYearData } from "./processData";
