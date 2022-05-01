@@ -12,8 +12,9 @@ export const getCrimeCategories = () => {
     .then((response) => response.json())
     .then((value) => {
       const keyObject: Record<string, string> = value.reduce(
-        (acc: Record<string, string>, item: { url: string; name: string }) => {
-          return { ...acc, [item.url]: item.name };
+        (acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
+          acc[url] = name;
+          return acc;
         },
         {}
       );
