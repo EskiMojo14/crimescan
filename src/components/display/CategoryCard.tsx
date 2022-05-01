@@ -39,7 +39,7 @@ export const CategoryCardMonth = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allCategories.length) {
@@ -165,7 +165,7 @@ export const CategoryCardYear = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allCategories.length) {

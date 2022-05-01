@@ -38,7 +38,7 @@ export const OutcomeCardMonth = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allOutcomes.length) {
@@ -164,7 +164,7 @@ export const OutcomeCardYear = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allOutcomes.length) {
