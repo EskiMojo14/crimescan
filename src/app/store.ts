@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import inputReducer from "./slices/input";
-import mapsReducer from "./slices/maps";
-import dataReducer from "./slices/data";
-import displayReducer from "./slices/display";
+import input from "./slices/input";
+import maps from "./slices/maps";
+import data from "./slices/data";
+import display from "./slices/display";
 
 export const store = configureStore({
   reducer: {
-    input: inputReducer,
-    maps: mapsReducer,
-    data: dataReducer,
-    display: displayReducer,
+    input,
+    maps,
+    data,
+    display,
   },
 });
 
