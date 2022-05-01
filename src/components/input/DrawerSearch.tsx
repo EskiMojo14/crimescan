@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { geocodeSearch } from "../../app/googleMaps";
+import { geocodeSearch } from "../../app/slices/maps/functions";
 import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "../../app/slices/input";
 import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "../../app/slices/maps";
 import { selectTheme } from "../../app/slices/display";

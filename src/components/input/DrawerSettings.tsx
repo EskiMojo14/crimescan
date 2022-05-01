@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getMonthData, getYearData } from "../../app/getData";
+import { getMonthData, getYearData } from "../../app/slices/data/functions";
 import {
   initialState,
   inputSetQuery,

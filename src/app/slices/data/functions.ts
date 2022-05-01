@@ -1,6 +1,9 @@
-import type { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "./slices/data/types";
-import { uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
-import store from "./store";
+import { setEmptyData, setMonth, setYear } from ".";
+import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
+import { setCategories, setLoading } from "../display";
+import { delay, uniqueArray, alphabeticalSort, hasKey, countInArray } from "../../../util/functions";
+import { queue } from "../../snackbarQueue";
+import store from "../../store";
 
 export const formatCategory = (category: string) => {
   const state = store.getState();
@@ -93,4 +96,66 @@ export const processYearData = (data: CrimeEntry[][], query: YearQuery): YearDat
     allOutcomes: allOutcomes,
     outcomeCount: outcomeCount,
   };
+};
+
+export const getCrimeCategories = () => {
+  const { dispatch } = store;
+  fetch("https://data.police.uk/api/crime-categories")
+    .then((response) => response.json())
+    .then((value) => {
+      const keyObject: Record<string, string> = value.reduce(
+        (acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
+          acc[url] = name;
+          return acc;
+        },
+        {}
+      );
+      dispatch(setCategories(keyObject));
+    });
+};
+
+export const getMonthData = (query: MonthQuery) => {
+  const { dispatch } = store;
+  // https://daveceddia.com/access-redux-store-outside-react/#dispatch-actions-outside-a-react-component
+  const { month, lat, lng } = query;
+  dispatch(setLoading(true));
+  fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
+    .then((response) => response.json())
+    .then((result) => {
+      const data = processMonthData(result, query);
+      dispatch(setEmptyData(data.count === 0));
+      dispatch(setMonth(data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log(error);
+      queue.notify({ title: "Failed to get crime data: " + error });
+      dispatch(setLoading(false));
+    });
+};
+
+export const getYearData = (query: YearQuery) => {
+  const { dispatch } = store;
+  // https://daveceddia.com/access-redux-store-outside-react/#dispatch-actions-outside-a-react-component
+  const { year, lat, lng } = query;
+  dispatch(setLoading(true));
+  const getMonthData = (month: number) => {
+    // Delay to prevent calling API too fast.
+    return delay((month - 1) * 100)
+      .then(() => fetch(`https://data.police.uk/api/crimes-at-location?date=${year}-${month}&lat=${lat}&lng=${lng}`))
+      .then((response) => response.json());
+  };
+  const months = new Array(12).fill("").map((item, index) => index + 1);
+  Promise.all(months.map((month) => getMonthData(month)))
+    .then((result) => {
+      const data = processYearData(result, query);
+      dispatch(setEmptyData(data.count.reduce((a, b) => a + b) === 0));
+      dispatch(setYear(data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log(error);
+      queue.notify({ title: "Failed to get crime data: " + error });
+      dispatch(setLoading(false));
+    });
 };

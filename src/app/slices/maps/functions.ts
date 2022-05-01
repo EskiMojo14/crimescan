@@ -1,23 +1,14 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import debounce from "lodash.debounce";
-import { queue } from "./snackbarQueue";
-import store from "./store";
-import { setLoaded, setLoading, setNoResults, setResult } from "./slices/maps";
-import { MapResult } from "./slices/maps/types";
+import { queue } from "../../snackbarQueue";
+import store from "../../store";
+import { setLoaded, setLoading, setNoResults, setResult } from ".";
+import { MapResult } from "./types";
+import { statusCodes } from "./constants";
 
 const loader = new Loader({
   apiKey: process.env.GOOGLE_MAPS_KEY as string,
 });
-
-const statusCodes: Record<string, string> = {
-  OK: "No errors occurred",
-  ZERO_RESULTS: "No results returned",
-  OVER_QUERY_LIMIT: "Quota exceeded",
-  REQUEST_DENIED: "Request denied",
-  INVALID_REQUEST: "Query likely missing",
-  UNKNOWN_ERROR: "Server error",
-  ERROR: "Request timed out",
-};
 
 let geocoder: google.maps.Geocoder;
 

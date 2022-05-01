@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "./app/hooks";
-import { loadGoogleMapsAPI } from "./app/googleMaps";
-import { getCrimeCategories } from "./app/getData";
+import { loadGoogleMapsAPI } from "./app/slices/maps/functions";
+import { getCrimeCategories } from "./app/slices/data/functions";
 import { selectEmptyData, selectQuery } from "./app/slices/data";
 import { queue } from "./app/snackbarQueue";
 import { closeModal, openModal } from "./util/functions";

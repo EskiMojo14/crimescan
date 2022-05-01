@@ -1,38 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
+import { blankMonth, blankYear } from "./constants";
 import { MonthData, YearData } from "./types";
-
-const blankMonth: MonthData = {
-  type: "month",
-  location: "",
-  query: {
-    type: "month",
-    month: "",
-    lat: "",
-    lng: "",
-  },
-  count: 0,
-  allCategories: [""],
-  categoryCount: [0],
-  allOutcomes: [""],
-  outcomeCount: [0],
-};
-
-const blankYear: YearData = {
-  type: "year",
-  location: "",
-  query: {
-    type: "year",
-    year: "",
-    lat: "",
-    lng: "",
-  },
-  count: [0],
-  allCategories: [""],
-  categoryCount: [[0]],
-  allOutcomes: [""],
-  outcomeCount: [[0]],
-};
 
 type DataState = {
   type: "month" | "year";
