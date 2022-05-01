@@ -4,7 +4,7 @@ import { loadGoogleMapsAPI } from "./app/slices/maps/functions";
 import { getCrimeCategories } from "./app/slices/data/functions";
 import { selectEmptyData, selectQuery } from "./app/slices/data";
 import { queue } from "./app/snackbarQueue";
-import { closeModal, openModal } from "./util/functions";
+import { closeModal, openModal } from "./app/slices/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
 import { ContentContainer } from "./components/display/ContentContainer";

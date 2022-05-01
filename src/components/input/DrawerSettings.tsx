@@ -13,8 +13,8 @@ import {
 } from "../../app/slices/input";
 import { selectQuery, selectLocation } from "../../app/slices/data";
 import { selectLoading, selectTheme, toggleTheme } from "../../app/slices/display";
-import { queryIcons } from "../../util/constants";
-import { hasKey } from "../../util/functions";
+import { queryIcons } from "../../app/slices/util/constants";
+import { hasKey } from "../../app/slices/util/functions";
 import { Button } from "@rmwc/button";
 import { Chip } from "@rmwc/chip";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";

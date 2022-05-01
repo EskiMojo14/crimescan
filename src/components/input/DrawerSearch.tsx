@@ -5,7 +5,7 @@ import { geocodeSearch } from "../../app/slices/maps/functions";
 import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "../../app/slices/input";
 import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "../../app/slices/maps";
 import { selectTheme } from "../../app/slices/display";
-import { hasKey } from "../../util/functions";
+import { hasKey } from "../../app/slices/util/functions";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent, DrawerTitle } from "@rmwc/drawer";
 import { IconButton } from "@rmwc/icon-button";

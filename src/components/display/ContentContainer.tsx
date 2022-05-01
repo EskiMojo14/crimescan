@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
-import { queryIcons } from "../../util/constants";
+import { queryIcons } from "../../app/slices/util/constants";
 import { selectQuery, selectType } from "../../app/slices/data";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";

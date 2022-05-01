@@ -1,7 +1,7 @@
 import { setEmptyData, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
 import { setCategories, setLoading } from "../display";
-import { delay, uniqueArray, alphabeticalSort, hasKey, countInArray } from "../../../util/functions";
+import { delay, uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
 import { queue } from "../../snackbarQueue";
 import store from "../../store";
 

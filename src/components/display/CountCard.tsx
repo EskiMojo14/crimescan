@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAppSelector } from "../../app/hooks";
-import { months } from "../../util/constants";
-import { iconObject } from "../../util/functions";
+import { months } from "../../app/slices/util/constants";
+import { iconObject } from "../../app/slices/util/functions";
 import { selectYearData } from "../../app/slices/data";
 import type { IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
