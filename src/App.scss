@@ -55,7 +55,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.scroll-lock {
+body[class^="scroll-lock"], body[class*=" scroll-lock"] {
   overflow: hidden;
 }
 

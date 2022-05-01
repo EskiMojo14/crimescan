@@ -1,3 +1,4 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { IconOptions, IconPropT } from "@rmwc/types";
 
 /**
@@ -139,20 +140,15 @@ export const iconObject = (jsx: React.ReactNode, config?: Omit<IconOptions, "ico
  * Adds scroll-lock class to body, to prevent scrolling while modal is open.
  */
 
-export const openModal = () => {
-  const body = document.querySelector("body");
-  if (body) {
-    body.classList.add("scroll-lock");
-  }
+export const openModal = (id = nanoid()) => {
+  document.body.classList.add(`scroll-lock-${id}`);
+  return id;
 };
 
 /**
  * Removes scroll-lock class from body, to allow scrolling once modal is closed.
  */
 
-export const closeModal = () => {
-  const body = document.querySelector("body");
-  if (body) {
-    body.classList.remove("scroll-lock");
-  }
+export const closeModal = (id: string) => {
+  document.body.classList.remove(`scroll-lock-${id}`);
 };

@@ -25,11 +25,11 @@ function App() {
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const openSearch = () => {
     setSearchDrawerOpen(true);
-    openModal();
+    openModal("search-drawer");
   };
   const closeSearch = () => {
     setSearchDrawerOpen(false);
-    closeModal();
+    closeModal("search-drawer");
   };
 
   return (
