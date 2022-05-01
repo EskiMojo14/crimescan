@@ -172,10 +172,16 @@ export const closeModal = (id: string) => {
   document.body.classList.remove(`scroll-lock-${id}`);
 };
 
-export const promiseAllSeries = async <T>(promises: Array<T | PromiseLike<T>>): Promise<Awaited<T>[]> => {
+export const promiseAllSeries = async <T>(
+  promises: Array<() => T | PromiseLike<T>>,
+  delayTime?: number
+): Promise<Awaited<T>[]> => {
   const values: any[] = [];
   for (const promise of promises) {
-    values.push(await promise);
+    values.push(await promise());
+    if (delayTime) {
+      await delay(delayTime);
+    }
   }
   return values as any;
 };

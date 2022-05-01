@@ -146,7 +146,10 @@ export const getYearData = (query: YearQuery) => {
     );
 
   const months = new Array(12).fill("").map((item, index) => index + 1);
-  promiseAllSeries(months.map((month) => getMonthData(month)))
+  promiseAllSeries(
+    months.map((month) => () => getMonthData(month)),
+    100
+  )
     .then((result) => {
       dispatch(setCrimes(result.flat()));
       const data = processYearData(result, query);
