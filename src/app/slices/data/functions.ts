@@ -1,4 +1,4 @@
-import { setEmptyData, setMonth, setYear } from ".";
+import { setCrimes, setEmptyData, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
 import { setCategories, setLoading } from "../display";
 import { delay, uniqueArray, alphabeticalSort, hasKey, countInArray } from "../util/functions";
@@ -122,6 +122,7 @@ export const getMonthData = (query: MonthQuery) => {
   fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
     .then((response) => response.json())
     .then((result) => {
+      dispatch(setCrimes(result));
       const data = processMonthData(result, query);
       dispatch(setEmptyData(data.count === 0));
       dispatch(setMonth(data));
@@ -148,6 +149,7 @@ export const getYearData = (query: YearQuery) => {
   const months = new Array(12).fill("").map((item, index) => index + 1);
   Promise.all(months.map((month) => getMonthData(month)))
     .then((result) => {
+      dispatch(setCrimes(result.flat()));
       const data = processYearData(result, query);
       dispatch(setEmptyData(data.count.reduce((a, b) => a + b) === 0));
       dispatch(setYear(data));

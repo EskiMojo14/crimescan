@@ -1,11 +1,16 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { blankMonth, blankYear } from "./constants";
-import { MonthData, YearData } from "./types";
+import { CrimeEntry, MonthData, YearData } from "./types";
+
+const crimeAdapter = createEntityAdapter<CrimeEntry>({
+  selectId: ({ persistent_id }) => persistent_id,
+});
 
 type DataState = {
   type: "month" | "year";
   emptyData: boolean;
+  crimes: EntityState<CrimeEntry>;
   month: MonthData;
   year: YearData;
 };
@@ -13,6 +18,7 @@ type DataState = {
 const initialState: DataState = {
   type: "month",
   emptyData: false,
+  crimes: crimeAdapter.getInitialState(),
   month: blankMonth,
   year: blankYear,
 };
@@ -34,10 +40,13 @@ export const dataSlice = createSlice({
     setEmptyData: (state, action: PayloadAction<boolean>) => {
       state.emptyData = action.payload;
     },
+    setCrimes: (state, action: PayloadAction<CrimeEntry[]>) => {
+      crimeAdapter.setMany(state.crimes, action);
+    },
   },
 });
 
-export const { setMonth, setYear, setEmptyData } = dataSlice.actions;
+export const { setMonth, setYear, setEmptyData, setCrimes } = dataSlice.actions;
 
 export const selectType = (state: RootState) => state.data.type;
 
