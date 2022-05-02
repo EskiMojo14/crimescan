@@ -91,13 +91,9 @@ export const {
 
 export const selectInitialLoad = (state: RootState) => state.data.initialLoad;
 
-export const selectType = (state: RootState) => state.data.type;
-
-export const selectMonthData = (state: RootState) => state.data.month;
-
-export const selectYearData = (state: RootState) => state.data.year;
-
 export const selectQuery = (state: RootState) => state.data.query;
+
+export const selectType = (state: RootState) => state.data.query?.type ?? "month";
 
 export const selectLocation = createSelector(selectAllCrimes, ([crimeEntry]) =>
   crimeEntry ? { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude } : undefined
@@ -111,6 +107,16 @@ export const selectAllCategories = createSelector(
   (allCrimes, formattedCategories) =>
     alphabeticalSort(uniqueArray(allCrimes.map(({ category }) => formattedCategories[category] ?? category)))
 );
+
+export const selectAllOutcomes = createSelector(selectAllCrimes, (allCrimes) => {
+  const outcomes = new Set<string>();
+  for (const crime of allCrimes) {
+    if (crime.outcome_status) {
+      outcomes.add(crime.outcome_status.category);
+    }
+  }
+  return alphabeticalSort(Array.from(outcomes));
+});
 
 const months = [...Array(12)].map((_, i) => ++i);
 
@@ -171,6 +177,37 @@ export const selectCategoryCount = createSelector(
     for (const [month, crimes] of Object.entries(crimesByMonth)) {
       for (const crime of crimes) {
         acc[formattedCategories[crime.category] ?? crime.category]?.[month]?.push(crime);
+      }
+    }
+    return Object.values(acc).map((monthAcc) => Object.values(monthAcc).map((crimes) => crimes.length));
+  }
+);
+
+export const selectOutcomeCount = createSelector(
+  selectQuery,
+  selectAllOutcomes,
+  selectAllCrimesByMonth,
+  (query, allOutcomes, crimesByMonth) => {
+    if (!query) {
+      return [];
+    }
+    const monthAcc =
+      query.type === "month"
+        ? { [query.month]: [] }
+        : monthsZeroStart.reduce<Record<string, CrimeEntry[]>>((midAcc, month) => {
+            midAcc[`${query.year}-${month}`] = [];
+            return midAcc;
+          }, {});
+    const acc = allOutcomes.reduce<Record<string, Record<string, CrimeEntry[]>>>((midAcc, category) => {
+      midAcc[category] = cloneDeep(monthAcc);
+      return midAcc;
+    }, {});
+
+    for (const [month, crimes] of Object.entries(crimesByMonth)) {
+      for (const crime of crimes) {
+        if (crime.outcome_status) {
+          acc[crime.outcome_status.category]?.[month]?.push(crime);
+        }
       }
     }
     return Object.values(acc).map((monthAcc) => Object.values(monthAcc).map((crimes) => crimes.length));

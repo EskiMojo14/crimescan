@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import classNames from "classnames";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
-import { selectMonthData, selectYearData } from "@s/data";
+import { selectAllOutcomes, selectOutcomeCount } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -24,11 +24,12 @@ import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const OutcomeCardMonth = () => {
-  const monthData = useAppSelector(selectMonthData);
-  const { allOutcomes, outcomeCount } = monthData;
+  const allOutcomes = useAppSelector(selectAllOutcomes);
+  const outcomeCount = useAppSelector(selectOutcomeCount);
+  const series = useMemo(() => outcomeCount.flat(), [outcomeCount]);
   const chartData = {
     labels: [],
-    series: outcomeCount,
+    series,
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
@@ -101,11 +102,11 @@ export const OutcomeCardMonth = () => {
 };
 
 export const OutcomeCardYear = () => {
-  const yearData = useAppSelector(selectYearData);
+  const allOutcomes = useAppSelector(selectAllOutcomes);
+  const outcomeCount = useAppSelector(selectOutcomeCount);
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
-  const { allOutcomes, outcomeCount } = yearData;
   const chartData = {
     labels: months,
     series: outcomeCount,
