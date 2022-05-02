@@ -1,6 +1,6 @@
 import { setCrimes, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
-import { setCategories, setLoading } from "@s/display";
+import { setLoading } from "@s/display";
 import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "@s/util/functions";
 import { queue } from "~/app/snackbarQueue";
 import store from "~/app/store";
@@ -96,22 +96,6 @@ export const processYearData = (data: CrimeEntry[][], query: YearQuery): YearDat
     allOutcomes: allOutcomes,
     outcomeCount: outcomeCount,
   };
-};
-
-export const getCrimeCategories = () => {
-  const { dispatch } = store;
-  fetch("https://data.police.uk/api/crime-categories")
-    .then((response) => response.json())
-    .then((value) => {
-      const keyObject: Record<string, string> = value.reduce(
-        (acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
-          acc[url] = name;
-          return acc;
-        },
-        {}
-      );
-      dispatch(setCategories(keyObject));
-    });
 };
 
 export const getMonthData = (query: MonthQuery) => {

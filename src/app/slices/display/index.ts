@@ -1,5 +1,17 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "~/app/store";
+
+export const getCrimeCategories = createAsyncThunk("display/getCrimeCategories", () =>
+  fetch("https://data.police.uk/api/crime-categories")
+    .then((response) => response.json())
+    .then(
+      (value): Record<string, string> =>
+        value.reduce((acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
+          acc[url] = name;
+          return acc;
+        }, {})
+    )
+);
 
 type DisplayState = {
   theme: "light" | "dark";
@@ -29,13 +41,15 @@ export const displaySlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setCategories: (state, action: PayloadAction<Record<string, string>>) => {
-      state.formattedCategories = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCrimeCategories.fulfilled, (state, { payload }) => {
+      state.formattedCategories = payload;
+    });
   },
 });
 
-export const { toggleTheme, setTheme, toggleLoading, setLoading, setCategories } = displaySlice.actions;
+export const { toggleTheme, setTheme, toggleLoading, setLoading } = displaySlice.actions;
 
 export const selectTheme = (state: RootState) => state.display.theme;
 

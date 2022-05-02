@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "@h";
+import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
-import { getCrimeCategories } from "@s/data/functions";
 import { selectCrimeTotal, selectQuery } from "@s/data";
-import { selectTheme } from "@s/display";
+import { getCrimeCategories, selectTheme } from "@s/display";
 import { queue } from "~/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
@@ -15,7 +14,11 @@ import { DrawerSettings } from "~/components/input/DrawerSettings";
 import "./App.scss";
 
 function App() {
-  useEffect(getCrimeCategories, []);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getCrimeCategories());
+  }, []);
   useEffect(loadGoogleMapsAPI, []);
 
   const theme = useAppSelector(selectTheme);
