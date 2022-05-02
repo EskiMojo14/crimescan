@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import classNames from "classnames";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
-import { getMonthData, getYearData } from "@s/data/functions";
-import { selectQuery, selectLocation } from "@s/data";
+import { getStaticMapURL } from "@s/maps/functions";
+import { notify } from "~/app/snackbarQueue";
+import { selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
 import { selectLoading, selectTheme, toggleTheme } from "@s/display";
 import { queryIcons } from "@s/util/constants";
 import { hasKey } from "@s/util/functions";
@@ -18,7 +19,6 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import "./DrawerSettings.scss";
-import { getStaticMapURL } from "@s/maps/functions";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
@@ -91,12 +91,17 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const { lat: resultLat, lng: resultLng } = resultLocation ?? {};
   const latLng = `${lat},${lng}`;
   const formFilled = validDate && validLocation;
-  const submit = () => {
+  const submit = async () => {
     if (formFilled) {
-      if (dateMode === "month") {
-        getMonthData({ type: dateMode, month, lat, lng });
-      } else {
-        getYearData({ type: dateMode, year, lat, lng });
+      try {
+        if (dateMode === "month") {
+          await dispatch(getMonthData({ type: dateMode, month, lat, lng })).unwrap();
+        } else {
+          await dispatch(getYearData({ type: dateMode, year, lat, lng })).unwrap();
+        }
+      } catch (e) {
+        console.log(e);
+        notify({ title: "Failed to get crime data" });
       }
     }
   };

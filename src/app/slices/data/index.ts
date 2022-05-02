@@ -8,9 +8,10 @@ import {
 } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "~/app/store";
-import { alphabeticalSort, uniqueArray } from "../util/functions";
-import { blankMonth, blankYear } from "./constants";
-import { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "./types";
+import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
+import { CrimeEntry, MonthQuery, YearQuery } from "./types";
+
+const months = [...Array(12)].map((_, i) => ++i);
 
 export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", () =>
   fetch("https://data.police.uk/api/crime-categories")
@@ -24,27 +25,43 @@ export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", ()
     )
 );
 
+export const getMonthData = createAsyncThunk(
+  "data/getMonthData",
+  ({ month, lat, lng }: MonthQuery): Promise<CrimeEntry[]> =>
+    fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`).then((response) =>
+      response.json()
+    )
+);
+
+export const getYearData = createAsyncThunk(
+  "data/getYearData",
+  ({ year, lat, lng }: YearQuery): Promise<CrimeEntry[][]> =>
+    promiseAllSeries(
+      months.map(
+        (month) => () =>
+          fetch(`https://data.police.uk/api/crimes-at-location?date=${year}-${month}&lat=${lat}&lng=${lng}`).then(
+            (response) => response.json()
+          )
+      ),
+      100
+    )
+);
+
 const crimeAdapter = createEntityAdapter<CrimeEntry>({
   selectId: ({ persistent_id }) => persistent_id,
 });
 
 type DataState = {
-  type: "month" | "year";
   initialLoad: boolean;
   crimes: EntityState<CrimeEntry>;
   query: MonthQuery | YearQuery | undefined;
-  month: MonthData;
-  year: YearData;
   formattedCategories: Record<string, string>;
 };
 
 const initialState: DataState = {
-  type: "month",
   initialLoad: true,
   crimes: crimeAdapter.getInitialState(),
   query: undefined,
-  month: blankMonth,
-  year: blankYear,
   formattedCategories: {},
 };
 
@@ -55,29 +72,30 @@ export const dataSlice = createSlice({
     setQuery: (state, { payload }: PayloadAction<MonthQuery | YearQuery>) => {
       state.query = payload;
     },
-    setMonth: (state, { payload }: PayloadAction<MonthData>) => {
-      state.type = "month";
-      state.month = { ...state.month, ...payload };
-      state.year = blankYear;
-    },
-    setYear: (state, { payload }: PayloadAction<YearData>) => {
-      state.type = "year";
-      state.year = { ...state.year, ...payload };
-      state.month = blankMonth;
-    },
     setCrimes: (state, { payload }: PayloadAction<CrimeEntry[]>) => {
       crimeAdapter.setAll(state.crimes, payload);
       state.initialLoad = false;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getCrimeCategories.fulfilled, (state, { payload }) => {
-      state.formattedCategories = payload;
-    });
+    builder
+      .addCase(getCrimeCategories.fulfilled, (state, { payload }) => {
+        state.formattedCategories = payload;
+      })
+      .addCase(getMonthData.fulfilled, (state, { payload, meta: { arg } }) => {
+        state.query = { ...arg, type: "month" };
+        crimeAdapter.setAll(state.crimes, payload);
+        state.initialLoad = false;
+      })
+      .addCase(getYearData.fulfilled, (state, { payload, meta: { arg } }) => {
+        state.query = { ...arg, type: "year" };
+        crimeAdapter.setAll(state.crimes, payload.flat());
+        state.initialLoad = false;
+      });
   },
 });
 
-export const { setQuery, setMonth, setYear, setCrimes } = dataSlice.actions;
+export const { setQuery, setCrimes } = dataSlice.actions;
 
 export default dataSlice.reducer;
 
@@ -117,8 +135,6 @@ export const selectAllOutcomes = createSelector(selectAllCrimes, (allCrimes) => 
   }
   return alphabeticalSort(Array.from(outcomes));
 });
-
-const months = [...Array(12)].map((_, i) => ++i);
 
 const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
 

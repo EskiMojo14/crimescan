@@ -37,27 +37,3 @@ export type YearQuery = {
   lat: string;
   lng: string;
 };
-
-/** Processed statistics data */
-
-export type MonthData = {
-  type: "month";
-  location: string;
-  query: MonthQuery;
-  count: number;
-  allCategories: string[];
-  categoryCount: number[];
-  allOutcomes: string[];
-  outcomeCount: number[];
-};
-
-export type YearData = {
-  type: "year";
-  location: string;
-  query: YearQuery;
-  count: number[];
-  allCategories: string[];
-  categoryCount: number[][];
-  allOutcomes: string[];
-  outcomeCount: number[][];
-};
