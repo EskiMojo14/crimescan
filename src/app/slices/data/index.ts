@@ -68,15 +68,7 @@ const initialState: DataState = {
 export const dataSlice = createSlice({
   name: "data",
   initialState,
-  reducers: {
-    setQuery: (state, { payload }: PayloadAction<MonthQuery | YearQuery>) => {
-      state.query = payload;
-    },
-    setCrimes: (state, { payload }: PayloadAction<CrimeEntry[]>) => {
-      crimeAdapter.setAll(state.crimes, payload);
-      state.initialLoad = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getCrimeCategories.fulfilled, (state, { payload }) => {
@@ -94,8 +86,6 @@ export const dataSlice = createSlice({
       });
   },
 });
-
-export const { setQuery, setCrimes } = dataSlice.actions;
 
 export default dataSlice.reducer;
 
