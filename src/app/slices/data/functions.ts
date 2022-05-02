@@ -2,7 +2,7 @@ import { setCrimes, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
 import { setLoading } from "@s/display";
 import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "@s/util/functions";
-import { queue } from "~/app/snackbarQueue";
+import { notify } from "~/app/snackbarQueue";
 import store from "~/app/store";
 
 export const formatCategory = (category: string) => {
@@ -113,7 +113,7 @@ export const getMonthData = (query: MonthQuery) => {
     })
     .catch((error) => {
       console.log(error);
-      queue.notify({ title: "Failed to get crime data: " + error });
+      notify({ title: "Failed to get crime data: " + error });
       dispatch(setLoading(false));
     });
 };
@@ -141,7 +141,7 @@ export const getYearData = (query: YearQuery) => {
     })
     .catch((error) => {
       console.log(error);
-      queue.notify({ title: "Failed to get crime data: " + error });
+      notify({ title: "Failed to get crime data: " + error });
       dispatch(setLoading(false));
     });
 };

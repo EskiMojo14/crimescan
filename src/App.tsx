@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { selectCrimeTotal, selectQuery } from "@s/data";
 import { getCrimeCategories, selectTheme } from "@s/display";
-import { queue } from "~/app/snackbarQueue";
+import { queue, notify } from "~/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
@@ -24,7 +24,7 @@ function App() {
       loadGoogleMapsAPI();
     } catch (e) {
       console.log(e);
-      queue.notify({ title: "Failed to load Google Maps API." });
+      notify({ title: "Failed to load Google Maps API." });
     }
   }, []);
 

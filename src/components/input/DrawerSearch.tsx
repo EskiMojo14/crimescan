@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import classNames from "classnames";
 import { useAppSelector } from "@h";
 import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
-import { queue } from "~/app/snackbarQueue";
+import { notify } from "~/app/snackbarQueue";
 import { statusCodes } from "~/app/slices/maps/constants";
 import { asyncDebounce } from "~/app/slices/util/functions";
 import { MapResult } from "~/app/slices/maps/types";
@@ -65,7 +65,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
           if (e instanceof Error && statusCodes[e.message]) {
             title += `: ${statusCodes[e.message]}`;
           }
-          queue.notify({ title });
+          notify({ title });
         } finally {
           setLoading(false);
         }
