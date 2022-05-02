@@ -1,11 +1,4 @@
-import {
-  createAsyncThunk,
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-  EntityState,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, EntityState } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "~/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
@@ -13,17 +6,15 @@ import { CrimeEntry, MonthQuery, YearQuery } from "./types";
 
 const months = [...Array(12)].map((_, i) => ++i);
 
-export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", () =>
-  fetch("https://data.police.uk/api/crime-categories")
-    .then((response) => response.json())
-    .then(
-      (value): Record<string, string> =>
-        value.reduce((acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
-          acc[url] = name;
-          return acc;
-        }, {})
-    )
-);
+export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", async () => {
+  const categories: { url: string; name: string }[] = await fetch("https://data.police.uk/api/crime-categories").then(
+    (response) => response.json()
+  );
+  return categories.reduce((acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
+    acc[url] = name;
+    return acc;
+  }, {});
+});
 
 export const getMonthData = createAsyncThunk(
   "data/getMonthData",
