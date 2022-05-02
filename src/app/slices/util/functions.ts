@@ -158,6 +158,8 @@ export const iconObject = (jsx: React.ReactNode, config?: Omit<IconOptions, "ico
 
 /**
  * Adds scroll-lock class to body, to prevent scrolling while modal is open.
+ * @param [id] id to namespace class with (uses nanoid by default)
+ * @returns id used to namespace
  */
 
 export const openModal = (id = nanoid()) => {
@@ -167,11 +169,19 @@ export const openModal = (id = nanoid()) => {
 
 /**
  * Removes scroll-lock class from body, to allow scrolling once modal is closed.
+ * @param id id used when namespacing class
  */
 
 export const closeModal = (id: string) => {
   document.body.classList.remove(`scroll-lock-${id}`);
 };
+
+/**
+ * Takes an array of functions that create promises, and awaits them in series, returning the results as an array.
+ * @param promises array of functions that create promises
+ * @param [delayTime] time to wait between each function
+ * @returns array of results from awaiting promises
+ */
 
 export const promiseAllSeries = async <T>(
   promises: Array<() => T | PromiseLike<T>>,
@@ -186,6 +196,13 @@ export const promiseAllSeries = async <T>(
   }
   return values as any;
 };
+
+/**
+ * Debounces an asynchronous function
+ * @param func function to debounce
+ * @param wait time to wait
+ * @returns debounced wrapper for async function
+ */
 
 export function asyncDebounce<F extends (...args: any[]) => Promise<any>>(func: F, wait?: number) {
   const resolveSet = new Set<(p: any) => void>();
