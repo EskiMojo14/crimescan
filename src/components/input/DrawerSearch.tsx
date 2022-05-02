@@ -76,7 +76,10 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
           validLocation
             ? {
                 backgroundImage: `url("${getStaticMapURL("448x448", theme, [
-                  { color: pinColors[theme].green, lat: result.lat, lng: result.lng },
+                  {
+                    styles: { color: `0x${pinColors[theme].green}` },
+                    locations: [{ lat: result.lat, lng: result.lng }],
+                  },
                 ])}")`,
               }
             : undefined

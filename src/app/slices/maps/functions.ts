@@ -59,7 +59,13 @@ export const geocodeSearch = debounce(getGeocodedResults, 400);
 export const getStaticMapURL = (
   size: string,
   theme?: "light" | "dark",
-  markers?: ({ color: string; lat: string; lng: string } | boolean)[]
+  markers?: (
+    | {
+        styles?: { color?: string; size?: "tiny" | "mid" | "small"; label?: string };
+        locations: { lat: string; lng: string }[];
+      }
+    | boolean
+  )[]
 ) => {
   const baseUrl = new URL("https://maps.googleapis.com/maps/api/staticmap");
   baseUrl.searchParams.set("key", process.env.GOOGLE_MAPS_KEY!);
@@ -69,8 +75,14 @@ export const getStaticMapURL = (
   }
   markers?.forEach((marker) => {
     if (typeof marker === "object") {
-      const { color, lat, lng } = marker;
-      baseUrl.searchParams.append("markers", `color:0x${color}|${lat},${lng}`);
+      const { styles, locations } = marker;
+      const stylesString =
+        styles &&
+        Object.entries(styles)
+          .map(([key, val]) => `${key}:${val}`)
+          .join("|");
+      const locationsString = locations.map(({ lat, lng }) => `${lat},${lng}`).join("|");
+      baseUrl.searchParams.append("markers", `${stylesString ? `${stylesString}|` : ""}${locationsString}`);
     }
   });
   return baseUrl.href;
