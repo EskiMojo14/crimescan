@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
-import { selectAllCategories, selectMonthData, selectYearData } from "@s/data";
+import { selectAllCategories, selectCategoryCount } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -26,9 +26,7 @@ const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCardMonth = () => {
   const allCategories = useAppSelector(selectAllCategories);
-
-  const monthData = useAppSelector(selectMonthData);
-  const { categoryCount } = monthData;
+  const categoryCount = useAppSelector(selectCategoryCount);
 
   const chartData = {
     labels: [],
@@ -36,7 +34,7 @@ export const CategoryCardMonth = () => {
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
-      return Math.round((value / chartData.series.reduce((a, b) => a + b)) * 100) + "%";
+      return Math.round((value / chartData.series[0].reduce((a, b) => a + b)) * 100) + "%";
     },
   };
 
@@ -92,7 +90,7 @@ export const CategoryCardMonth = () => {
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[index]}</DataTableCell>
+                    <DataTableCell isNumeric>{categoryCount[0][index]}</DataTableCell>
                   </DataTableRow>
                 );
               })}
@@ -106,9 +104,7 @@ export const CategoryCardMonth = () => {
 
 export const CategoryCardYear = () => {
   const allCategories = useAppSelector(selectAllCategories);
-
-  const yearData = useAppSelector(selectYearData);
-  const { categoryCount } = yearData;
+  const categoryCount = useAppSelector(selectCategoryCount);
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 

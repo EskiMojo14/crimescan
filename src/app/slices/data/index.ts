@@ -6,6 +6,7 @@ import {
   EntityState,
   PayloadAction,
 } from "@reduxjs/toolkit";
+import cloneDeep from "lodash.clonedeep";
 import { RootState } from "~/app/store";
 import { alphabeticalSort, uniqueArray } from "../util/functions";
 import { blankMonth, blankYear } from "./constants";
@@ -78,6 +79,8 @@ export const dataSlice = createSlice({
 
 export const { setQuery, setMonth, setYear, setCrimes } = dataSlice.actions;
 
+export default dataSlice.reducer;
+
 export const {
   selectIds: selectCrimeIds,
   selectEntities: selectCrimeMap,
@@ -144,4 +147,32 @@ export const selectCountSeries = createSelector(selectQuery, selectAllCrimesByMo
   }
 });
 
-export default dataSlice.reducer;
+export const selectCategoryCount = createSelector(
+  selectQuery,
+  selectFormattedCategories,
+  selectAllCategories,
+  selectAllCrimesByMonth,
+  (query, formattedCategories, allCategories, crimesByMonth) => {
+    if (!query) {
+      return [];
+    }
+    const monthAcc =
+      query.type === "month"
+        ? { [query.month]: [] }
+        : monthsZeroStart.reduce<Record<string, CrimeEntry[]>>((midAcc, month) => {
+            midAcc[`${query.year}-${month}`] = [];
+            return midAcc;
+          }, {});
+    const acc = allCategories.reduce<Record<string, Record<string, CrimeEntry[]>>>((midAcc, category) => {
+      midAcc[category] = cloneDeep(monthAcc);
+      return midAcc;
+    }, {});
+
+    for (const [month, crimes] of Object.entries(crimesByMonth)) {
+      for (const crime of crimes) {
+        acc[formattedCategories[crime.category] ?? crime.category]?.[month]?.push(crime);
+      }
+    }
+    return Object.values(acc).map((monthAcc) => Object.values(monthAcc).map((crimes) => crimes.length));
+  }
+);
