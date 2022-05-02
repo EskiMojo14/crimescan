@@ -1,17 +1,13 @@
 import { setCrimes, setMonth, setQuery, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
-import { setLoading } from "@s/display";
-import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "@s/util/functions";
+import { selectFormattedCategories, setLoading } from "@s/display";
+import { uniqueArray, alphabeticalSort, countInArray, promiseAllSeries } from "@s/util/functions";
 import { notify } from "~/app/snackbarQueue";
 import store from "~/app/store";
 
 export const formatCategory = (category: string) => {
-  const state = store.getState();
-  const { formattedCategories } = state.display;
-  if (hasKey(formattedCategories, category)) {
-    return formattedCategories[category];
-  }
-  return category;
+  const formattedCategories = selectFormattedCategories(store.getState());
+  return formattedCategories[category] ?? category;
 };
 
 export const processMonthData = (data: CrimeEntry[], query: MonthQuery): MonthData => {

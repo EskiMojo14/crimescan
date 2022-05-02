@@ -48,6 +48,8 @@ type InputState = {
 };
 
 export const DrawerSettings = (props: DrawerSettingsProps) => {
+  const dispatch = useAppDispatch();
+
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
 
@@ -70,8 +72,6 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const resultLocation = useAppSelector(selectLocation);
   const query = useAppSelector(selectQuery);
 
-  const dispatch = useAppDispatch();
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -88,9 +88,8 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
     });
   const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
-  const [resultLat, resultLng] = resultLocation.split(", ");
+  const { lat: resultLat, lng: resultLng } = resultLocation ?? {};
   const latLng = `${lat},${lng}`;
-  const queryLocation = query && `${query.lat},${query.lng}`;
   const formFilled = validDate && validLocation;
   const submit = () => {
     if (formFilled) {
@@ -203,7 +202,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
           </div>
           <div className="guide-chips">
             {validLocation ? <Chip icon="location_on" label="Query" className="query-chip non-interactive" /> : null}
-            {resultLocation && queryLocation === latLng ? (
+            {resultLocation && `${query?.lat},${query?.lng}` === latLng ? (
               <Chip
                 icon="location_on"
                 label={
@@ -224,7 +223,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
               validLocation
                 ? {
                     backgroundImage: `url("${getStaticMapURL("448x448", theme, [
-                      resultLocation && queryLocation === latLng
+                      resultLat && resultLng && `${query?.lat},${query?.lng}` === latLng
                         ? {
                             styles: { color: `0x${pinColors[theme].red}` },
                             locations: [{ lat: resultLat, lng: resultLng }],

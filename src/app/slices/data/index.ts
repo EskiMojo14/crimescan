@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSelector, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "~/app/store";
 import { blankMonth, blankYear } from "./constants";
 import { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "./types";
@@ -69,7 +69,8 @@ export const selectYearData = (state: RootState) => state.data.year;
 
 export const selectQuery = (state: RootState) => state.data.query;
 
-export const selectLocation = (state: RootState) =>
-  state.data.type === "month" ? state.data.month.location : state.data.year.location;
+export const selectLocation = createSelector(selectAllCrimes, ([crimeEntry]) =>
+  crimeEntry ? { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude } : undefined
+);
 
 export default dataSlice.reducer;
