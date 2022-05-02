@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import classNames from "classnames";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
@@ -27,10 +27,11 @@ const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 export const CategoryCardMonth = () => {
   const allCategories = useAppSelector(selectAllCategories);
   const categoryCount = useAppSelector(selectCategoryCount);
+  const series = useMemo(() => categoryCount.flat(), [categoryCount]);
 
   const chartData = {
     labels: [],
-    series: categoryCount.flat(),
+    series,
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
