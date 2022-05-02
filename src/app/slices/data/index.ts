@@ -6,6 +6,8 @@ import { CrimeEntry, Query } from "./types";
 
 const months = [...Array(12)].map((_, i) => ++i);
 
+const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
+
 export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", async () => {
   const categories: { url: string; name: string }[] = await fetch("https://data.police.uk/api/crime-categories").then(
     (response) => response.json()
@@ -28,7 +30,7 @@ export const getYearData = createAsyncThunk(
   "data/getYearData",
   ({ date, lat, lng }: Query): Promise<CrimeEntry[][]> =>
     promiseAllSeries(
-      months.map(
+      monthsZeroStart.map(
         (month) => () =>
           fetch(`https://data.police.uk/api/crimes-at-location?date=${date}-${month}&lat=${lat}&lng=${lng}`).then(
             (response) => response.json()
@@ -114,8 +116,6 @@ export const selectAllOutcomes = createSelector(selectAllCrimes, (allCrimes) => 
   }
   return alphabeticalSort(Array.from(outcomes));
 });
-
-const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
 
 export const selectAllCrimesByMonth = createSelector(selectAllCrimes, selectQuery, (crimes, query) => {
   if (!query) {
