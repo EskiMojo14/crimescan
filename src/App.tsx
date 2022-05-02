@@ -3,6 +3,7 @@ import { useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { getCrimeCategories } from "@s/data/functions";
 import { selectCrimeTotal, selectQuery } from "@s/data";
+import { selectTheme } from "@s/display";
 import { queue } from "~/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
@@ -12,11 +13,18 @@ import { ContentEmpty } from "~/components/display/ContentEmpty";
 import { DrawerSearch } from "~/components/input/DrawerSearch";
 import { DrawerSettings } from "~/components/input/DrawerSettings";
 import "./App.scss";
-import "normalize.css";
 
 function App() {
   useEffect(getCrimeCategories, []);
   useEffect(loadGoogleMapsAPI, []);
+
+  const theme = useAppSelector(selectTheme);
+  useEffect(() => {
+    document.documentElement.className = theme;
+    document
+      .querySelector("meta[name=theme-color]")
+      ?.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
+  }, [theme]);
 
   const query = useAppSelector(selectQuery);
 

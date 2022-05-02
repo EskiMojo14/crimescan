@@ -45,6 +45,8 @@
 @use "@material/theme/functions" as theme-functions;
 @use "@material/rtl";
 
+@use "normalize.css/normalize";
+
 @include typography.core-styles();
 
 * {

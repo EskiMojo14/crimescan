@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "~/app/store";
 
-const applyTheme = (theme: "light" | "dark") => {
-  document.documentElement.className = theme;
-  const meta = document.querySelector("meta[name=theme-color]");
-  if (meta) {
-    meta.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
-  }
-};
-
 type DisplayState = {
   theme: "light" | "dark";
   loading: boolean;
@@ -26,12 +18,9 @@ export const displaySlice = createSlice({
   initialState,
   reducers: {
     toggleTheme: (state) => {
-      const newTheme = state.theme === "dark" ? "light" : "dark";
-      applyTheme(newTheme);
-      state.theme = newTheme;
+      state.theme = state.theme === "dark" ? "light" : "dark";
     },
     setTheme: (state, action: PayloadAction<"light" | "dark">) => {
-      applyTheme(action.payload);
       state.theme = action.payload;
     },
     toggleLoading: (state) => {
