@@ -95,9 +95,9 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
     if (formFilled) {
       try {
         if (dateMode === "month") {
-          await dispatch(getMonthData({ type: dateMode, month, lat, lng })).unwrap();
+          await dispatch(getMonthData({ type: dateMode, date: month, lat, lng })).unwrap();
         } else {
-          await dispatch(getYearData({ type: dateMode, year, lat, lng })).unwrap();
+          await dispatch(getYearData({ type: dateMode, date: year, lat, lng })).unwrap();
         }
       } catch (e) {
         console.log(e);

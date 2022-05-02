@@ -2,7 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, Ent
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "~/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
-import { CrimeEntry, MonthQuery, YearQuery } from "./types";
+import { CrimeEntry, Query } from "./types";
 
 const months = [...Array(12)].map((_, i) => ++i);
 
@@ -18,19 +18,19 @@ export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", as
 
 export const getMonthData = createAsyncThunk(
   "data/getMonthData",
-  ({ month, lat, lng }: MonthQuery): Promise<CrimeEntry[]> =>
-    fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`).then((response) =>
+  ({ date, lat, lng }: Query): Promise<CrimeEntry[]> =>
+    fetch(`https://data.police.uk/api/crimes-at-location?date=${date}&lat=${lat}&lng=${lng}`).then((response) =>
       response.json()
     )
 );
 
 export const getYearData = createAsyncThunk(
   "data/getYearData",
-  ({ year, lat, lng }: YearQuery): Promise<CrimeEntry[][]> =>
+  ({ date, lat, lng }: Query): Promise<CrimeEntry[][]> =>
     promiseAllSeries(
       months.map(
         (month) => () =>
-          fetch(`https://data.police.uk/api/crimes-at-location?date=${year}-${month}&lat=${lat}&lng=${lng}`).then(
+          fetch(`https://data.police.uk/api/crimes-at-location?date=${date}-${month}&lat=${lat}&lng=${lng}`).then(
             (response) => response.json()
           )
       ),
@@ -45,7 +45,7 @@ const crimeAdapter = createEntityAdapter<CrimeEntry>({
 type DataState = {
   initialLoad: boolean;
   crimes: EntityState<CrimeEntry>;
-  query: MonthQuery | YearQuery | undefined;
+  query: Query | undefined;
   formattedCategories: Record<string, string>;
 };
 
@@ -92,8 +92,6 @@ export const selectInitialLoad = (state: RootState) => state.data.initialLoad;
 
 export const selectQuery = (state: RootState) => state.data.query;
 
-export const selectType = (state: RootState) => state.data.query?.type ?? "month";
-
 export const selectLocation = createSelector(selectAllCrimes, ([crimeEntry]) =>
   crimeEntry ? { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude } : undefined
 );
@@ -124,10 +122,10 @@ export const selectAllCrimesByMonth = createSelector(selectAllCrimes, selectQuer
     return {};
   }
   if (query.type === "month") {
-    return { [query.month]: crimes };
+    return { [query.date]: crimes };
   }
   const acc = monthsZeroStart.reduce<Record<string, CrimeEntry[]>>((midAcc, month) => {
-    midAcc[`${query.year}-${month}`] = [];
+    midAcc[`${query.date}-${month}`] = [];
     return midAcc;
   }, {});
   for (const crime of crimes) {
@@ -142,7 +140,7 @@ export const selectCountSeries = createSelector(selectQuery, selectAllCrimesByMo
   }
   switch (query.type) {
     case "month":
-      return [allCrimes[query.month].length];
+      return [allCrimes[query.date].length];
     case "year":
       return Object.values(allCrimes).map((crimes) => crimes.length);
     default:
@@ -161,9 +159,9 @@ export const selectCategoryCount = createSelector(
     }
     const monthAcc =
       query.type === "month"
-        ? { [query.month]: [] }
+        ? { [query.date]: [] }
         : monthsZeroStart.reduce<Record<string, CrimeEntry[]>>((midAcc, month) => {
-            midAcc[`${query.year}-${month}`] = [];
+            midAcc[`${query.date}-${month}`] = [];
             return midAcc;
           }, {});
     const acc = allCategories.reduce<Record<string, Record<string, CrimeEntry[]>>>((midAcc, category) => {
@@ -190,9 +188,9 @@ export const selectOutcomeCount = createSelector(
     }
     const monthAcc =
       query.type === "month"
-        ? { [query.month]: [] }
+        ? { [query.date]: [] }
         : monthsZeroStart.reduce<Record<string, CrimeEntry[]>>((midAcc, month) => {
-            midAcc[`${query.year}-${month}`] = [];
+            midAcc[`${query.date}-${month}`] = [];
             return midAcc;
           }, {});
     const acc = allOutcomes.reduce<Record<string, Record<string, CrimeEntry[]>>>((midAcc, category) => {

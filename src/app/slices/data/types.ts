@@ -22,18 +22,11 @@ export type CrimeEntry = {
   month: string;
 };
 
-/** Query types */
+/** Arguments to pass to data fetching thunks. */
 
-export type MonthQuery = {
-  type: "month";
-  month: string;
-  lat: string;
-  lng: string;
-};
-
-export type YearQuery = {
-  type: "year";
-  year: string;
+export type Query = {
+  type: "month" | "year";
+  date: string;
   lat: string;
   lng: string;
 };
