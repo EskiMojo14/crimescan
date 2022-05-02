@@ -21,16 +21,13 @@ export const displaySlice = createSlice({
     setTheme: (state, action: PayloadAction<"light" | "dark">) => {
       state.theme = action.payload;
     },
-    toggleLoading: (state) => {
-      state.loading = !state.loading;
-    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
   },
 });
 
-export const { toggleTheme, setTheme, toggleLoading, setLoading } = displaySlice.actions;
+export const { toggleTheme, setTheme, setLoading } = displaySlice.actions;
 
 export const selectTheme = (state: RootState) => state.display.theme;
 

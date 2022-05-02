@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
-import { selectMonthData, selectYearData } from "@s/data";
+import { selectAllCategories, selectMonthData, selectYearData } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -25,8 +25,11 @@ import "./CategoryCard.scss";
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCardMonth = () => {
+  const allCategories = useAppSelector(selectAllCategories);
+
   const monthData = useAppSelector(selectMonthData);
-  const { allCategories, categoryCount } = monthData;
+  const { categoryCount } = monthData;
+
   const chartData = {
     labels: [],
     series: categoryCount,
@@ -102,11 +105,13 @@ export const CategoryCardMonth = () => {
 };
 
 export const CategoryCardYear = () => {
+  const allCategories = useAppSelector(selectAllCategories);
+
   const yearData = useAppSelector(selectYearData);
+  const { categoryCount } = yearData;
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
-  const { allCategories, categoryCount } = yearData;
   const chartData = {
     labels: months,
     series: categoryCount,

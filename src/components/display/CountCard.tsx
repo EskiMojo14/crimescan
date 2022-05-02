@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject } from "@s/util/functions";
-import { selectYearData } from "@s/data";
+import { selectCountSeries } from "@s/data";
 import type { IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -21,8 +21,7 @@ import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton
 import "./CountCard.scss";
 
 export const CountCard = () => {
-  const data = useAppSelector(selectYearData);
-  const { count } = data;
+  const count = useAppSelector(selectCountSeries);
   const chartData = {
     labels: months,
     series: [count],

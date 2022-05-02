@@ -7,6 +7,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { RootState } from "~/app/store";
+import { alphabeticalSort, uniqueArray } from "../util/functions";
 import { blankMonth, blankYear } from "./constants";
 import { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "./types";
 
@@ -64,7 +65,7 @@ export const dataSlice = createSlice({
       state.month = blankMonth;
     },
     setCrimes: (state, { payload }: PayloadAction<CrimeEntry[]>) => {
-      crimeAdapter.setMany(state.crimes, payload);
+      crimeAdapter.setAll(state.crimes, payload);
       state.initialLoad = false;
     },
   },
@@ -100,5 +101,47 @@ export const selectLocation = createSelector(selectAllCrimes, ([crimeEntry]) =>
 );
 
 export const selectFormattedCategories = (state: RootState) => state.data.formattedCategories;
+
+export const selectAllCategories = createSelector(
+  selectAllCrimes,
+  selectFormattedCategories,
+  (allCrimes, formattedCategories) =>
+    alphabeticalSort(uniqueArray(allCrimes.map(({ category }) => formattedCategories[category] ?? category)))
+);
+
+const months = [...Array(12)].map((_, i) => ++i);
+
+const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
+
+export const selectAllCrimesByMonth = createSelector(selectAllCrimes, selectQuery, (crimes, query) => {
+  if (!query) {
+    return {};
+  }
+  if (query.type === "month") {
+    return { [query.month]: crimes };
+  }
+  const acc = monthsZeroStart.reduce<Record<string, CrimeEntry[]>>((midAcc, month) => {
+    midAcc[`${query.year}-${month}`] = [];
+    return midAcc;
+  }, {});
+  for (const crime of crimes) {
+    acc[crime.month]?.push(crime);
+  }
+  return acc;
+});
+
+export const selectCountSeries = createSelector(selectQuery, selectAllCrimesByMonth, (query, allCrimes) => {
+  if (!query) {
+    return [];
+  }
+  switch (query.type) {
+    case "month":
+      return [allCrimes[query.month].length];
+    case "year":
+      return Object.values(allCrimes).map((crimes) => crimes.length);
+    default:
+      return [];
+  }
+});
 
 export default dataSlice.reducer;
