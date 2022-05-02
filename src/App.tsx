@@ -22,6 +22,8 @@ function App() {
 
   const total = useAppSelector(selectCrimeTotal);
 
+  const [latLng, setLatLng] = useState({ lat: "", lng: "" });
+
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const openSearch = () => {
     setSearchDrawerOpen(true);
@@ -34,8 +36,8 @@ function App() {
 
   return (
     <>
-      <DrawerSearch open={searchDrawerOpen} close={closeSearch} />
-      <DrawerSettings openSearch={openSearch} />
+      <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
+      <DrawerSettings openSearch={openSearch} latLng={latLng} />
       <DrawerAppContent>
         {(!query.lat && !query.lng) || total === 0 ? <ContentEmpty /> : <ContentContainer />}
       </DrawerAppContent>

@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import input from "@s/input";
 import maps from "@s/maps";
 import data from "@s/data";
 import display from "@s/display";
 
 export const store = configureStore({
   reducer: {
-    input,
     maps,
     data,
     display,

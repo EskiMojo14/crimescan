@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "@h";
 import { geocodeSearch, getStaticMapURL } from "@s/maps/functions";
-import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "@s/input";
 import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "@s/maps";
 import { selectTheme } from "@s/display";
-import { hasKey } from "@s/util/functions";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent, DrawerTitle } from "@rmwc/drawer";
 import { IconButton } from "@rmwc/icon-button";
@@ -30,25 +28,22 @@ const pinColors = {
 type DrawerSearchProps = {
   open: boolean;
   close: () => void;
+  setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
 export const DrawerSearch = (props: DrawerSearchProps) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector(selectTheme);
 
-  const search = useAppSelector(selectSearchQuery);
+  const [search, setSearch] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    if (hasKey(initialState.search, name)) {
-      dispatch(inputSetSearch({ key: name, value: value }));
-      if (name === "query") {
-        geocodeSearch(value);
-      }
-    }
+    const { value } = e.target;
+    setSearch(value);
+    geocodeSearch(value);
   };
+
   const clearSearch = () => {
-    dispatch(inputSetSearch({ key: "query", value: "" }));
+    setSearch("");
     dispatch(setNoResults(true));
   };
 
@@ -68,6 +63,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         </Typography>
       </div>
     ) : null;
+
   const validLocation = result.lat && result.lng;
   const resultDisplay = !noResults ? (
     <div className="result-display">
@@ -94,10 +90,10 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
   ) : null;
 
   const confirmResult = () => {
-    dispatch(setLatLng({ lat: result.lat, lng: result.lng }));
+    props.setLatLng({ lat: result.lat, lng: result.lng });
     props.close();
     setTimeout(() => {
-      dispatch(inputSetSearch({ key: "query", value: "" }));
+      setSearch("");
       dispatch(setNoResults(true));
     }, 300);
   };

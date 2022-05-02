@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
+import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { getMonthData, getYearData } from "@s/data/functions";
-import { initialState, inputSetQuery, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "@s/input";
 import { selectQuery, selectLocation } from "@s/data";
 import { selectLoading, selectTheme, toggleTheme } from "@s/display";
 import { queryIcons } from "@s/util/constants";
@@ -36,17 +36,36 @@ const pinColors = {
 
 type DrawerSettingsProps = {
   openSearch: () => void;
+  latLng: { lat: string; lng: string };
+};
+
+type InputState = {
+  dateMode: "month" | "year";
+  month: string;
+  year: string;
+  lat: string;
+  lng: string;
 };
 
 export const DrawerSettings = (props: DrawerSettingsProps) => {
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
 
-  const dateMode = useAppSelector(selectDateMode);
-  const month = useAppSelector(selectMonth);
-  const year = useAppSelector(selectYear);
-  const lat = useAppSelector(selectLat);
-  const lng = useAppSelector(selectLng);
+  const [inputState, updateInputState] = useImmer<InputState>({
+    dateMode: "month",
+    month: "",
+    year: "",
+    lat: "",
+    lng: "",
+  });
+
+  useEffect(() => {
+    updateInputState((draftState) => {
+      Object.assign(draftState, props.latLng);
+    });
+  }, [props.latLng]);
+
+  const { dateMode, month, year, lat, lng } = inputState;
 
   const resultLocation = useAppSelector(selectLocation);
   const query = useAppSelector(selectQuery);
@@ -56,14 +75,17 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (hasKey(initialState.query, name)) {
-      dispatch(inputSetQuery({ key: name, value: value }));
+    if (hasKey(inputState, name) && name !== "dateMode") {
+      updateInputState((draftState) => {
+        draftState[name] = value;
+      });
     }
   };
 
-  const changeDateMode = (mode: "month" | "year") => {
-    dispatch(inputSetQuery({ key: "dateMode", value: mode }));
-  };
+  const changeDateMode = (mode: "month" | "year") =>
+    updateInputState((draftState) => {
+      draftState.dateMode = mode;
+    });
   const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
   const [resultLat, resultLng] = resultLocation.split(", ");

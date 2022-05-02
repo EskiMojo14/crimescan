@@ -39,7 +39,8 @@
     "react-bem-helper": "^1.4.1",
     "react-chartist": "^0.14.4",
     "react-dom": "^16.14.0",
-    "react-redux": "^7.2.4"
+    "react-redux": "^7.2.4",
+    "use-immer": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
