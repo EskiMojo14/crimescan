@@ -1,7 +1,7 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import debounce from "lodash.debounce";
-import { queue } from "../../snackbarQueue";
-import store from "../../store";
+import { queue } from "~/app/snackbarQueue";
+import store from "~/app/store";
 import { setLoaded, setLoading, setNoResults, setResult } from ".";
 import { MapResult } from "./types";
 import { statusCodes } from "./constants";

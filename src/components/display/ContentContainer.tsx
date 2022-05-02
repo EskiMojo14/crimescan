@@ -1,7 +1,7 @@
 import React from "react";
-import { useAppSelector } from "../../app/hooks";
-import { queryIcons } from "../../app/slices/util/constants";
-import { selectQuery, selectType } from "../../app/slices/data";
+import { useAppSelector } from "@h";
+import { queryIcons } from "@s/util/constants";
+import { selectQuery, selectType } from "@s/data";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
 import { CountCard } from "./CountCard";

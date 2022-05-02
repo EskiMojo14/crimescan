@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import emptyImg from "../../media/empty.svg";
-import emptyCheckImg from "../../media/empty_check.svg";
-import { useAppSelector } from "../../app/hooks";
-import { selectEmptyData } from "../../app/slices/data";
+import emptyImg from "@m/empty.svg";
+import emptyCheckImg from "@m/empty_check.svg";
+import { useAppSelector } from "@h";
+import { selectEmptyData } from "@s/data";
 import { Typography } from "@rmwc/typography";
 import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
 import "./ContentEmpty.scss";

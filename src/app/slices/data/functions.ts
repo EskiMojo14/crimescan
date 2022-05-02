@@ -1,9 +1,9 @@
 import { setCrimes, setEmptyData, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
-import { setCategories, setLoading } from "../display";
-import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "../util/functions";
-import { queue } from "../../snackbarQueue";
-import store from "../../store";
+import { setCategories, setLoading } from "@s/display";
+import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "@s/util/functions";
+import { queue } from "~/app/snackbarQueue";
+import store from "~/app/store";
 
 export const formatCategory = (category: string) => {
   const state = store.getState();

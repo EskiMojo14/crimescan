@@ -1,11 +1,11 @@
 import React from "react";
 import classNames from "classnames";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { geocodeSearch, getStaticMapURL } from "../../app/slices/maps/functions";
-import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "../../app/slices/input";
-import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "../../app/slices/maps";
-import { selectTheme } from "../../app/slices/display";
-import { hasKey } from "../../app/slices/util/functions";
+import { useAppDispatch, useAppSelector } from "@h";
+import { geocodeSearch, getStaticMapURL } from "@s/maps/functions";
+import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "@s/input";
+import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "@s/maps";
+import { selectTheme } from "@s/display";
+import { hasKey } from "@s/util/functions";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent, DrawerTitle } from "@rmwc/drawer";
 import { IconButton } from "@rmwc/icon-button";
@@ -14,7 +14,7 @@ import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
 import "./DrawerSearch.scss";
-import emptyImg from "../../media/empty.svg";
+import emptyImg from "@m/empty.svg";
 
 const pinColors = {
   dark: {

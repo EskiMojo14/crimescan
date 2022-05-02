@@ -1,20 +1,12 @@
 import React from "react";
 import classNames from "classnames";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getMonthData, getYearData } from "../../app/slices/data/functions";
-import {
-  initialState,
-  inputSetQuery,
-  selectLat,
-  selectLng,
-  selectMonth,
-  selectYear,
-  selectDateMode,
-} from "../../app/slices/input";
-import { selectQuery, selectLocation } from "../../app/slices/data";
-import { selectLoading, selectTheme, toggleTheme } from "../../app/slices/display";
-import { queryIcons } from "../../app/slices/util/constants";
-import { hasKey } from "../../app/slices/util/functions";
+import { useAppDispatch, useAppSelector } from "@h";
+import { getMonthData, getYearData } from "@s/data/functions";
+import { initialState, inputSetQuery, selectLat, selectLng, selectMonth, selectYear, selectDateMode } from "@s/input";
+import { selectQuery, selectLocation } from "@s/data";
+import { selectLoading, selectTheme, toggleTheme } from "@s/display";
+import { queryIcons } from "@s/util/constants";
+import { hasKey } from "@s/util/functions";
 import { Button } from "@rmwc/button";
 import { Chip } from "@rmwc/chip";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
@@ -23,10 +15,10 @@ import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
-import { Logo } from "../util/Logo";
-import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
+import { Logo } from "@c/util/Logo";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import "./DrawerSettings.scss";
-import { getStaticMapURL } from "../../app/slices/maps/functions";
+import { getStaticMapURL } from "@s/maps/functions";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;

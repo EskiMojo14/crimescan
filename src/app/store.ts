@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import input from "./slices/input";
-import maps from "./slices/maps";
-import data from "./slices/data";
-import display from "./slices/display";
+import input from "@s/input";
+import maps from "@s/maps";
+import data from "@s/data";
+import display from "@s/display";
 
 export const store = configureStore({
   reducer: {

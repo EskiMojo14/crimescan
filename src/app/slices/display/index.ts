@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
+import { RootState } from "~/app/store";
 
 const applyTheme = (theme: "light" | "dark") => {
   document.documentElement.className = theme;

@@ -50,6 +50,13 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+    alias: {
+      "~": path.resolve(__dirname, "src/"),
+      "@c": path.resolve(__dirname, "src/components/"),
+      "@s": path.resolve(__dirname, "src/app/slices/"),
+      "@h": path.resolve(__dirname, "src/app/hooks/"),
+      "@m": path.resolve(__dirname, "src/media/"),
+    },
   },
   mode: "development",
   plugins: [

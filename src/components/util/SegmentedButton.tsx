@@ -1,6 +1,6 @@
 import React from "react";
-import BEMHelper from "../../app/slices/util/bemHelper";
-import { HTMLProps } from "../../app/slices/util/types";
+import BEMHelper from "@s/util/bemHelper";
+import { HTMLProps } from "@s/util/types";
 import { Button, ButtonProps } from "@rmwc/button";
 import "./SegmentedButton.scss";
 

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { useAppSelector } from "../../app/hooks";
-import { months } from "../../app/slices/util/constants";
-import { iconObject, addOrRemove } from "../../app/slices/util/functions";
-import { selectMonthData, selectYearData } from "../../app/slices/data";
+import { useAppSelector } from "@h";
+import { months } from "@s/util/constants";
+import { iconObject, addOrRemove } from "@s/util/functions";
+import { selectMonthData, selectYearData } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -19,7 +19,7 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 

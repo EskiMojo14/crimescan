@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
+import { RootState } from "~/app/store";
 import { blankMonth, blankYear } from "./constants";
 import { CrimeEntry, MonthData, YearData } from "./types";
 
