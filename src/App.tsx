@@ -19,7 +19,14 @@ function App() {
   useEffect(() => {
     dispatch(getCrimeCategories());
   }, []);
-  useEffect(loadGoogleMapsAPI, []);
+  useEffect(() => {
+    try {
+      loadGoogleMapsAPI();
+    } catch (e) {
+      console.log(e);
+      queue.notify({ title: "Failed to load Google Maps API." });
+    }
+  }, []);
 
   const theme = useAppSelector(selectTheme);
   useEffect(() => {

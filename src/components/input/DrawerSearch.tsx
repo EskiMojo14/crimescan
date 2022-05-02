@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import classNames from "classnames";
-import { useAppDispatch, useAppSelector } from "@h";
-import { geocodeSearch, getStaticMapURL } from "@s/maps/functions";
-import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "@s/maps";
+import { useAppSelector } from "@h";
+import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
+import { queue } from "~/app/snackbarQueue";
+import { statusCodes } from "~/app/slices/maps/constants";
+import { asyncDebounce } from "~/app/slices/util/functions";
+import { MapResult } from "~/app/slices/maps/types";
 import { selectTheme } from "@s/display";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent, DrawerTitle } from "@rmwc/drawer";
@@ -32,27 +35,57 @@ type DrawerSearchProps = {
 };
 
 export const DrawerSearch = (props: DrawerSearchProps) => {
-  const dispatch = useAppDispatch();
   const theme = useAppSelector(selectTheme);
 
   const [search, setSearch] = useState("");
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [result, setResult] = useState<MapResult | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+
+  const debouncedGeocodeSearch = useMemo(
+    () =>
+      asyncDebounce(async (value: string): Promise<MapResult | undefined> => {
+        setLoading(true);
+        try {
+          const geocodeResult = await getGeocodedResults(value);
+          if (!geocodeResult) {
+            return geocodeResult;
+          } else {
+            const {
+              results: [firstResult],
+            } = geocodeResult;
+            return {
+              name: firstResult.formatted_address,
+              lat: `${firstResult.geometry.location.lat()}`,
+              lng: `${firstResult.geometry.location.lng()}`,
+            };
+          }
+        } catch (e) {
+          console.log(e);
+          let title = "Failed to get geocoding results";
+          if (e instanceof Error && statusCodes[e.message]) {
+            title += `: ${statusCodes[e.message]}`;
+          }
+          queue.notify({ title });
+        } finally {
+          setLoading(false);
+        }
+      }, 400),
+    [setLoading]
+  );
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearch(value);
-    geocodeSearch(value);
+    const result = await debouncedGeocodeSearch(value);
+    setResult(result);
   };
 
   const clearSearch = () => {
     setSearch("");
-    dispatch(setNoResults(true));
+    setResult(undefined);
   };
 
-  const loading = useAppSelector(selectMapsLoading);
-  const noResults = useAppSelector(selectMapsNoResults);
-  const result = useAppSelector(selectMapsResult);
-
   const noResultDisplay =
-    noResults && !loading ? (
+    !result && !loading ? (
       <div className="no-result-display">
         <img className="image" src={emptyImg} alt="Empty" />
         <Typography className="title" use="headline6" tag="h3">
@@ -64,8 +97,8 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
       </div>
     ) : null;
 
-  const validLocation = result.lat && result.lng;
-  const resultDisplay = !noResults ? (
+  const validLocation = result && result.lat && result.lng;
+  const resultDisplay = result ? (
     <div className="result-display">
       <div className="name-container">
         <Typography use="body1">{result.name}</Typography>
@@ -93,11 +126,13 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
   ) : null;
 
   const confirmResult = () => {
-    props.setLatLng({ lat: result.lat, lng: result.lng });
+    if (result) {
+      props.setLatLng({ lat: result.lat, lng: result.lng });
+    }
     props.close();
     setTimeout(() => {
       setSearch("");
-      dispatch(setNoResults(true));
+      setResult(undefined);
     }, 300);
   };
 
@@ -105,7 +140,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
     <Drawer open={props.open} onClose={props.close} modal className="drawer-search drawer-right">
       <DrawerHeader>
         <DrawerTitle>Location search</DrawerTitle>
-        <Button label="Confirm" outlined onClick={confirmResult} disabled={noResults} />
+        <Button label="Confirm" outlined onClick={confirmResult} disabled={!result} />
         <LinearProgress closed={!loading} />
       </DrawerHeader>
       <div className="search-container">

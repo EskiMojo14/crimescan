@@ -1,5 +1,6 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { IconOptions, IconPropT } from "@rmwc/types";
+import debounce from "lodash.debounce";
 
 /**
  * Checks that object contains specified key.
@@ -185,3 +186,27 @@ export const promiseAllSeries = async <T>(
   }
   return values as any;
 };
+
+export function asyncDebounce<F extends (...args: any[]) => Promise<any>>(func: F, wait?: number) {
+  const resolveSet = new Set<(p: any) => void>();
+  const rejectSet = new Set<(p: any) => void>();
+
+  const debounced = debounce((args: Parameters<F>) => {
+    func(...args)
+      .then((...res) => {
+        resolveSet.forEach((resolve) => resolve(...res));
+        resolveSet.clear();
+      })
+      .catch((...res) => {
+        rejectSet.forEach((reject) => reject(...res));
+        rejectSet.clear();
+      });
+  }, wait);
+
+  return (...args: Parameters<F>): ReturnType<F> =>
+    new Promise((resolve, reject) => {
+      resolveSet.add(resolve);
+      rejectSet.add(reject);
+      debounced(args);
+    }) as ReturnType<F>;
+}
