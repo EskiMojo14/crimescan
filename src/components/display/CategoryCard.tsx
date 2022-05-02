@@ -30,11 +30,11 @@ export const CategoryCardMonth = () => {
 
   const chartData = {
     labels: [],
-    series: categoryCount,
+    series: categoryCount.flat(),
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
-      return Math.round((value / chartData.series[0].reduce((a, b) => a + b)) * 100) + "%";
+      return Math.round((value / chartData.series.reduce((a, b) => a + b, 0)) * 100) + "%";
     },
   };
 
@@ -90,7 +90,7 @@ export const CategoryCardMonth = () => {
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[0][index]}</DataTableCell>
+                    <DataTableCell isNumeric>{categoryCount[index][0]}</DataTableCell>
                   </DataTableRow>
                 );
               })}
