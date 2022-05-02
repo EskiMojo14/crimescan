@@ -90,7 +90,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
   const [resultLat, resultLng] = resultLocation.split(", ");
   const latLng = `${lat},${lng}`;
-  const queryLocation = `${query.lat},${query.lng}`;
+  const queryLocation = query && `${query.lat},${query.lng}`;
   const formFilled = validDate && validLocation;
   const submit = () => {
     if (formFilled) {

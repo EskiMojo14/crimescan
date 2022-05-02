@@ -1,4 +1,4 @@
-import { setCrimes, setMonth, setYear } from ".";
+import { setCrimes, setMonth, setQuery, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
 import { setLoading } from "@s/display";
 import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "@s/util/functions";
@@ -106,6 +106,7 @@ export const getMonthData = (query: MonthQuery) => {
   fetch(`https://data.police.uk/api/crimes-at-location?date=${month}&lat=${lat}&lng=${lng}`)
     .then((response) => response.json())
     .then((result) => {
+      dispatch(setQuery(query));
       dispatch(setCrimes(result));
       const data = processMonthData(result, query);
       dispatch(setMonth(data));
@@ -134,6 +135,7 @@ export const getYearData = (query: YearQuery) => {
     100
   )
     .then((result) => {
+      dispatch(setQuery(query));
       dispatch(setCrimes(result.flat()));
       const data = processYearData(result, query);
       dispatch(setYear(data));

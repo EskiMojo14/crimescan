@@ -56,9 +56,7 @@ function App() {
     <>
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
       <DrawerSettings openSearch={openSearch} latLng={latLng} />
-      <DrawerAppContent>
-        {(!query.lat && !query.lng) || total === 0 ? <ContentEmpty /> : <ContentContainer />}
-      </DrawerAppContent>
+      <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>
   );

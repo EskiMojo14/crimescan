@@ -11,6 +11,9 @@ import "./ContentContainer.scss";
 
 export const ContentContainer = () => {
   const query = useAppSelector(selectQuery);
+  if (!query) {
+    return null;
+  }
   const dataType = useAppSelector(selectType);
   const dateChip =
     query.type === "month" ? (
