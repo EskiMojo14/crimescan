@@ -83,12 +83,12 @@ export const dataSlice = createSlice({
         state.formattedCategories = payload;
       })
       .addCase(getMonthData.fulfilled, (state, { payload, meta: { arg } }) => {
-        state.query = { ...arg, type: "month" };
+        state.query = arg;
         crimeAdapter.setAll(state.crimes, payload);
         state.initialLoad = false;
       })
       .addCase(getYearData.fulfilled, (state, { payload, meta: { arg } }) => {
-        state.query = { ...arg, type: "year" };
+        state.query = arg;
         crimeAdapter.setAll(state.crimes, payload.flat());
         state.initialLoad = false;
       });
