@@ -1,5 +1,6 @@
 @use "@material/rtl";
-@use "../../util";
+@use "~/util";
+
 .drawer-search {
   &.mdc-drawer.drawer-right {
     width: 400px;
