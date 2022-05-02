@@ -13,17 +13,8 @@ export const loadGoogleMapsAPI = () =>
 
 export const getGeocodedResults = async (query: string) => {
   if (geocoder && query) {
-    let status: google.maps.GeocoderStatus = google.maps.GeocoderStatus.ZERO_RESULTS;
-    const result = await geocoder.geocode({ address: query, region: "GB" }, (_, s) => {
-      status = s;
-    });
-    if (!result || status === google.maps.GeocoderStatus.ZERO_RESULTS) {
-      throw new Error(google.maps.GeocoderStatus.ZERO_RESULTS);
-    } else if (status !== google.maps.GeocoderStatus.OK) {
-      throw new Error(status);
-    } else {
-      return result;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return await geocoder.geocode({ address: query, region: "GB" }, () => {});
   }
 };
 

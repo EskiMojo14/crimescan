@@ -48,7 +48,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         try {
           const geocodeResult = await getGeocodedResults(value);
           if (!geocodeResult) {
-            return geocodeResult;
+            return undefined;
           } else {
             const {
               results: [firstResult],
@@ -59,13 +59,17 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
               lng: `${firstResult.geometry.location.lng()}`,
             };
           }
-        } catch (e) {
+        } catch (e: any) {
           console.log(e);
-          let title = "Failed to get geocoding results";
-          if (e instanceof Error && statusCodes[e.message]) {
-            title += `: ${statusCodes[e.message]}`;
+          if (e.code === google.maps.GeocoderStatus.ZERO_RESULTS) {
+            return undefined;
+          } else {
+            let title = "Failed to get geocoding results";
+            if (e.code && statusCodes[e.code]) {
+              title += `: ${statusCodes[e.code]}`;
+            }
+            notify({ title });
           }
-          notify({ title });
         } finally {
           setLoading(false);
         }
