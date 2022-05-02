@@ -1,12 +1,4 @@
 .empty-container {
-  position: absolute;
-  width: 100%;
-  opacity: 0;
-  transition: opacity 200ms linear;
-  z-index: 4;
-  &.open {
-    opacity: 1;
-  }
   .mdc-top-app-bar--fixed-adjust {
     padding-top: 72px;
   }

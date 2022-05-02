@@ -1,4 +1,4 @@
-import { setCrimes, setEmptyData, setMonth, setYear } from ".";
+import { setCrimes, setMonth, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
 import { setCategories, setLoading } from "@s/display";
 import { uniqueArray, alphabeticalSort, hasKey, countInArray, promiseAllSeries } from "@s/util/functions";
@@ -124,7 +124,6 @@ export const getMonthData = (query: MonthQuery) => {
     .then((result) => {
       dispatch(setCrimes(result));
       const data = processMonthData(result, query);
-      dispatch(setEmptyData(data.count === 0));
       dispatch(setMonth(data));
       dispatch(setLoading(false));
     })
@@ -153,7 +152,6 @@ export const getYearData = (query: YearQuery) => {
     .then((result) => {
       dispatch(setCrimes(result.flat()));
       const data = processYearData(result, query);
-      dispatch(setEmptyData(data.count.reduce((a, b) => a + b) === 0));
       dispatch(setYear(data));
       dispatch(setLoading(false));
     })

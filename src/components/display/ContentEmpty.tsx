@@ -1,45 +1,27 @@
-import React, { useEffect, useState } from "react";
-import classNames from "classnames";
+import React from "react";
 import emptyImg from "@m/empty.svg";
 import emptyCheckImg from "@m/empty_check.svg";
 import { useAppSelector } from "@h";
-import { selectEmptyData } from "@s/data";
+import { selectInitialLoad } from "@s/data";
 import { Typography } from "@rmwc/typography";
 import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
 import "./ContentEmpty.scss";
 
-type ContentEmptyProps = {
-  open?: boolean;
-};
+export const ContentEmpty = () => {
+  const initialLoad = useAppSelector(selectInitialLoad);
 
-export const ContentEmpty = (props: ContentEmptyProps) => {
-  const [open, setOpen] = useState(true);
-  useEffect(() => {
-    if (props.open) {
-      setOpen(!!props.open);
-    } else {
-      setTimeout(() => {
-        setOpen(!!props.open);
-      }, 200);
-    }
-  }, [props.open]);
-
-  const emptyData = useAppSelector(selectEmptyData);
-
-  return open ? (
-    <div className={classNames("empty-container", { open: props.open })}>
+  return (
+    <div className={"empty-container"}>
       <TopAppBarFixedAdjust />
       <div className="content">
-        <img className="image" src={emptyData ? emptyCheckImg : emptyImg} alt="Empty" />
+        <img className="image" src={!initialLoad ? emptyCheckImg : emptyImg} alt="Empty" />
         <Typography className="title" use="headline6" tag="h3">
-          {emptyData ? "No crimes logged within given period." : "No data to display"}
+          {!initialLoad ? "No crimes logged within given period." : "No data to display"}
         </Typography>
         <Typography className="subtitle" use="body1" tag="p">
-          {emptyData ? "Congrats!" : "Submit a query to get started."}
+          {!initialLoad ? "Congrats!" : "Submit a query to get started."}
         </Typography>
       </div>
     </div>
-  ) : (
-    <></>
   );
 };

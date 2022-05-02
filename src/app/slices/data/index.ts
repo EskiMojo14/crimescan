@@ -9,7 +9,7 @@ const crimeAdapter = createEntityAdapter<CrimeEntry>({
 
 type DataState = {
   type: "month" | "year";
-  emptyData: boolean;
+  initialLoad: boolean;
   crimes: EntityState<CrimeEntry>;
   month: MonthData;
   year: YearData;
@@ -17,7 +17,7 @@ type DataState = {
 
 const initialState: DataState = {
   type: "month",
-  emptyData: false,
+  initialLoad: true,
   crimes: crimeAdapter.getInitialState(),
   month: blankMonth,
   year: blankYear,
@@ -37,20 +37,26 @@ export const dataSlice = createSlice({
       state.year = { ...state.year, ...action.payload };
       state.month = blankMonth;
     },
-    setEmptyData: (state, action: PayloadAction<boolean>) => {
-      state.emptyData = action.payload;
-    },
     setCrimes: (state, action: PayloadAction<CrimeEntry[]>) => {
       crimeAdapter.setMany(state.crimes, action);
+      state.initialLoad = false;
     },
   },
 });
 
-export const { setMonth, setYear, setEmptyData, setCrimes } = dataSlice.actions;
+export const { setMonth, setYear, setCrimes } = dataSlice.actions;
+
+export const {
+  selectIds: selectCrimeIds,
+  selectEntities: selectCrimeMap,
+  selectAll: selectAllCrimes,
+  selectTotal: selectCrimeTotal,
+  selectById: selectCrimeById,
+} = crimeAdapter.getSelectors((state: RootState) => state.data.crimes);
+
+export const selectInitialLoad = (state: RootState) => state.data.initialLoad;
 
 export const selectType = (state: RootState) => state.data.type;
-
-export const selectEmptyData = (state: RootState) => state.data.emptyData;
 
 export const selectMonthData = (state: RootState) => state.data.month;
 
