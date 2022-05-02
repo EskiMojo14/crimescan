@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import classNames from "classnames";
+import { useImmer } from "use-immer";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
@@ -39,15 +40,14 @@ export const CategoryCardMonth = () => {
     },
   };
 
-  const [focused, setFocused] = useState<string[]>([]);
-  const focus = (letter: string) => {
-    setFocused((focused) => addOrRemove([...focused], letter));
-  };
+  const [focused, updateFocused] = useImmer<string[]>([]);
+  const focus = (letter: string) => updateFocused((focused) => addOrRemove(focused, letter));
+
   const focusAll = () => {
     if (focused.length === allCategories.length) {
-      setFocused([]);
+      updateFocused([]);
     } else {
-      setFocused(letters.slice(0, allCategories.length));
+      updateFocused(letters.slice(0, allCategories.length));
     }
   };
 
@@ -165,15 +165,14 @@ export const CategoryCardYear = () => {
       <ChartistGraph type="Line" data={chartData} options={lineChartOptions} className="ct-major-eleventh" />
     ) : null;
 
-  const [focused, setFocused] = useState<string[]>([]);
-  const focus = (letter: string) => {
-    setFocused((focused) => addOrRemove([...focused], letter));
-  };
+  const [focused, updateFocused] = useImmer<string[]>([]);
+  const focus = (letter: string) => updateFocused((focused) => addOrRemove(focused, letter));
+
   const focusAll = () => {
     if (focused.length === allCategories.length) {
-      setFocused([]);
+      updateFocused([]);
     } else {
-      setFocused(letters.slice(0, allCategories.length));
+      updateFocused(letters.slice(0, allCategories.length));
     }
   };
 

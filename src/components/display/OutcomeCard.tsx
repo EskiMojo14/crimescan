@@ -20,6 +20,7 @@ import {
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
+import { useImmer } from "use-immer";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
@@ -37,15 +38,13 @@ export const OutcomeCardMonth = () => {
     },
   };
 
-  const [focused, setFocused] = useState<string[]>([]);
-  const focus = (letter: string) => {
-    setFocused((focused) => addOrRemove([...focused], letter));
-  };
+  const [focused, updateFocused] = useImmer<string[]>([]);
+  const focus = (letter: string) => updateFocused((focused) => addOrRemove(focused, letter));
   const focusAll = () => {
     if (focused.length === allOutcomes.length) {
-      setFocused([]);
+      updateFocused([]);
     } else {
-      setFocused(letters.slice(0, allOutcomes.length));
+      updateFocused(letters.slice(0, allOutcomes.length));
     }
   };
 
@@ -163,15 +162,14 @@ export const OutcomeCardYear = () => {
       <ChartistGraph type="Line" data={chartData} options={lineChartOptions} className="ct-major-eleventh" />
     ) : null;
 
-  const [focused, setFocused] = useState<string[]>([]);
-  const focus = (letter: string) => {
-    setFocused((focused) => addOrRemove([...focused], letter));
-  };
+  const [focused, updateFocused] = useImmer<string[]>([]);
+  const focus = (letter: string) => updateFocused((focused) => addOrRemove(focused, letter));
+
   const focusAll = () => {
     if (focused.length === allOutcomes.length) {
-      setFocused([]);
+      updateFocused([]);
     } else {
-      setFocused(letters.slice(0, allOutcomes.length));
+      updateFocused(letters.slice(0, allOutcomes.length));
     }
   };
 
