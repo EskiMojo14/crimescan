@@ -190,17 +190,21 @@ svg.material-icons,
   }
 }
 
+@function contrast($color) {
+  @return if(theme-functions.contrast-tone($color) == "dark", black, white);
+}
+
 .light {
   $theme: (
     primary: palette.$light-green-700,
-    on-primary: if(theme-functions.contrast-tone(palette.$light-green-700) == "dark", black, white),
+    on-primary: contrast(palette.$light-green-700),
     secondary: palette.$red-700,
-    on-secondary: if(theme-functions.contrast-tone(palette.$red-700) == "dark", black, white),
+    on-secondary: contrast(palette.$red-700),
     background: palette.$grey-200,
     error: palette.$deep-orange-500,
-    on-error: if(theme-functions.contrast-tone(palette.$deep-orange-500) == "dark", black, white),
+    on-error: contrast(palette.$deep-orange-500),
     surface: white,
-    on-surface: black,
+    on-surface: contrast(white),
   );
   @include theme.theme($theme);
 }
@@ -208,12 +212,12 @@ svg.material-icons,
 .dark {
   $theme: (
     primary: palette.$light-green-300,
-    on-primary: if(theme-functions.contrast-tone(palette.$light-green-300) == "dark", black, white),
+    on-primary: contrast(palette.$light-green-300),
     secondary: palette.$red-400,
-    on-secondary: if(theme-functions.contrast-tone(palette.$red-400) == "dark", black, white),
+    on-secondary: contrast(palette.$red-400),
     background: #121212,
     error: palette.$deep-orange-400,
-    on-error: if(theme-functions.contrast-tone(palette.$deep-orange-400) == "dark", black, white),
+    on-error: contrast(palette.$deep-orange-400),
     surface: #121212,
     on-surface: white,
   );
