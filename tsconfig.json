@@ -20,7 +20,27 @@
         "sourceMap": true, // Generate corrresponding .map file
         "noUnusedLocals": false, // Report errors on unused locals
         "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
-        "noFallthroughCasesInSwitch": true // Report errors for fallthrough cases in switch statement
+        "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
+        "paths": {
+            "~/*": [
+                "./src/*"
+            ],
+            "@s/*": [
+                "./src/app/slices/*"
+            ],
+            "@h": [
+                "./src/app/hooks"
+            ],
+            "@h/*": [
+                "./src/app/hooks/*"
+            ],
+            "@c/*": [
+                "./src/components/*"
+            ],
+            "@m/*": [
+                "./src/media/*"
+            ],
+        }
     },
     "include": [
         "src/**/*", // *** The files TypeScript should type check ***

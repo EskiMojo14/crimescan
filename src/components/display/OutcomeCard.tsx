@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import classNames from "classnames";
-import { useAppSelector } from "../../app/hooks";
-import { months } from "../../util/constants";
-import { iconObject, addOrRemove } from "../../util/functions";
-import { selectMonthData, selectYearData } from "./dataSlice";
+import { useAppSelector } from "@h";
+import { months } from "@s/util/constants";
+import { iconObject, addOrRemove } from "@s/util/functions";
+import { selectAllOutcomes, selectOutcomeCount } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -19,16 +19,17 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const OutcomeCardMonth = () => {
-  const monthData = useAppSelector(selectMonthData);
-  const { allOutcomes, outcomeCount } = monthData;
+  const allOutcomes = useAppSelector(selectAllOutcomes);
+  const outcomeCount = useAppSelector(selectOutcomeCount);
+  const series = useMemo(() => outcomeCount.flat(), [outcomeCount]);
   const chartData = {
     labels: [],
-    series: outcomeCount,
+    series,
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
@@ -38,7 +39,7 @@ export const OutcomeCardMonth = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allOutcomes.length) {
@@ -101,11 +102,11 @@ export const OutcomeCardMonth = () => {
 };
 
 export const OutcomeCardYear = () => {
-  const yearData = useAppSelector(selectYearData);
+  const allOutcomes = useAppSelector(selectAllOutcomes);
+  const outcomeCount = useAppSelector(selectOutcomeCount);
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
-  const { allOutcomes, outcomeCount } = yearData;
   const chartData = {
     labels: months,
     series: outcomeCount,
@@ -164,7 +165,7 @@ export const OutcomeCardYear = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allOutcomes.length) {

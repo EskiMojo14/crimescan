@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import classNames from "classnames";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { geocodeSearch } from "../../app/googleMaps";
-import { initialState, inputSetSearch, selectSearchQuery, setLatLng } from "./inputSlice";
-import { selectMapsLoading, selectMapsNoResults, selectMapsResult, setNoResults } from "./mapsSlice";
-import { selectTheme } from "../display/displaySlice";
-import { hasKey } from "../../util/functions";
+import { useAppSelector } from "@h";
+import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
+import { notify } from "~/app/snackbarQueue";
+import { statusCodes } from "~/app/slices/maps/constants";
+import { asyncDebounce } from "~/app/slices/util/functions";
+import { MapResult } from "~/app/slices/maps/types";
+import { selectTheme } from "@s/display";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerHeader, DrawerContent, DrawerTitle } from "@rmwc/drawer";
 import { IconButton } from "@rmwc/icon-button";
@@ -14,7 +15,7 @@ import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
 import "./DrawerSearch.scss";
-import emptyImg from "../../media/empty.svg";
+import emptyImg from "@m/empty.svg";
 
 const pinColors = {
   dark: {
@@ -30,34 +31,65 @@ const pinColors = {
 type DrawerSearchProps = {
   open: boolean;
   close: () => void;
+  setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
 export const DrawerSearch = (props: DrawerSearchProps) => {
-  const dispatch = useAppDispatch();
   const theme = useAppSelector(selectTheme);
 
-  const search = useAppSelector(selectSearchQuery);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    if (hasKey(initialState.search, name)) {
-      dispatch(inputSetSearch({ key: name, value: value }));
-      if (name === "query") {
-        geocodeSearch(value);
-      }
-    }
-  };
-  const clearSearch = () => {
-    dispatch(inputSetSearch({ key: "query", value: "" }));
-    dispatch(setNoResults(true));
+  const [search, setSearch] = useState("");
+  const [result, setResult] = useState<MapResult | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+
+  const debouncedGeocodeSearch = useMemo(
+    () =>
+      asyncDebounce(async (value: string): Promise<MapResult | undefined> => {
+        setLoading(true);
+        try {
+          const geocodeResult = await getGeocodedResults(value);
+          if (!geocodeResult) {
+            return undefined;
+          } else {
+            const {
+              results: [firstResult],
+            } = geocodeResult;
+            return {
+              name: firstResult.formatted_address,
+              lat: `${firstResult.geometry.location.lat()}`,
+              lng: `${firstResult.geometry.location.lng()}`,
+            };
+          }
+        } catch (e: any) {
+          console.log(e);
+          if (e.code === google.maps.GeocoderStatus.ZERO_RESULTS) {
+            return undefined;
+          } else {
+            let title = "Failed to get geocoding results";
+            if (e.code && statusCodes[e.code]) {
+              title += `: ${statusCodes[e.code]}`;
+            }
+            notify({ title });
+          }
+        } finally {
+          setLoading(false);
+        }
+      }, 400),
+    [setLoading]
+  );
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearch(value);
+    const result = await debouncedGeocodeSearch(value);
+    setResult(result);
   };
 
-  const loading = useAppSelector(selectMapsLoading);
-  const noResults = useAppSelector(selectMapsNoResults);
-  const result = useAppSelector(selectMapsResult);
+  const clearSearch = () => {
+    setSearch("");
+    setResult(undefined);
+  };
 
   const noResultDisplay =
-    noResults && !loading ? (
+    !result && !loading ? (
       <div className="no-result-display">
         <img className="image" src={emptyImg} alt="Empty" />
         <Typography className="title" use="headline6" tag="h3">
@@ -68,8 +100,9 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         </Typography>
       </div>
     ) : null;
-  const validLocation = result.lat && result.lng;
-  const resultDisplay = !noResults ? (
+
+  const validLocation = result && result.lat && result.lng;
+  const resultDisplay = result ? (
     <div className="result-display">
       <div className="name-container">
         <Typography use="body1">{result.name}</Typography>
@@ -79,7 +112,12 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         style={
           validLocation
             ? {
-                backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${process.env.GOOGLE_MAPS_KEY}&markers=color:0x${pinColors[theme].green}|${result.lat},${result.lng}")`,
+                backgroundImage: `url("${getStaticMapURL("448x448", theme, [
+                  {
+                    styles: { color: `0x${pinColors[theme].green}` },
+                    locations: [{ lat: result.lat, lng: result.lng }],
+                  },
+                ])}")`,
               }
             : undefined
         }
@@ -92,11 +130,13 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
   ) : null;
 
   const confirmResult = () => {
-    dispatch(setLatLng({ lat: result.lat, lng: result.lng }));
+    if (result) {
+      props.setLatLng({ lat: result.lat, lng: result.lng });
+    }
     props.close();
     setTimeout(() => {
-      dispatch(inputSetSearch({ key: "query", value: "" }));
-      dispatch(setNoResults(true));
+      setSearch("");
+      setResult(undefined);
     }, 300);
   };
 
@@ -104,7 +144,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
     <Drawer open={props.open} onClose={props.close} modal className="drawer-search drawer-right">
       <DrawerHeader>
         <DrawerTitle>Location search</DrawerTitle>
-        <Button label="Confirm" outlined onClick={confirmResult} disabled={noResults} />
+        <Button label="Confirm" outlined onClick={confirmResult} disabled={!result} />
         <LinearProgress closed={!loading} />
       </DrawerHeader>
       <div className="search-container">

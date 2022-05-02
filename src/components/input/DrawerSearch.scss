@@ -1,5 +1,6 @@
 @use "@material/rtl";
-@use "../../util";
+@use "~/util";
+
 .drawer-search {
   &.mdc-drawer.drawer-right {
     width: 400px;
@@ -68,7 +69,7 @@
         .map-container {
           position: relative;
           @include util.divider-border(all);
-          background-size: contain;
+          background-size: cover;
           background-position: center;
           padding-top: 100%;
           .map-icon {

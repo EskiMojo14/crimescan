@@ -1,20 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getMonthData, getYearData } from "../../app/getData";
-import {
-  initialState,
-  inputSetQuery,
-  selectLat,
-  selectLng,
-  selectMonth,
-  selectYear,
-  selectDateMode,
-} from "./inputSlice";
-import { selectQuery, selectLocation } from "../display/dataSlice";
-import { selectLoading, selectTheme, toggleTheme } from "../display/displaySlice";
-import { queryIcons } from "../../util/constants";
-import { hasKey } from "../../util/functions";
+import { useImmer } from "use-immer";
+import { useAppDispatch, useAppSelector } from "@h";
+import { getStaticMapURL } from "@s/maps/functions";
+import { notify } from "~/app/snackbarQueue";
+import { selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
+import { selectLoading, selectTheme, toggleTheme } from "@s/display";
+import { queryIcons } from "@s/util/constants";
+import { hasKey } from "@s/util/functions";
 import { Button } from "@rmwc/button";
 import { Chip } from "@rmwc/chip";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
@@ -23,8 +16,8 @@ import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
-import { Logo } from "../util/Logo";
-import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
+import { Logo } from "@c/util/Logo";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import "./DrawerSettings.scss";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
@@ -43,45 +36,72 @@ const pinColors = {
 
 type DrawerSettingsProps = {
   openSearch: () => void;
+  latLng: { lat: string; lng: string };
+};
+
+type InputState = {
+  dateMode: "month" | "year";
+  month: string;
+  year: string;
+  lat: string;
+  lng: string;
 };
 
 export const DrawerSettings = (props: DrawerSettingsProps) => {
+  const dispatch = useAppDispatch();
+
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
 
-  const dateMode = useAppSelector(selectDateMode);
-  const month = useAppSelector(selectMonth);
-  const year = useAppSelector(selectYear);
-  const lat = useAppSelector(selectLat);
-  const lng = useAppSelector(selectLng);
+  const [inputState, updateInputState] = useImmer<InputState>({
+    dateMode: "month",
+    month: "",
+    year: "",
+    lat: "",
+    lng: "",
+  });
+
+  useEffect(() => {
+    updateInputState((draftState) => {
+      Object.assign(draftState, props.latLng);
+    });
+  }, [props.latLng]);
+
+  const { dateMode, month, year, lat, lng } = inputState;
 
   const resultLocation = useAppSelector(selectLocation);
   const query = useAppSelector(selectQuery);
 
-  const dispatch = useAppDispatch();
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (hasKey(initialState.query, name)) {
-      dispatch(inputSetQuery({ key: name, value: value }));
+    if (hasKey(inputState, name) && name !== "dateMode") {
+      updateInputState((draftState) => {
+        draftState[name] = value;
+      });
     }
   };
 
-  const changeDateMode = (mode: "month" | "year") => {
-    dispatch(inputSetQuery({ key: "dateMode", value: mode }));
-  };
+  const changeDateMode = (mode: "month" | "year") =>
+    updateInputState((draftState) => {
+      draftState.dateMode = mode;
+    });
   const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
+  const { lat: resultLat, lng: resultLng } = resultLocation ?? {};
   const latLng = `${lat},${lng}`;
-  const queryLocation = `${query.lat},${query.lng}`;
   const formFilled = validDate && validLocation;
-  const submit = () => {
+  const submit = async () => {
     if (formFilled) {
-      if (dateMode === "month") {
-        getMonthData({ type: dateMode, month, lat, lng });
-      } else {
-        getYearData({ type: dateMode, year, lat, lng });
+      try {
+        if (dateMode === "month") {
+          await dispatch(getMonthData({ type: dateMode, date: month, lat, lng })).unwrap();
+        } else {
+          await dispatch(getYearData({ type: dateMode, date: year, lat, lng })).unwrap();
+        }
+      } catch (e) {
+        console.log(e);
+        notify({ title: "Failed to get crime data" });
       }
     }
   };
@@ -187,7 +207,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
           </div>
           <div className="guide-chips">
             {validLocation ? <Chip icon="location_on" label="Query" className="query-chip non-interactive" /> : null}
-            {resultLocation && queryLocation === latLng ? (
+            {resultLocation && `${query?.lat},${query?.lng}` === latLng ? (
               <Chip
                 icon="location_on"
                 label={
@@ -207,13 +227,18 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
             style={
               validLocation
                 ? {
-                    backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?size=448x448&key=${
-                      process.env.GOOGLE_MAPS_KEY
-                    }${
-                      resultLocation && queryLocation === latLng
-                        ? `&markers=color:0x${pinColors[theme].red}|${resultLocation}`
-                        : ""
-                    }&markers=color:0x${pinColors[theme].green}|${lat},${lng}")`,
+                    backgroundImage: `url("${getStaticMapURL("448x448", theme, [
+                      resultLat && resultLng && `${query?.lat},${query?.lng}` === latLng
+                        ? {
+                            styles: { color: `0x${pinColors[theme].red}` },
+                            locations: [{ lat: resultLat, lng: resultLng }],
+                          }
+                        : false,
+                      {
+                        styles: { color: `0x${pinColors[theme].green}` },
+                        locations: [{ lat, lng }],
+                      },
+                    ])}")`,
                   }
                 : undefined
             }

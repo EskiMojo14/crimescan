@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import classNames from "classnames";
-import { useAppSelector } from "../../app/hooks";
-import { months } from "../../util/constants";
-import { iconObject, addOrRemove } from "../../util/functions";
-import { selectMonthData, selectYearData } from "./dataSlice";
+import { useAppSelector } from "@h";
+import { months } from "@s/util/constants";
+import { iconObject, addOrRemove } from "@s/util/functions";
+import { selectAllCategories, selectCategoryCount } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -19,27 +19,29 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import "./CategoryCard.scss";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCardMonth = () => {
-  const monthData = useAppSelector(selectMonthData);
-  const { allCategories, categoryCount } = monthData;
+  const allCategories = useAppSelector(selectAllCategories);
+  const categoryCount = useAppSelector(selectCategoryCount);
+  const series = useMemo(() => categoryCount.flat(), [categoryCount]);
+
   const chartData = {
     labels: [],
-    series: categoryCount,
+    series,
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
-      return Math.round((value / chartData.series.reduce((a, b) => a + b)) * 100) + "%";
+      return Math.round((value / chartData.series.reduce((a, b) => a + b, 0)) * 100) + "%";
     },
   };
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allCategories.length) {
@@ -89,7 +91,7 @@ export const CategoryCardMonth = () => {
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[index]}</DataTableCell>
+                    <DataTableCell isNumeric>{categoryCount[index][0]}</DataTableCell>
                   </DataTableRow>
                 );
               })}
@@ -102,11 +104,11 @@ export const CategoryCardMonth = () => {
 };
 
 export const CategoryCardYear = () => {
-  const yearData = useAppSelector(selectYearData);
+  const allCategories = useAppSelector(selectAllCategories);
+  const categoryCount = useAppSelector(selectCategoryCount);
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
-  const { allCategories, categoryCount } = yearData;
   const chartData = {
     labels: months,
     series: categoryCount,
@@ -165,7 +167,7 @@ export const CategoryCardYear = () => {
 
   const [focused, setFocused] = useState<string[]>([]);
   const focus = (letter: string) => {
-    setFocused(addOrRemove(focused, letter));
+    setFocused((focused) => addOrRemove([...focused], letter));
   };
   const focusAll = () => {
     if (focused.length === allCategories.length) {

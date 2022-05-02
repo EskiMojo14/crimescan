@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../../app/hooks";
-import { months } from "../../util/constants";
-import { iconObject } from "../../util/functions";
-import { selectYearData } from "./dataSlice";
+import { useAppSelector } from "@h";
+import { months } from "@s/util/constants";
+import { iconObject } from "@s/util/functions";
+import { selectCountSeries } from "@s/data";
 import type { IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -17,12 +17,11 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "../util/SegmentedButton";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import "./CountCard.scss";
 
 export const CountCard = () => {
-  const data = useAppSelector(selectYearData);
-  const { count } = data;
+  const count = useAppSelector(selectCountSeries);
   const chartData = {
     labels: months,
     series: [count],

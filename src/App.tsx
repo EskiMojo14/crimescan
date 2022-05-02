@@ -1,45 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "./app/hooks";
-import { loadGoogleMapsAPI } from "./app/googleMaps";
-import { getCrimeCategories } from "./app/getData";
-import { selectEmptyData, selectQuery } from "./components/display/dataSlice";
-import { queue } from "./app/snackbarQueue";
-import { closeModal, openModal } from "./util/functions";
+import { useAppDispatch, useAppSelector } from "@h";
+import { loadGoogleMapsAPI } from "@s/maps/functions";
+import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
+import { selectTheme } from "@s/display";
+import { queue, notify } from "~/app/snackbarQueue";
+import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
-import { ContentContainer } from "./components/display/ContentContainer";
-import { ContentEmpty } from "./components/display/ContentEmpty";
-import { DrawerSearch } from "./components/input/DrawerSearch";
-import { DrawerSettings } from "./components/input/DrawerSettings";
+import { ContentContainer } from "@c/display/ContentContainer";
+import { ContentEmpty } from "@c/display/ContentEmpty";
+import { DrawerSearch } from "@c/input/DrawerSearch";
+import { DrawerSettings } from "@c/input/DrawerSettings";
 import "./App.scss";
-import "normalize.css";
 
 function App() {
-  useEffect(getCrimeCategories, []);
-  useEffect(loadGoogleMapsAPI, []);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getCrimeCategories());
+  }, []);
+  useEffect(() => {
+    try {
+      loadGoogleMapsAPI();
+    } catch (e) {
+      console.log(e);
+      notify({ title: "Failed to load Google Maps API." });
+    }
+  }, []);
+
+  const theme = useAppSelector(selectTheme);
+  useEffect(() => {
+    document.documentElement.className = theme;
+    document
+      .querySelector("meta[name=theme-color]")
+      ?.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
+  }, [theme]);
 
   const query = useAppSelector(selectQuery);
 
-  const emptyData = useAppSelector(selectEmptyData);
+  const total = useAppSelector(selectCrimeTotal);
+
+  const [latLng, setLatLng] = useState({ lat: "", lng: "" });
 
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const openSearch = () => {
     setSearchDrawerOpen(true);
-    openModal();
+    openModal("search-drawer");
   };
   const closeSearch = () => {
     setSearchDrawerOpen(false);
-    closeModal();
+    closeModal("search-drawer");
   };
 
   return (
     <>
-      <DrawerSearch open={searchDrawerOpen} close={closeSearch} />
-      <DrawerSettings openSearch={openSearch} />
-      <DrawerAppContent>
-        <ContentEmpty open={(!query.lat && !query.lng) || emptyData} />
-        <ContentContainer />
-      </DrawerAppContent>
+      <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
+      <DrawerSettings openSearch={openSearch} latLng={latLng} />
+      <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>
   );
