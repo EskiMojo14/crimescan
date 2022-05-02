@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
-import { selectCrimeTotal, selectQuery } from "@s/data";
-import { getCrimeCategories, selectTheme } from "@s/display";
+import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
+import { selectTheme } from "@s/display";
 import { queue, notify } from "~/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";

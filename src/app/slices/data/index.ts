@@ -1,7 +1,26 @@
-import { createEntityAdapter, createSelector, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityState,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { RootState } from "~/app/store";
 import { blankMonth, blankYear } from "./constants";
 import { CrimeEntry, MonthData, MonthQuery, YearData, YearQuery } from "./types";
+
+export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", () =>
+  fetch("https://data.police.uk/api/crime-categories")
+    .then((response) => response.json())
+    .then(
+      (value): Record<string, string> =>
+        value.reduce((acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
+          acc[url] = name;
+          return acc;
+        }, {})
+    )
+);
 
 const crimeAdapter = createEntityAdapter<CrimeEntry>({
   selectId: ({ persistent_id }) => persistent_id,
@@ -14,6 +33,7 @@ type DataState = {
   query: MonthQuery | YearQuery | undefined;
   month: MonthData;
   year: YearData;
+  formattedCategories: Record<string, string>;
 };
 
 const initialState: DataState = {
@@ -23,6 +43,7 @@ const initialState: DataState = {
   query: undefined,
   month: blankMonth,
   year: blankYear,
+  formattedCategories: {},
 };
 
 export const dataSlice = createSlice({
@@ -46,6 +67,11 @@ export const dataSlice = createSlice({
       crimeAdapter.setMany(state.crimes, payload);
       state.initialLoad = false;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCrimeCategories.fulfilled, (state, { payload }) => {
+      state.formattedCategories = payload;
+    });
   },
 });
 
@@ -72,5 +98,7 @@ export const selectQuery = (state: RootState) => state.data.query;
 export const selectLocation = createSelector(selectAllCrimes, ([crimeEntry]) =>
   crimeEntry ? { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude } : undefined
 );
+
+export const selectFormattedCategories = (state: RootState) => state.data.formattedCategories;
 
 export default dataSlice.reducer;

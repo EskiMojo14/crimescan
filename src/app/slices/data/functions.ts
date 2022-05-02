@@ -1,6 +1,6 @@
-import { setCrimes, setMonth, setQuery, setYear } from ".";
+import { selectFormattedCategories, setCrimes, setMonth, setQuery, setYear } from ".";
 import { CrimeEntry, MonthData, YearData, MonthQuery, YearQuery } from "./types";
-import { selectFormattedCategories, setLoading } from "@s/display";
+import { setLoading } from "@s/display";
 import { uniqueArray, alphabeticalSort, countInArray, promiseAllSeries } from "@s/util/functions";
 import { notify } from "~/app/snackbarQueue";
 import store from "~/app/store";
