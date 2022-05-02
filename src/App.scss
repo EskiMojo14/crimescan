@@ -193,8 +193,8 @@ svg.material-icons,
 .light {
   $theme: (
     primary: palette.$light-green-700,
-    secondary: palette.$red-700,
     on-primary: if(theme-functions.contrast-tone(palette.$light-green-700) == "dark", black, white),
+    secondary: palette.$red-700,
     on-secondary: if(theme-functions.contrast-tone(palette.$red-700) == "dark", black, white),
     background: palette.$grey-200,
     error: palette.$deep-orange-500,
@@ -208,8 +208,8 @@ svg.material-icons,
 .dark {
   $theme: (
     primary: palette.$light-green-300,
-    secondary: palette.$red-400,
     on-primary: if(theme-functions.contrast-tone(palette.$light-green-300) == "dark", black, white),
+    secondary: palette.$red-400,
     on-secondary: if(theme-functions.contrast-tone(palette.$red-400) == "dark", black, white),
     background: #121212,
     error: palette.$deep-orange-400,
