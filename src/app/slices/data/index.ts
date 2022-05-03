@@ -1,6 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, EntityState } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
-import { RootState } from "~/app/store";
+import { RootState } from "/src/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
 import { CrimeEntry, Query } from "./types";
 
