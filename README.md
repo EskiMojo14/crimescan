@@ -8,4 +8,4 @@ CrimeScan is built using TypeScript, React, Redux, and SCSS. It uses RMWC as a U
 
 Site code is stored in `/src`, and is built by running `npm run build` in the root directory. It compiles into `/dist`.
 
-Parcel's serve can be run with `npm start`. It gets hosted at `localhost:8080`.
+Parcel's serve can be run with `npm start`. It gets hosted at `localhost:1234`.
