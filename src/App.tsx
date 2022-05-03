@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
-import { selectTheme } from "@s/display";
+import { selectTheme } from "@s/settings";
 import { queue, notify } from "/src/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";

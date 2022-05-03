@@ -1,4 +1,14 @@
-import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, EntityState } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityState,
+  isAnyOf,
+  isFulfilled,
+  isPending,
+  isRejected,
+} from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "/src/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
@@ -44,13 +54,15 @@ const crimeAdapter = createEntityAdapter<CrimeEntry>();
 
 type DataState = {
   initialLoad: boolean;
+  loadingId: string;
   crimes: EntityState<CrimeEntry>;
   query: Query | undefined;
   formattedCategories: Record<string, string>;
 };
 
-const initialState: DataState = {
+export const initialState: DataState = {
   initialLoad: true,
+  loadingId: "",
   crimes: crimeAdapter.getInitialState(),
   query: undefined,
   formattedCategories: {},
@@ -74,7 +86,18 @@ export const dataSlice = createSlice({
         state.query = arg;
         crimeAdapter.setAll(state.crimes, payload.flat());
         state.initialLoad = false;
-      });
+      })
+      .addMatcher(isPending(getMonthData, getYearData), (state, { meta: { requestId } }) => {
+        state.loadingId = requestId;
+      })
+      .addMatcher(
+        isAnyOf(isFulfilled(getMonthData, getYearData), isRejected(getMonthData, getYearData)),
+        (state, { meta: { requestId } }) => {
+          if (state.loadingId === requestId) {
+            state.loadingId = "";
+          }
+        }
+      );
   },
 });
 
@@ -89,6 +112,8 @@ export const {
 } = crimeAdapter.getSelectors((state: RootState) => state.data.crimes);
 
 export const selectInitialLoad = (state: RootState) => state.data.initialLoad;
+
+export const selectLoading = (state: RootState) => !!state.data.loadingId;
 
 export const selectQuery = (state: RootState) => state.data.query;
 
