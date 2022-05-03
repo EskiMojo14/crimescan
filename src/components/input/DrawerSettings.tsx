@@ -227,7 +227,7 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
             style={
               validLocation
                 ? {
-                    backgroundImage: `url("${getStaticMapURL("448x448", theme, [
+                    backgroundImage: `url("${getStaticMapURL("438x438", theme, [
                       resultLat && resultLng && `${query?.lat},${query?.lng}` === latLng
                         ? {
                             styles: { color: `0x${pinColors[theme].red}` },
