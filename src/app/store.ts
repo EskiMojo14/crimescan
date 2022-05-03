@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import data from "@s/data";
-import display from "@s/display";
+import settings from "@s/settings";
 
 export const store = configureStore({
   reducer: {
     data,
-    display,
+    settings,
   },
 });
 
