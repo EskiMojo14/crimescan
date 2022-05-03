@@ -1,0 +1,25 @@
+@use "/src/util";
+
+.drawer-favourites {
+  &.mdc-drawer.drawer-right {
+    width: 400px;
+  }
+  .mdc-drawer {
+    &__header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      padding: 16px;
+      @include util.divider-border(bottom);
+    }
+    &__title {
+      flex-grow: 1;
+      margin: 0;
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+  }
+}

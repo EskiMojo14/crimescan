@@ -12,6 +12,7 @@ import DrawerSearch from "@c/data/DrawerSearch";
 import DrawerQuery from "@c/data/DrawerQuery";
 import useBoolStates from "@h/useBoolStates";
 import "./App.scss";
+import DrawerFavourites from "@c/user/DrawerFavourites";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -58,10 +59,14 @@ function App() {
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const [closeSearch, openSearch] = useBoolStates(setSearchDrawerOpen, "setSearchDrawerOpen");
 
+  const [favouritesDrawerOpen, setFavouritesDrawerOpen] = useState(false);
+  const [closeFavourites, openFavourites] = useBoolStates(setFavouritesDrawerOpen, "setFavouritesDrawerOpen");
+
   return (
     <>
+      <DrawerFavourites open={favouritesDrawerOpen} onClose={closeFavourites} />
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
-      <DrawerQuery openSearch={openSearch} latLng={latLng} />
+      <DrawerQuery openSearch={openSearch} openFavourites={openFavourites} latLng={latLng} />
       <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>

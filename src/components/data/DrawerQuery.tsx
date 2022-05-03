@@ -35,6 +35,7 @@ const pinColors = {
 } as const;
 
 type DrawerQueryProps = {
+  openFavourites: () => void;
   openSearch: () => void;
   latLng: { lat: string; lng: string };
 };
@@ -168,7 +169,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="button-container">
             <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
-            <Button label="Saved" icon="star" outlined />
+            <Button label="Saved" icon="star" outlined onClick={props.openFavourites} />
           </div>
           <div className="double-field">
             <div className="field">
