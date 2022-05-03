@@ -1,16 +1,31 @@
-import { configureStore } from "@reduxjs/toolkit";
+import listener from "@mw/listener";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import data from "@s/data";
-import display from "@s/display";
+import settings from "@s/settings";
+import { loadState } from "/src/app/localStorage";
 
-export const store = configureStore({
-  reducer: {
-    data,
-    display,
-  },
+const reducer = combineReducers({
+  data,
+  settings,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof reducer>;
+
+export const createStore = (preloadedState?: Partial<RootState>) =>
+  configureStore({
+    preloadedState,
+    reducer,
+    middleware: (gDM) => gDM().prepend(listener),
+  });
+
+export const store = createStore(loadState());
 
 export type AppDispatch = typeof store.dispatch;
+
+export type AppThunk<ReturnType> = (
+  dispatch: AppDispatch,
+  getState: () => RootState,
+  extraArgument?: never
+) => ReturnType;
 
 export default store;
