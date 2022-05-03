@@ -10,7 +10,7 @@ import { DrawerAppContent } from "@rmwc/drawer";
 import { ContentContainer } from "@c/display/ContentContainer";
 import { ContentEmpty } from "@c/display/ContentEmpty";
 import { DrawerSearch } from "@c/input/DrawerSearch";
-import { DrawerSettings } from "@c/input/DrawerSettings";
+import DrawerQuery from "@c/input/DrawerQuery";
 import "./App.scss";
 
 function App() {
@@ -68,7 +68,7 @@ function App() {
   return (
     <>
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
-      <DrawerSettings openSearch={openSearch} latLng={latLng} />
+      <DrawerQuery openSearch={openSearch} latLng={latLng} />
       <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
       <SnackbarQueue messages={queue.messages} />
     </>

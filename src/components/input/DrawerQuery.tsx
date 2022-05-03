@@ -18,7 +18,7 @@ import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
-import "./DrawerSettings.scss";
+import "./DrawerQuery.scss";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
@@ -34,7 +34,7 @@ const pinColors = {
   },
 } as const;
 
-type DrawerSettingsProps = {
+type DrawerQueryProps = {
   openSearch: () => void;
   latLng: { lat: string; lng: string };
 };
@@ -47,7 +47,7 @@ type InputState = {
   lng: string;
 };
 
-export const DrawerSettings = (props: DrawerSettingsProps) => {
+export const DrawerQuery = (props: DrawerQueryProps) => {
   const dispatch = useAppDispatch();
 
   const theme = useAppSelector(selectTheme);
@@ -265,3 +265,5 @@ export const DrawerSettings = (props: DrawerSettingsProps) => {
     </Drawer>
   );
 };
+
+export default DrawerQuery;
