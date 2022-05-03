@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
-import { RootState } from "~/app/store";
+import { RootState } from "/src/app/store";
 import { getMonthData, getYearData } from "@s/data";
 
 type DisplayState = {

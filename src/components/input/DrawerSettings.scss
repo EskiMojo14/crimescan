@@ -1,6 +1,6 @@
 @use "@material/rtl";
 @use "@material/typography";
-@use "~/util";
+@use "/src/util";
 
 .drawer-settings {
   &.mdc-drawer {

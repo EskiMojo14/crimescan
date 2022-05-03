@@ -138,14 +138,21 @@ svg.material-icons,
       border: 0 solid var(--divider-color);
       @include rtl.reflexive(border-left-width, 0, border-right-width, 1px);
     }
-    &.indicator::before {
-      content: "";
-      position: absolute;
-      @include rtl.reflexive-position(right, 0);
-      top: 0;
-      height: 100%;
-      width: 4px;
-      background-color: var(--lighter-color);
+    &.indicator {
+      &::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background-color: var(--lighter-color);
+      }
+      @include rtl.rtl {
+        &::before {
+          left: 0;
+        }
+      }
     }
   }
 }

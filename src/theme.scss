@@ -1,16 +1,16 @@
-@use "@material/button";
-@use "@material/card";
-@use "@material/chips";
-@use "@material/checkbox";
-@use "@material/drawer";
-@use "@material/icon-button";
-@use "@material/linear-progress";
-@use "@material/ripple";
-@use "@material/snackbar";
-@use "@material/top-app-bar";
+@use "@material/button/index.scss" as button;
+@use "@material/card/index.scss" as card;
+@use "@material/chips/index.scss" as chips;
+@use "@material/checkbox/index.scss" as checkbox;
+@use "@material/drawer/index.scss" as drawer;
+@use "@material/icon-button/index.scss" as icon-button;
+@use "@material/linear-progress/index.scss" as linear-progress;
+@use "@material/ripple/index.scss" as ripple;
+@use "@material/snackbar/index.scss" as snackbar;
+@use "@material/top-app-bar/index.scss" as top-app-bar;
 @use "@material/textfield/mixins" as text-field;
-@use "@material/textfield/helper-text/" as text-field-helper-text;
-@use "@material/textfield/icon/" as text-field-icon;
+@use "@material/textfield/helper-text/index.scss" as text-field-helper-text;
+@use "@material/textfield/icon/index.scss" as text-field-icon;
 
 @use "@material/feature-targeting";
 @use "@material/theme/color-palette" as palette;

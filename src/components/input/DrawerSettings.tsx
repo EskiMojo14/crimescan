@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { getStaticMapURL } from "@s/maps/functions";
-import { notify } from "~/app/snackbarQueue";
+import { notify } from "/src/app/snackbarQueue";
 import { selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
 import { selectLoading, selectTheme, toggleTheme } from "@s/display";
 import { queryIcons } from "@s/util/constants";
