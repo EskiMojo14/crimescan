@@ -4,13 +4,13 @@ import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue, notify } from "/src/app/snackbarQueue";
-import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
 import ContentContainer from "@c/data/ContentContainer";
 import ContentEmpty from "@c/data/ContentEmpty";
 import DrawerSearch from "@c/data/DrawerSearch";
 import DrawerQuery from "@c/data/DrawerQuery";
+import useBoolStates from "@h/useBoolStates";
 import "./App.scss";
 
 function App() {
@@ -56,14 +56,7 @@ function App() {
   const [latLng, setLatLng] = useState({ lat: "", lng: "" });
 
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
-  const openSearch = () => {
-    setSearchDrawerOpen(true);
-    openModal("search-drawer");
-  };
-  const closeSearch = () => {
-    setSearchDrawerOpen(false);
-    closeModal("search-drawer");
-  };
+  const [closeSearch, openSearch] = useBoolStates(setSearchDrawerOpen, "setSearchDrawerOpen");
 
   return (
     <>

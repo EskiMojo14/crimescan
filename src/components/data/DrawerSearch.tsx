@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "@h";
 import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
 import { statusCodes } from "@s/maps/constants";
-import { asyncDebounce } from "@s/util/functions";
+import { asyncDebounce, closeModal, openModal } from "@s/util/functions";
 import { MapResult } from "@s/maps/types";
 import { selectTheme } from "@s/settings";
 import { Button } from "@rmwc/button";
@@ -33,6 +33,14 @@ type DrawerSearchProps = {
 };
 
 export const DrawerSearch = (props: DrawerSearchProps) => {
+  useEffect(() => {
+    if (props.open) {
+      openModal("search-drawer");
+    } else {
+      closeModal("search-drawer");
+    }
+  }, [props.open]);
+
   const theme = useAppSelector(selectTheme);
 
   const [search, setSearch] = useState("");

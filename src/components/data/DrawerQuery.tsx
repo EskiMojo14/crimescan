@@ -168,6 +168,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="button-container">
             <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
+            <Button label="Saved" icon="star" outlined />
           </div>
           <div className="double-field">
             <div className="field">

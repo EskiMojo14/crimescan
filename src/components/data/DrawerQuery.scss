@@ -54,22 +54,18 @@
       .button-container {
         margin-bottom: 16px;
         display: flex;
+        column-gap: 16px;
         .mdc-button {
-          flex-grow: 1;
+          flex: 1 0;
         }
       }
       .double-field {
         display: flex;
         margin-bottom: 16px;
-        flex: calc(50% - 8px) 1 0;
+        column-gap: 16px;
         .field {
+          flex: 1 0;
           margin-bottom: 0;
-          &:first-child {
-            @include rtl.reflexive-box(margin, right, 8px);
-          }
-          &:last-child {
-            @include rtl.reflexive-box(margin, left, 8px);
-          }
         }
       }
       .field {
