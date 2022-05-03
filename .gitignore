@@ -24,3 +24,4 @@ apiKeys.env
 /.parcel-cache
 /dist
 /.vscode
+tsconfig.tsbuildinfo

@@ -22,4 +22,10 @@ export const store = createStore(loadState());
 
 export type AppDispatch = typeof store.dispatch;
 
+export type AppThunk<ReturnType> = (
+  dispatch: AppDispatch,
+  getState: () => RootState,
+  extraArgument?: never
+) => ReturnType;
+
 export default store;

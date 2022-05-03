@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
-import { selectTheme } from "@s/settings";
+import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue, notify } from "/src/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
@@ -35,6 +35,19 @@ function App() {
       .querySelector("meta[name=theme-color]")
       ?.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--meta-color"));
   }, [theme]);
+
+  const cookies = useAppSelector(selectCookies);
+  useEffect(() => {
+    if (!cookies) {
+      notify({
+        actions: [{ label: "Accept", onClick: () => dispatch(cookiesAccepted()) }],
+        dismissesOnAction: true,
+        onClose: () => dispatch(cookiesAccepted()),
+        timeout: 200000,
+        title: "By using this site, you consent to use of cookies to store preferences.",
+      });
+    }
+  }, [cookies]);
 
   const query = useAppSelector(selectQuery);
 

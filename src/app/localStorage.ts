@@ -6,7 +6,7 @@ import type { AppStartListening } from "@mw/listener";
 import { objectEntries, objectFromEntries } from "@s/util/functions";
 import type { ObjectEntries } from "@s/util/types";
 import { initialState as data } from "@s/data";
-import { initialState as settings } from "@s/settings";
+import { initialState as settings, selectCookies } from "@s/settings";
 
 type WhitelistDef = {
   [K in keyof RootState]?: true | [keyof RootState[K], ...(keyof RootState[K])[]];
@@ -27,7 +27,7 @@ const idWhitelist = <W extends WhitelistDef>(whitelist: W) => whitelist;
 
 const persistWhitelist = idWhitelist({
   data: ["formattedCategories"],
-  settings: ["theme"],
+  settings: ["theme", "cookies"],
 });
 
 type PersistWhitelist = typeof persistWhitelist;
@@ -65,7 +65,7 @@ export const sanitiseState = (state: RootState) =>
 
 export const saveState = (state: RootState) => {
   try {
-    const accepted = true; //selectCookies(state);
+    const accepted = selectCookies(state);
     if (accepted) {
       const serializedState = JSON.stringify(sanitiseState(state));
       localStorage.setItem("state", serializedState);
