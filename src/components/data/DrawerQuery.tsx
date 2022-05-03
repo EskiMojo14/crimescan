@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@h";
 import { getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
 import { selectLoading, selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
+import { pinColors } from "@s/maps/constants";
 import { selectTheme, toggleTheme } from "@s/settings";
 import { queryIcons } from "@s/util/constants";
 import { hasKey } from "@s/util/functions";
@@ -19,20 +20,10 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import "./DrawerQuery.scss";
+import { withTooltip } from "@c/util/hocs";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
-
-const pinColors = {
-  dark: {
-    green: "AED581",
-    red: "EF5350",
-  },
-  light: {
-    green: "689F38",
-    red: "D32F2F",
-  },
-} as const;
 
 type DrawerQueryProps = {
   openFavourites: () => void;
@@ -139,7 +130,10 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
       <DrawerHeader>
         <Logo className="drawer-logo" rotate={loading} />
         <div className="logo-text">CrimeScan</div>
-        <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={() => dispatch(toggleTheme())} />
+        {withTooltip(
+          <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={() => dispatch(toggleTheme())} />,
+          "Toggle theme"
+        )}
         <LinearProgress closed={!loading} />
       </DrawerHeader>
       <DrawerContent>

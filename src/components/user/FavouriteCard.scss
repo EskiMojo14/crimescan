@@ -1,0 +1,24 @@
+@use "/src/util";
+
+.favourite-card.mdc-card {
+  background: transparent;
+  padding: 16px;
+  gap: 16px;
+  .mdc-typography--overline {
+    margin: -12px 0;
+  }
+  .map-container {
+    position: relative;
+    @include util.divider-border(all);
+    background-size: cover;
+    background-position: center;
+    padding-top: 100%;
+  }
+  .mdc-card {
+    &__actions {
+      margin: -16px;
+      margin-top: 0;
+      @include util.divider-border(top);
+    }
+  }
+}

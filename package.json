@@ -32,6 +32,7 @@
     "@rmwc/linear-progress": "^6.1.4",
     "@rmwc/snackbar": "^6.1.4",
     "@rmwc/textfield": "^6.1.4",
+    "@rmwc/tooltip": "^6.1.4",
     "@rmwc/top-app-bar": "^6.1.4",
     "@rmwc/typography": "^6.1.4",
     "@types/lodash.clonedeep": "^4.5.7",

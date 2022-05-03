@@ -575,4 +575,43 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       }
     }
   }
+
+  .rmwc-tooltip {
+    &-inner {
+      background-color: map-get($variables, text-high);
+      color: map-get($variables, surface);
+    }
+    &-placement-top .rmwc-tooltip-arrow,
+    &-placement-topLeft .rmwc-tooltip-arrow,
+    &-placement-topRight .rmwc-tooltip-arrow {
+      border-top-color: map-get($variables, text-high);
+      &-inner {
+        border-top-color: map-get($variables, surface);
+      }
+    }
+    &-placement-right .rmwc-tooltip-arrow,
+    &-placement-rightTop .rmwc-tooltip-arrow,
+    &-placement-rightBottom .rmwc-tooltip-arrow {
+      border-right-color: map-get($variables, text-high);
+      &-inner {
+        border-right-color: map-get($variables, surface);
+      }
+    }
+    &-placement-left .rmwc-tooltip-arrow,
+    &-placement-leftTop .rmwc-tooltip-arrow,
+    &-placement-leftBottom .rmwc-tooltip-arrow {
+      border-left-color: map-get($variables, text-high);
+      &-inner {
+        border-left-color: map-get($variables, surface);
+      }
+    }
+    &-placement-bottom .rmwc-tooltip-arrow-inner,
+    &-placement-bottomLeft .rmwc-tooltip-arrow-inner,
+    &-placement-bottomRight .rmwc-tooltip-arrow-inner {
+      border-bottom-color: map-get($variables, text-high);
+      &-inner {
+        border-bottom-color: map-get($variables, surface);
+      }
+    }
+  }
 }

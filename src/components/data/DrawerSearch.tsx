@@ -3,7 +3,7 @@ import { useAppSelector } from "@h";
 import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
 import useScrollLock from "@h/useScrollLock";
-import { statusCodes } from "@s/maps/constants";
+import { statusCodes, pinColors } from "@s/maps/constants";
 import { asyncDebounce } from "@s/util/functions";
 import { MapResult } from "@s/maps/types";
 import { selectTheme } from "@s/settings";
@@ -15,17 +15,6 @@ import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
 import "./DrawerSearch.scss";
 import emptyImg from "@m/empty.svg";
-
-const pinColors = {
-  dark: {
-    green: "AED581",
-    red: "EF5350",
-  },
-  light: {
-    green: "689F38",
-    red: "D32F2F",
-  },
-} as const;
 
 type DrawerSearchProps = {
   open: boolean;
@@ -108,7 +97,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         <Typography use="body1">{result.name}</Typography>
       </div>
       <div
-        className="map-container image"
+        className="map-container"
         style={{
           backgroundImage: `url("${getStaticMapURL("368x368", theme, [
             {
