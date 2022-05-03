@@ -22,9 +22,6 @@
         "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
         "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
         "paths": {
-            "/*": [
-                "./*"
-            ],
             "@s/*": [
                 "./src/app/slices/*"
             ],
@@ -34,11 +31,17 @@
             "@h/*": [
                 "./src/app/hooks/*"
             ],
+            "@mw/*": [
+                "./src/app/middleware/*"
+            ],
             "@c/*": [
                 "./src/components/*"
             ],
             "@m/*": [
                 "./src/media/*"
+            ],
+            "/*": [
+                "./*"
             ],
         }
     },

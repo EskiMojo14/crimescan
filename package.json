@@ -7,6 +7,7 @@
     "@s/*": "./src/app/slices/$1",
     "@h": "./src/app/hooks",
     "@h/*": "./src/app/hooks/$1",
+    "@mw/*": "./src/app/middleware/$1",
     "@c/*": "./src/components/$1",
     "@m/*": "./src/media/$1"
   },
@@ -14,7 +15,8 @@
     "start": "parcel --open",
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "parcel build"
+    "build": "parcel build",
+    "type": "tsc --noEmit"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.11.4",
@@ -38,6 +40,7 @@
     "classnames": "^2.3.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
+    "lodash.pick": "^4.4.0",
     "normalize.css": "^8.0.1",
     "react": "^16.14.0",
     "react-bem-helper": "^1.4.1",
@@ -56,6 +59,7 @@
     "@types/google.maps": "^3.44.4",
     "@types/jest": "^26.0.23",
     "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.pick": "^4.4.7",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.4",
     "@typescript-eslint/eslint-plugin": "^4.23.0",

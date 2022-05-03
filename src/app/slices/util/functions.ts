@@ -1,6 +1,7 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { IconOptions, IconPropT } from "@rmwc/types";
 import debounce from "lodash.debounce";
+import { ObjectEntries } from "@s/util/types";
 
 /**
  * Checks that object contains specified key.
@@ -10,6 +11,54 @@ import debounce from "lodash.debounce";
  */
 
 export const hasKey = <O>(obj: O, key: keyof any): key is keyof O => key in obj;
+
+/**
+ * Checks if item is included in array, and asserts that the types are the same.
+ * @param arr Array of items
+ * @param item Item to be checked
+ * @returns Whether the item is contained in the array.
+ */
+
+export const arrayIncludes = <T>(arr: Readonly<T[]> | T[], item: any): item is T => arr.includes(item);
+
+/**
+ * Checks every item of an array matches a condition, and asserts that the items are a specified type.
+ * @param arr Array of items to be checked
+ * @param callback Type predicate which takes each item and checks its type, returning `true` if the type matches.
+ * @returns If all items meet the callback requirement.
+ */
+
+export const arrayEveryType = <T>(
+  arr: any[],
+  predicate: (item: any, index: number, array: any[]) => item is T
+): arr is T[] => arr.every(predicate);
+
+/** Merge objects and modify specified keys. */
+
+export const mergeObjects = <T>(obj: T, ...objs: Partial<T>[]): T => Object.assign({}, obj, ...objs);
+
+/**
+ * Returns an array of object keys to iterate on.
+ *
+ * Only use for objects you're certain won't gain more keys in runtime.
+ */
+
+export const objectKeys = <T extends Record<string, any>>(obj: T): (keyof T)[] => Object.keys(obj);
+
+/**
+ * Returns an array of object entries to iterate on.
+ *
+ * Only use for objects you're certain won't gain more keys in runtime.
+ */
+
+export const objectEntries = <T extends Record<string, any>>(obj: T): ObjectEntries<T> => Object.entries(obj);
+
+/**
+ * Creates an object from tuples. Use to assert a
+ */
+
+export const objectFromEntries = <T extends Record<string, any>>(entries: ObjectEntries<T>): T =>
+  Object.fromEntries(entries) as T;
 
 /**
  * Remove all duplicate values within an array.
