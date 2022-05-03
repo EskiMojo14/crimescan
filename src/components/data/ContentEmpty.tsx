@@ -11,7 +11,7 @@ export const ContentEmpty = () => {
   const initialLoad = useAppSelector(selectInitialLoad);
 
   return (
-    <div className={"empty-container"}>
+    <div className="empty-container">
       <TopAppBarFixedAdjust />
       <div className="content">
         <img className="image" src={!initialLoad ? emptyCheckImg : emptyImg} alt="Empty" />
@@ -25,3 +25,5 @@ export const ContentEmpty = () => {
     </div>
   );
 };
+
+export default ContentEmpty;

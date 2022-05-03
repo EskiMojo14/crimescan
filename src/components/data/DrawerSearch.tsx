@@ -157,3 +157,5 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
     </Drawer>
   );
 };
+
+export default DrawerSearch;

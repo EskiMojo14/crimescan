@@ -7,10 +7,10 @@ import { queue, notify } from "/src/app/snackbarQueue";
 import { closeModal, openModal } from "@s/util/functions";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
-import { ContentContainer } from "@c/display/ContentContainer";
-import { ContentEmpty } from "@c/display/ContentEmpty";
-import { DrawerSearch } from "@c/input/DrawerSearch";
-import DrawerQuery from "@c/input/DrawerQuery";
+import ContentContainer from "@c/data/ContentContainer";
+import ContentEmpty from "@c/data/ContentEmpty";
+import DrawerSearch from "@c/data/DrawerSearch";
+import DrawerQuery from "@c/data/DrawerQuery";
 import "./App.scss";
 
 function App() {
