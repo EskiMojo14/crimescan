@@ -40,9 +40,7 @@ export const getYearData = createAsyncThunk(
     )
 );
 
-const crimeAdapter = createEntityAdapter<CrimeEntry>({
-  selectId: ({ persistent_id }) => persistent_id,
-});
+const crimeAdapter = createEntityAdapter<CrimeEntry>();
 
 type DataState = {
   initialLoad: boolean;
