@@ -9,7 +9,7 @@ import { selectLoading, selectQuery, selectLocation, getMonthData, getYearData }
 import { pinColors } from "@s/maps/constants";
 import { selectTheme, toggleTheme } from "@s/settings";
 import { queryIcons } from "@s/util/constants";
-import { hasKey } from "@s/util/functions";
+import { hasKey, iconObject } from "@s/util/functions";
 import { Button } from "@rmwc/button";
 import { Chip } from "@rmwc/chip";
 import { Drawer, DrawerHeader, DrawerContent } from "@rmwc/drawer";
@@ -177,7 +177,20 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="button-container">
             <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
-            <Button label="Saved" icon="hotel_class" outlined disabled={!locationTotal} onClick={props.openLocations} />
+            <Button
+              label="Saved"
+              icon={iconObject(
+                <svg viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M12 4C9.2 4 7 6.2 7 9C7 10 7 12 12 18.7C17 12 17 10 17 9C17 6.2 14.8 4 12 4M12 11.5L14.4 13L13.8 10.2L16 8.3L13.1 8.1L12 5.4L10.9 8L8 8.3L10.2 10.2L9.5 13L12 11.5Z"
+                  />
+                </svg>
+              )}
+              outlined
+              disabled={!locationTotal}
+              onClick={props.openLocations}
+            />
           </div>
           <div className="double-field">
             <div className="field">
