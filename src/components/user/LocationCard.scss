@@ -27,6 +27,6 @@
   }
   &.location-card--selected {
     border-color: transparent;
-    @include elevation.elevation(1);
+    @include elevation.elevation(2);
   }
 }

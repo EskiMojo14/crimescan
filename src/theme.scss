@@ -333,7 +333,7 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     .mdc-card {
       $elevated: if(
         $dark,
-        lighten(overlay-elevation(map-get($variables, surface), 24), 3%),
+        lighten(overlay-elevation(map-get($variables, surface), 24), 4%),
         map-get($variables, surface)
       );
       &.mdc-card--outlined {
