@@ -4,6 +4,8 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { useAppSelector } from "@h";
 import { selectFavouriteLatLngs } from "@s/user";
 import FavouriteCard from "@c/user/FavouriteCard";
+import { Typography } from "@rmwc/typography";
+import emptyImg from "@m/empty.svg";
 import "./DrawerFavourites.scss";
 
 type DrawerFavouritesProps = {
@@ -26,14 +28,26 @@ export const DrawerFavourites = ({ open, onClose, latLng, setLatLng }: DrawerFav
         <DrawerTitle>Saved locations</DrawerTitle>
       </DrawerHeader>
       <DrawerContent>
-        {favouriteLatLngs.map((latLngId) => (
-          <FavouriteCard
-            key={latLngId}
-            favouriteLatLng={latLngId}
-            selected={latLngId === `${latLng.lat},${latLng.lng}`}
-            applyLatLng={applyLatLng}
-          />
-        ))}
+        {favouriteLatLngs.length ? (
+          favouriteLatLngs.map((latLngId) => (
+            <FavouriteCard
+              key={latLngId}
+              favouriteLatLng={latLngId}
+              selected={latLngId === `${latLng.lat},${latLng.lng}`}
+              applyLatLng={applyLatLng}
+            />
+          ))
+        ) : (
+          <div className="no-result-display">
+            <img className="image" src={emptyImg} alt="Empty" />
+            <Typography className="title" use="headline6" tag="h3">
+              No locations saved
+            </Typography>
+            <Typography className="subtitle" use="body1" tag="p">
+              Add some using the query drawer!
+            </Typography>
+          </div>
+        )}
       </DrawerContent>
     </Drawer>
   );
