@@ -4,6 +4,7 @@ import { queryIcons } from "@s/util/constants";
 import { selectQuery } from "@s/data";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
+import { createLatLng, selectFavouriteByLatLng } from "@s/user";
 import { CountCard } from "./CountCard";
 import { CategoryCardMonth, CategoryCardYear } from "./CategoryCard";
 import { OutcomeCardMonth, OutcomeCardYear } from "./OutcomeCard";
@@ -14,6 +15,9 @@ export const ContentContainer = () => {
   if (!query) {
     return null;
   }
+  const savedLocation = useAppSelector((state) =>
+    selectFavouriteByLatLng(state, createLatLng({ lat: query.lat, lng: query.lng }))
+  );
 
   const queryChips =
     query.lat && query.lng ? (
@@ -23,6 +27,7 @@ export const ContentContainer = () => {
           icon={query.type === "month" ? queryIcons.month : queryIcons.year}
           className="non-interactive"
         />
+        {savedLocation && <Chip label={savedLocation.name} icon={queryIcons.location} className="non-interactive" />}
         <Chip label={query.lat} icon={queryIcons.lat} className="non-interactive" />
         <Chip label={query.lng} icon={queryIcons.lng} className="non-interactive" />
       </TopAppBarSection>

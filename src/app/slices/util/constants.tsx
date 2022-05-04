@@ -5,6 +5,7 @@ import { iconObject } from "./functions";
 export const queryIcons: Record<string, IconPropT> = {
   month: "date_range",
   year: "date_range",
+  location: "location_on",
   lat: iconObject(
     <svg
       xmlns="http://www.w3.org/2000/svg"
