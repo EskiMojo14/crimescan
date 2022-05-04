@@ -3,6 +3,7 @@
 @use "@material/chips/index.scss" as chips;
 @use "@material/checkbox/index.scss" as checkbox;
 @use "@material/drawer/index.scss" as drawer;
+@use "@material/dialog/index.scss" as dialog;
 @use "@material/icon-button/index.scss" as icon-button;
 @use "@material/linear-progress/index.scss" as linear-progress;
 @use "@material/ripple/index.scss" as ripple;
@@ -236,6 +237,29 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
     }
     &__row:hover:not(.mdc-data-table__row--selected):not(.mdc-data-table__row--activated) {
       background-color: rgba(map-get($variables, on-surface), 0.04);
+    }
+  }
+
+  .mdc-dialog {
+    @include dialog.container-fill-color(
+      if($dark, overlay-elevation(map-get($variables, surface), 24), map-get($variables, surface))
+    );
+    @include dialog.scrim-color(map-get($variables, on-surface), 0.32);
+    @include dialog.title-ink-color(map-get($variables, text-high));
+    @include dialog.content-ink-color(map-get($variables, text-medium));
+    color: map-get($variables, text-high);
+    .mdc-chip {
+      @include chips.fill-color-accessible(
+        mix(
+          map-get($variables, on-surface),
+          if($dark, overlay-elevation(map-get($variables, surface), 24), map-get($variables, surface)),
+          12%
+        )
+      );
+    }
+    &--delete-confirm .mdc-button[data-mdc-dialog-action="accept"] {
+      @include button.ink-color(map-get($variables, error));
+      @include ripple.states(map-get($variables, error), false, feature-targeting.all(), ".mdc-button__ripple");
     }
   }
 

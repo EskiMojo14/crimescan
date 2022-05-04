@@ -26,6 +26,7 @@
     "@rmwc/checkbox": "^6.1.4",
     "@rmwc/chip": "^6.1.4",
     "@rmwc/data-table": "^6.1.4",
+    "@rmwc/dialog": "^6.1.4",
     "@rmwc/drawer": "^6.1.4",
     "@rmwc/icon": "^6.1.4",
     "@rmwc/icon-button": "^6.1.4",
