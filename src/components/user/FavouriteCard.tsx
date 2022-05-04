@@ -64,7 +64,7 @@ export const FavouriteCard = ({ favouriteLatLng }: FavouriteCardProps) => {
       />
       <CardActions>
         <CardActionIcons>
-          {withTooltip(<CardActionIcon icon="delete" onClick={handleDelete} />, "Delete favourite", { align: "top" })}
+          {withTooltip(<CardActionIcon icon="delete" onClick={handleDelete} />, "Delete location", { align: "top" })}
         </CardActionIcons>
       </CardActions>
     </Card>

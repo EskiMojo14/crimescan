@@ -19,8 +19,10 @@ import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
-import "./DrawerQuery.scss";
 import { withTooltip } from "@c/util/hocs";
+import { addFavourite, selectFavouriteMap } from "@s/user";
+import "./DrawerQuery.scss";
+import { prompt } from "/src/app/dialogQueue";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
@@ -44,6 +46,8 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
 
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
+
+  const favouritesMap = useAppSelector(selectFavouriteMap);
 
   const [inputState, updateInputState] = useImmer<InputState>({
     dateMode: "month",
@@ -74,6 +78,13 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
     }
   };
 
+  const handleSave = async () => {
+    const name = await prompt({ title: "Location name", acceptLabel: "Save", inputProps: { outlined: true } });
+    if (name) {
+      dispatch(addFavourite({ name, lat, lng }));
+    }
+  };
+
   const changeDateMode = (mode: "month" | "year") =>
     updateInputState((draftState) => {
       draftState.dateMode = mode;
@@ -83,6 +94,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const { lat: resultLat, lng: resultLng } = resultLocation ?? {};
   const latLng = `${lat},${lng}`;
   const formFilled = validDate && validLocation;
+
   const submit = async () => {
     if (formFilled) {
       try {
@@ -163,7 +175,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="button-container">
             <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
-            <Button label="Saved" icon="star" outlined onClick={props.openFavourites} />
+            <Button label="Saved" icon="hotel_class" outlined onClick={props.openFavourites} />
           </div>
           <div className="double-field">
             <div className="field">
@@ -200,6 +212,15 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
                 }}
               />
             </div>
+          </div>
+          <div className="button-container">
+            <Button
+              label="Save"
+              icon="star"
+              outlined
+              onClick={handleSave}
+              disabled={!validLocation || latLng in favouritesMap}
+            />
           </div>
           <div className="guide-chips">
             {validLocation ? <Chip icon="location_on" label="Query" className="query-chip non-interactive" /> : null}
