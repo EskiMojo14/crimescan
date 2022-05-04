@@ -9,19 +9,30 @@ import "./DrawerFavourites.scss";
 type DrawerFavouritesProps = {
   open: boolean;
   onClose: () => void;
+  latLng: { lat: string; lng: string };
+  setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
-export const DrawerFavourites = ({ open, onClose }: DrawerFavouritesProps) => {
+export const DrawerFavourites = ({ open, onClose, latLng, setLatLng }: DrawerFavouritesProps) => {
   useScrollLock(open, "drawer-favourites");
   const favouriteLatLngs = useAppSelector(selectFavouriteLatLngs);
+  const applyLatLng = (latLngId: string) => {
+    const [lat, lng] = latLngId.split(",");
+    setLatLng({ lat, lng });
+  };
   return (
     <Drawer {...{ open, onClose }} modal className="drawer-favourites drawer-right">
       <DrawerHeader>
         <DrawerTitle>Saved locations</DrawerTitle>
       </DrawerHeader>
       <DrawerContent>
-        {favouriteLatLngs.map((latLng) => (
-          <FavouriteCard key={latLng} favouriteLatLng={latLng} />
+        {favouriteLatLngs.map((latLngId) => (
+          <FavouriteCard
+            key={latLngId}
+            favouriteLatLng={latLngId}
+            selected={latLngId === `${latLng.lat},${latLng.lng}`}
+            applyLatLng={applyLatLng}
+          />
         ))}
       </DrawerContent>
     </Drawer>

@@ -1,6 +1,8 @@
+@use "@material/animation/index.scss" as animation;
 @use "/src/util";
 
 .favourite-card.mdc-card {
+  transition: border-color animation.$standard-curve-timing-function 200ms;
   background: transparent;
   padding: 16px;
   gap: 16px;

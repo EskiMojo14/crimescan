@@ -66,7 +66,7 @@ function App() {
 
   return (
     <>
-      <DrawerFavourites open={favouritesDrawerOpen} onClose={closeFavourites} />
+      <DrawerFavourites open={favouritesDrawerOpen} onClose={closeFavourites} latLng={latLng} setLatLng={setLatLng} />
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
       <DrawerQuery openSearch={openSearch} openFavourites={openFavourites} latLng={latLng} />
       <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
