@@ -34,25 +34,6 @@ export const userSlice = createSlice({
     removeLocation: (state, action: PayloadAction<EntityId>) => {
       savedLocationEntityAdapter.removeOne(state.locations, action);
     },
-    useExampleLocations: (state) => {
-      savedLocationEntityAdapter.setAll(state.locations, [
-        {
-          name: "London",
-          lat: "51.5072178",
-          lng: "-0.1275862",
-        },
-        {
-          name: "Bath",
-          lat: "51.3781018",
-          lng: "-2.3596827",
-        },
-        {
-          name: "Bristol",
-          lat: "51.454513",
-          lng: "-2.58791",
-        },
-      ]);
-    },
   },
 });
 
