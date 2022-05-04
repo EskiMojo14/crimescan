@@ -145,7 +145,8 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
         <div className="logo-text">CrimeScan</div>
         {withTooltip(
           <IconButton icon={theme === "dark" ? "dark_mode" : "light_mode"} onClick={() => dispatch(toggleTheme())} />,
-          "Toggle theme"
+          "Toggle theme",
+          { align: "bottom" }
         )}
         <LinearProgress closed={!loading} />
       </DrawerHeader>
