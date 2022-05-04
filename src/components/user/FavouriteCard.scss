@@ -3,8 +3,8 @@
 @use "/src/util";
 
 .favourite-card.mdc-card {
-  transition: background-color animation.$standard-curve-timing-function 200ms,
-    box-shadow animation.$standard-curve-timing-function 200ms;
+  transition: background-color animation.$standard-curve-timing-function 200ms;
+  transition-property: background-color, border-color, box-shadow;
   @include elevation.elevation(0);
   padding: 16px;
   gap: 16px;
