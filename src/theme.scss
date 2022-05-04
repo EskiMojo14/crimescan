@@ -16,6 +16,7 @@
 @use "@material/feature-targeting";
 @use "@material/theme/color-palette" as palette;
 @use "@material/theme/functions" as theme-functions;
+@use "@material/theme/variables" as theme-variables;
 
 // 1 - card, switch
 // 2 - contained button
@@ -127,10 +128,18 @@ $graph-colors-dark: (
 $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z);
 
 @mixin theme($theme, $dark: false) {
+  @each $theme-color, $color in $theme {
+    --mdc-theme-#{$theme-color}: #{$color};
+  }
+  @each $text-color,
+    $color in map-get(theme-variables.$text-colors, theme-functions.contrast-tone(map-get($theme, background)))
+  {
+    --mdc-theme-text-#{$text-color}-on-background: #{$color};
+  }
   $text-colors: (
-    text-high: rgba(map-get($theme, on-surface), 0.87),
-    text-medium: rgba(map-get($theme, on-surface), 0.6),
-    text-disabled: rgba(map-get($theme, on-surface), 0.38),
+    text-high: rgba(map-get($theme, on-surface), theme-variables.text-emphasis(high)),
+    text-medium: rgba(map-get($theme, on-surface), theme-variables.text-emphasis(medium)),
+    text-disabled: rgba(map-get($theme, on-surface), theme-variables.text-emphasis(disabled)),
   );
   $variables: map-merge($theme, $text-colors);
   --meta-color: #{if(
