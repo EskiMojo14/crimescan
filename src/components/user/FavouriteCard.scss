@@ -1,9 +1,11 @@
 @use "@material/animation/index.scss" as animation;
+@use "@material/elevation/index.scss" as elevation;
 @use "/src/util";
 
 .favourite-card.mdc-card {
-  transition: border-color animation.$standard-curve-timing-function 200ms;
-  background: transparent;
+  transition: background-color animation.$standard-curve-timing-function 200ms,
+    box-shadow animation.$standard-curve-timing-function 200ms;
+  @include elevation.elevation(0);
   padding: 16px;
   gap: 16px;
   .mdc-typography--overline {
@@ -22,5 +24,9 @@
       margin-top: 0;
       @include util.divider-border(top);
     }
+  }
+  &.favourite-card--selected {
+    border-color: transparent;
+    @include elevation.elevation(1);
   }
 }

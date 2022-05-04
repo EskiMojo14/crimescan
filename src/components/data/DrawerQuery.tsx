@@ -4,6 +4,7 @@ import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
+import { prompt } from "/src/app/dialogQueue";
 import { selectLoading, selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
 import { pinColors } from "@s/maps/constants";
 import { selectTheme, toggleTheme } from "@s/settings";
@@ -20,9 +21,8 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import { withTooltip } from "@c/util/hocs";
-import { addFavourite, selectFavouriteMap } from "@s/user";
+import { addFavourite, selectFavouriteMap, selectFavouriteTotal } from "@s/user";
 import "./DrawerQuery.scss";
-import { prompt } from "/src/app/dialogQueue";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
@@ -48,6 +48,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const loading = useAppSelector(selectLoading);
 
   const favouritesMap = useAppSelector(selectFavouriteMap);
+  const favouriteTotal = useAppSelector(selectFavouriteTotal);
 
   const [inputState, updateInputState] = useImmer<InputState>({
     dateMode: "month",
@@ -175,7 +176,13 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="button-container">
             <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
-            <Button label="Saved" icon="hotel_class" outlined onClick={props.openFavourites} />
+            <Button
+              label="Saved"
+              icon="hotel_class"
+              outlined
+              disabled={!favouriteTotal}
+              onClick={props.openFavourites}
+            />
           </div>
           <div className="double-field">
             <div className="field">

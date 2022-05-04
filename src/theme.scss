@@ -200,9 +200,6 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         color: map-get($variables, text-disabled);
       }
     }
-    &.favourite-card--selected {
-      border-color: map-get($variables, primary);
-    }
   }
 
   .mdc-checkbox {
@@ -330,6 +327,19 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
         }
         .subtitle {
           color: map-get($variables, text-medium);
+        }
+      }
+    }
+    .mdc-card {
+      $elevated: if(
+        $dark,
+        lighten(overlay-elevation(map-get($variables, surface), 24), 3%),
+        map-get($variables, surface)
+      );
+      &.mdc-card--outlined {
+        background-color: if($dark, overlay-elevation(map-get($variables, surface), 24), map-get($variables, surface));
+        &.favourite-card--selected {
+          background-color: $elevated;
         }
       }
     }
