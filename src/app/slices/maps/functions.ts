@@ -1,5 +1,7 @@
 import { Loader } from "@googlemaps/js-api-loader";
 
+export const createLatLng = ({ lat, lng }: { lat: string; lng: string }) => `${lat},${lng}`;
+
 const loader = new Loader({
   apiKey: process.env.GOOGLE_MAPS_KEY as string,
 });
@@ -43,7 +45,7 @@ export const getStaticMapURL = (
         Object.entries(styles)
           .map(([key, val]) => `${key}:${val}`)
           .join("|");
-      const locationsString = locations.map(({ lat, lng }) => `${lat},${lng}`).join("|");
+      const locationsString = locations.map(createLatLng).join("|");
       baseUrl.searchParams.append("markers", `${stylesString ? `${stylesString}|` : ""}${locationsString}`);
     }
   });

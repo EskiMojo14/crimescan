@@ -3,14 +3,17 @@ import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
-import { queue, notify } from "/src/app/snackbarQueue";
-import { closeModal, openModal } from "@s/util/functions";
+import { queue as dialogQueue } from "/src/app/dialogQueue";
+import { queue as snackbarQueue, notify } from "/src/app/snackbarQueue";
+import { DialogQueue } from "@rmwc/dialog";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
-import { ContentContainer } from "@c/display/ContentContainer";
-import { ContentEmpty } from "@c/display/ContentEmpty";
-import { DrawerSearch } from "@c/input/DrawerSearch";
-import { DrawerSettings } from "@c/input/DrawerSettings";
+import ContentContainer from "@c/data/ContentContainer";
+import ContentEmpty from "@c/data/ContentEmpty";
+import DrawerSearch from "@c/data/DrawerSearch";
+import DrawerQuery from "@c/data/DrawerQuery";
+import useBoolStates from "@h/useBoolStates";
+import DrawerLocations from "@c/user/DrawerLocations";
 import "./App.scss";
 
 function App() {
@@ -56,21 +59,19 @@ function App() {
   const [latLng, setLatLng] = useState({ lat: "", lng: "" });
 
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
-  const openSearch = () => {
-    setSearchDrawerOpen(true);
-    openModal("search-drawer");
-  };
-  const closeSearch = () => {
-    setSearchDrawerOpen(false);
-    closeModal("search-drawer");
-  };
+  const [closeSearch, openSearch] = useBoolStates(setSearchDrawerOpen, "setSearchDrawerOpen");
+
+  const [locationsDrawerOpen, setLocationsDrawerOpen] = useState(false);
+  const [closeLocations, openLocations] = useBoolStates(setLocationsDrawerOpen, "setLocationsDrawerOpen");
 
   return (
     <>
+      <DrawerLocations open={locationsDrawerOpen} onClose={closeLocations} latLng={latLng} setLatLng={setLatLng} />
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
-      <DrawerSettings openSearch={openSearch} latLng={latLng} />
+      <DrawerQuery openSearch={openSearch} openLocations={openLocations} latLng={latLng} />
       <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
-      <SnackbarQueue messages={queue.messages} />
+      <SnackbarQueue messages={snackbarQueue.messages} />
+      <DialogQueue dialogs={dialogQueue.dialogs} />
     </>
   );
 }

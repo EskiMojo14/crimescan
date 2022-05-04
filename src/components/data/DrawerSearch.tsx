@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 import { useAppSelector } from "@h";
 import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
-import { statusCodes } from "@s/maps/constants";
+import useScrollLock from "@h/useScrollLock";
+import { statusCodes, pinColors } from "@s/maps/constants";
 import { asyncDebounce } from "@s/util/functions";
 import { MapResult } from "@s/maps/types";
 import { selectTheme } from "@s/settings";
@@ -15,17 +16,6 @@ import { Typography } from "@rmwc/typography";
 import "./DrawerSearch.scss";
 import emptyImg from "@m/empty.svg";
 
-const pinColors = {
-  dark: {
-    green: "AED581",
-    red: "EF5350",
-  },
-  light: {
-    green: "689F38",
-    red: "D32F2F",
-  },
-} as const;
-
 type DrawerSearchProps = {
   open: boolean;
   close: () => void;
@@ -33,6 +23,8 @@ type DrawerSearchProps = {
 };
 
 export const DrawerSearch = (props: DrawerSearchProps) => {
+  useScrollLock(props.open, "search-drawer");
+
   const theme = useAppSelector(selectTheme);
 
   const [search, setSearch] = useState("");
@@ -105,7 +97,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         <Typography use="body1">{result.name}</Typography>
       </div>
       <div
-        className="map-container image"
+        className="map-container"
         style={{
           backgroundImage: `url("${getStaticMapURL("368x368", theme, [
             {
@@ -157,3 +149,5 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
     </Drawer>
   );
 };
+
+export default DrawerSearch;

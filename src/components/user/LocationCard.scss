@@ -1,0 +1,32 @@
+@use "@material/animation/index.scss" as animation;
+@use "@material/elevation/index.scss" as elevation;
+@use "/src/util";
+
+.location-card.mdc-card {
+  transition: background-color animation.$standard-curve-timing-function 200ms;
+  transition-property: background-color, border-color, box-shadow;
+  @include elevation.elevation(0);
+  padding: 16px;
+  gap: 16px;
+  .mdc-typography--overline {
+    margin: -12px 0;
+  }
+  .map-container {
+    position: relative;
+    @include util.divider-border(all);
+    background-size: cover;
+    background-position: center;
+    padding-top: 100%;
+  }
+  .mdc-card {
+    &__actions {
+      margin: -16px;
+      margin-top: 0;
+      @include util.divider-border(top);
+    }
+  }
+  &.location-card--selected {
+    border-color: transparent;
+    @include elevation.elevation(2);
+  }
+}
