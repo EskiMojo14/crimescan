@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import classNames from "classnames";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
-import { getStaticMapURL } from "@s/maps/functions";
+import { createLatLng, getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
 import { prompt } from "/src/app/dialogQueue";
 import { selectLoading, selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
@@ -21,7 +21,7 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import { withTooltip } from "@c/util/hocs";
-import { addLocation, createLatLng, selectLocationMap, selectLocationTotal } from "@s/user";
+import { addLocation, selectLocationMap, selectLocationTotal } from "@s/user";
 import "./DrawerQuery.scss";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;

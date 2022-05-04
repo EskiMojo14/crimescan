@@ -1,9 +1,8 @@
 import { createEntityAdapter, createSlice, EntityId, EntityState, PayloadAction } from "@reduxjs/toolkit";
+import { createLatLng } from "@s/maps/functions";
 import { SavedLocation } from "@s/user/types";
 import { alphabeticalSortCurried } from "@s/util/functions";
 import { RootState } from "/src/app/store";
-
-export const createLatLng = ({ lat, lng }: { lat: string; lng: string }) => `${lat},${lng}`;
 
 export const savedLocationEntityAdapter = createEntityAdapter<SavedLocation>({
   selectId: createLatLng,
