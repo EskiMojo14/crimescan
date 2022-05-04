@@ -11,31 +11,31 @@ export const savedLocationEntityAdapter = createEntityAdapter<SavedLocation>({
 });
 
 type UserState = {
-  favourites: EntityState<SavedLocation>;
+  locations: EntityState<SavedLocation>;
 };
 
 export const initialState: UserState = {
-  favourites: savedLocationEntityAdapter.getInitialState(),
+  locations: savedLocationEntityAdapter.getInitialState(),
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setAllFavourites: (state, action: PayloadAction<SavedLocation[]>) => {
-      savedLocationEntityAdapter.setAll(state.favourites, action);
+    setAllLocations: (state, action: PayloadAction<SavedLocation[]>) => {
+      savedLocationEntityAdapter.setAll(state.locations, action);
     },
-    addFavourite: (state, action: PayloadAction<SavedLocation>) => {
-      savedLocationEntityAdapter.setOne(state.favourites, action);
+    addLocation: (state, action: PayloadAction<SavedLocation>) => {
+      savedLocationEntityAdapter.setOne(state.locations, action);
     },
-    updateFavourite: (state, action: PayloadAction<SavedLocation>) => {
-      savedLocationEntityAdapter.upsertOne(state.favourites, action);
+    updateLocation: (state, action: PayloadAction<SavedLocation>) => {
+      savedLocationEntityAdapter.upsertOne(state.locations, action);
     },
-    removeFavourite: (state, action: PayloadAction<EntityId>) => {
-      savedLocationEntityAdapter.removeOne(state.favourites, action);
+    removeLocation: (state, action: PayloadAction<EntityId>) => {
+      savedLocationEntityAdapter.removeOne(state.locations, action);
     },
-    useExampleFavourites: (state) => {
-      savedLocationEntityAdapter.setAll(state.favourites, [
+    useExampleLocations: (state) => {
+      savedLocationEntityAdapter.setAll(state.locations, [
         {
           name: "London",
           lat: "51.5072178",
@@ -57,15 +57,15 @@ export const userSlice = createSlice({
 });
 
 export const {
-  actions: { setAllFavourites, addFavourite, updateFavourite, removeFavourite },
+  actions: { setAllLocations, addLocation, updateLocation, removeLocation },
 } = userSlice;
 
 export default userSlice.reducer;
 
 export const {
-  selectAll: selectAllFavourites,
-  selectById: selectFavouriteByLatLng,
-  selectEntities: selectFavouriteMap,
-  selectIds: selectFavouriteLatLngs,
-  selectTotal: selectFavouriteTotal,
-} = savedLocationEntityAdapter.getSelectors((state: RootState) => state.user.favourites);
+  selectAll: selectAllLocations,
+  selectById: selectLocationByLatLng,
+  selectEntities: selectLocationMap,
+  selectIds: selectLocationLatLngs,
+  selectTotal: selectLocationTotal,
+} = savedLocationEntityAdapter.getSelectors((state: RootState) => state.user.locations);

@@ -21,14 +21,14 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import { withTooltip } from "@c/util/hocs";
-import { addFavourite, selectFavouriteMap, selectFavouriteTotal } from "@s/user";
+import { addLocation, selectLocationMap, selectLocationTotal } from "@s/user";
 import "./DrawerQuery.scss";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 const latLngRegex = /^(-?\d+(\.\d+)?)$/;
 
 type DrawerQueryProps = {
-  openFavourites: () => void;
+  openLocations: () => void;
   openSearch: () => void;
   latLng: { lat: string; lng: string };
 };
@@ -47,8 +47,8 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const theme = useAppSelector(selectTheme);
   const loading = useAppSelector(selectLoading);
 
-  const favouritesMap = useAppSelector(selectFavouriteMap);
-  const favouriteTotal = useAppSelector(selectFavouriteTotal);
+  const locationsMap = useAppSelector(selectLocationMap);
+  const locationTotal = useAppSelector(selectLocationTotal);
 
   const [inputState, updateInputState] = useImmer<InputState>({
     dateMode: "month",
@@ -82,7 +82,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const handleSave = async () => {
     const name = await prompt({ title: "Location name", acceptLabel: "Save", inputProps: { outlined: true } });
     if (name) {
-      dispatch(addFavourite({ name, lat, lng }));
+      dispatch(addLocation({ name, lat, lng }));
     }
   };
 
@@ -176,13 +176,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="button-container">
             <Button label="Search" icon="travel_explore" outlined onClick={props.openSearch} />
-            <Button
-              label="Saved"
-              icon="hotel_class"
-              outlined
-              disabled={!favouriteTotal}
-              onClick={props.openFavourites}
-            />
+            <Button label="Saved" icon="hotel_class" outlined disabled={!locationTotal} onClick={props.openLocations} />
           </div>
           <div className="double-field">
             <div className="field">
@@ -226,7 +220,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
               icon="star"
               outlined
               onClick={handleSave}
-              disabled={!validLocation || latLng in favouritesMap}
+              disabled={!validLocation || latLng in locationsMap}
             />
           </div>
           <div className="guide-chips">

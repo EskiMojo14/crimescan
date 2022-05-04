@@ -29,7 +29,7 @@ const idWhitelist = <W extends WhitelistDef>(whitelist: W) => whitelist;
 const persistWhitelist = idWhitelist({
   data: ["formattedCategories"],
   settings: ["theme", "cookies"],
-  user: ["favourites"],
+  user: ["locations"],
 });
 
 type PersistWhitelist = typeof persistWhitelist;

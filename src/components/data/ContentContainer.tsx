@@ -4,7 +4,7 @@ import { queryIcons } from "@s/util/constants";
 import { selectQuery } from "@s/data";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
-import { createLatLng, selectFavouriteByLatLng } from "@s/user";
+import { createLatLng, selectLocationByLatLng } from "@s/user";
 import { CountCard } from "./CountCard";
 import { CategoryCardMonth, CategoryCardYear } from "./CategoryCard";
 import { OutcomeCardMonth, OutcomeCardYear } from "./OutcomeCard";
@@ -16,7 +16,7 @@ export const ContentContainer = () => {
     return null;
   }
   const savedLocation = useAppSelector((state) =>
-    selectFavouriteByLatLng(state, createLatLng({ lat: query.lat, lng: query.lng }))
+    selectLocationByLatLng(state, createLatLng({ lat: query.lat, lng: query.lng }))
   );
 
   const queryChips =

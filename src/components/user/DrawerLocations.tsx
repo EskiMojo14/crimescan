@@ -2,22 +2,22 @@ import React from "react";
 import useScrollLock from "@h/useScrollLock";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { useAppSelector } from "@h";
-import { selectFavouriteLatLngs } from "@s/user";
-import FavouriteCard from "@c/user/FavouriteCard";
+import { selectLocationLatLngs } from "@s/user";
+import FavouriteCard from "@c/user/LocationCard";
 import { Typography } from "@rmwc/typography";
 import emptyImg from "@m/empty.svg";
-import "./DrawerFavourites.scss";
+import "./DrawerLocations.scss";
 
-type DrawerFavouritesProps = {
+type DrawerLocationsProps = {
   open: boolean;
   onClose: () => void;
   latLng: { lat: string; lng: string };
   setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
-export const DrawerFavourites = ({ open, onClose, latLng, setLatLng }: DrawerFavouritesProps) => {
+export const DrawerLocations = ({ open, onClose, latLng, setLatLng }: DrawerLocationsProps) => {
   useScrollLock(open, "drawer-favourites");
-  const favouriteLatLngs = useAppSelector(selectFavouriteLatLngs);
+  const locationLatLngs = useAppSelector(selectLocationLatLngs);
   const applyLatLng = (latLngId: string) => {
     const [lat, lng] = latLngId.split(",");
     setLatLng({ lat, lng });
@@ -28,11 +28,11 @@ export const DrawerFavourites = ({ open, onClose, latLng, setLatLng }: DrawerFav
         <DrawerTitle>Saved locations</DrawerTitle>
       </DrawerHeader>
       <DrawerContent>
-        {favouriteLatLngs.length ? (
-          favouriteLatLngs.map((latLngId) => (
+        {locationLatLngs.length ? (
+          locationLatLngs.map((latLngId) => (
             <FavouriteCard
               key={latLngId}
-              favouriteLatLng={latLngId}
+              latLngId={latLngId}
               selected={latLngId === `${latLng.lat},${latLng.lng}`}
               applyLatLng={applyLatLng}
             />
@@ -53,4 +53,4 @@ export const DrawerFavourites = ({ open, onClose, latLng, setLatLng }: DrawerFav
   );
 };
 
-export default DrawerFavourites;
+export default DrawerLocations;

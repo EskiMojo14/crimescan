@@ -13,7 +13,7 @@ import ContentEmpty from "@c/data/ContentEmpty";
 import DrawerSearch from "@c/data/DrawerSearch";
 import DrawerQuery from "@c/data/DrawerQuery";
 import useBoolStates from "@h/useBoolStates";
-import DrawerFavourites from "@c/user/DrawerFavourites";
+import DrawerLocations from "@c/user/DrawerLocations";
 import "./App.scss";
 
 function App() {
@@ -61,14 +61,14 @@ function App() {
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const [closeSearch, openSearch] = useBoolStates(setSearchDrawerOpen, "setSearchDrawerOpen");
 
-  const [favouritesDrawerOpen, setFavouritesDrawerOpen] = useState(false);
-  const [closeFavourites, openFavourites] = useBoolStates(setFavouritesDrawerOpen, "setFavouritesDrawerOpen");
+  const [locationsDrawerOpen, setLocationsDrawerOpen] = useState(false);
+  const [closeLocations, openLocations] = useBoolStates(setLocationsDrawerOpen, "setLocationsDrawerOpen");
 
   return (
     <>
-      <DrawerFavourites open={favouritesDrawerOpen} onClose={closeFavourites} latLng={latLng} setLatLng={setLatLng} />
+      <DrawerLocations open={locationsDrawerOpen} onClose={closeLocations} latLng={latLng} setLatLng={setLatLng} />
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
-      <DrawerQuery openSearch={openSearch} openFavourites={openFavourites} latLng={latLng} />
+      <DrawerQuery openSearch={openSearch} openLocations={openLocations} latLng={latLng} />
       <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
       <SnackbarQueue messages={snackbarQueue.messages} />
       <DialogQueue dialogs={dialogQueue.dialogs} />

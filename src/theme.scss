@@ -338,7 +338,7 @@ $letters: (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, 
       );
       &.mdc-card--outlined {
         background-color: if($dark, overlay-elevation(map-get($variables, surface), 24), map-get($variables, surface));
-        &.favourite-card--selected {
+        &.location-card--selected {
           background-color: $elevated;
         }
       }

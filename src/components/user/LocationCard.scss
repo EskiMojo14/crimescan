@@ -2,7 +2,7 @@
 @use "@material/elevation/index.scss" as elevation;
 @use "/src/util";
 
-.favourite-card.mdc-card {
+.location-card.mdc-card {
   transition: background-color animation.$standard-curve-timing-function 200ms;
   transition-property: background-color, border-color, box-shadow;
   @include elevation.elevation(0);
@@ -25,7 +25,7 @@
       @include util.divider-border(top);
     }
   }
-  &.favourite-card--selected {
+  &.location-card--selected {
     border-color: transparent;
     @include elevation.elevation(1);
   }
