@@ -21,7 +21,7 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import { withTooltip } from "@c/util/hocs";
-import { addLocation, selectLocationMap, selectLocationTotal } from "@s/user";
+import { addLocation, createLatLng, selectLocationMap, selectLocationTotal } from "@s/user";
 import "./DrawerQuery.scss";
 
 const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
@@ -93,7 +93,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
   const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
   const { lat: resultLat, lng: resultLng } = resultLocation ?? {};
-  const latLng = `${lat},${lng}`;
+  const latLng = createLatLng({ lat, lng });
   const formFilled = validDate && validLocation;
 
   const submit = async () => {
@@ -225,7 +225,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </div>
           <div className="guide-chips">
             {validLocation ? <Chip icon="location_on" label="Query" className="query-chip non-interactive" /> : null}
-            {resultLocation && `${query?.lat},${query?.lng}` === latLng ? (
+            {query && resultLocation && createLatLng(query) === latLng ? (
               <Chip
                 icon="location_on"
                 label={
@@ -246,7 +246,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
               validLocation
                 ? {
                     backgroundImage: `url("${getStaticMapURL("438x438", theme, [
-                      resultLat && resultLng && `${query?.lat},${query?.lng}` === latLng
+                      resultLat && resultLng && query && createLatLng(query) === latLng
                         ? {
                             styles: { color: `0x${pinColors[theme].red}` },
                             locations: [{ lat: resultLat, lng: resultLng }],

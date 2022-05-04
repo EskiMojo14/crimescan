@@ -2,7 +2,7 @@ import React from "react";
 import useScrollLock from "@h/useScrollLock";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { useAppSelector } from "@h";
-import { selectLocationLatLngs } from "@s/user";
+import { createLatLng, selectLocationLatLngs } from "@s/user";
 import FavouriteCard from "@c/user/LocationCard";
 import { Typography } from "@rmwc/typography";
 import emptyImg from "@m/empty.svg";
@@ -33,7 +33,7 @@ export const DrawerLocations = ({ open, onClose, latLng, setLatLng }: DrawerLoca
             <FavouriteCard
               key={latLngId}
               latLngId={latLngId}
-              selected={latLngId === `${latLng.lat},${latLng.lng}`}
+              selected={latLngId === createLatLng(latLng)}
               applyLatLng={applyLatLng}
             />
           ))
