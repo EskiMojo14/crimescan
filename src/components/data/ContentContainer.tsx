@@ -21,7 +21,7 @@ export const ContentContainer = () => {
 
   const queryChips =
     query.lat && query.lng ? (
-      <TopAppBarSection alignEnd>
+      <TopAppBarSection className="chip-section" alignEnd>
         <Chip
           label={query.date}
           icon={query.type === "month" ? queryIcons.month : queryIcons.year}

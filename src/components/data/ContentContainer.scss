@@ -9,8 +9,8 @@
     &--fixed-adjust {
       padding-top: 72px;
     }
-    .mdc-chip {
-      @include rtl.reflexive-box(margin, left, 8px);
+    .chip-section {
+      gap: 8px;
     }
   }
   .content-grid {
