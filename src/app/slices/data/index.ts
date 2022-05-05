@@ -8,12 +8,16 @@ import {
   isFulfilled,
   isPending,
   isRejected,
+  PayloadAction,
+  UnsubscribeListener,
 } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "/src/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
 import { CrimeEntry, Query } from "./types";
 import { baseApi } from "@s/api";
+import { AppStartListening } from "@mw/listener";
+import { notify } from "/src/app/snackbarQueue";
 
 const months = [...Array(12)].map((_, i) => ++i);
 
@@ -29,10 +33,53 @@ export const dataApi = baseApi.injectEndpoints({
           return acc;
         }, {}),
     }),
+    getMonthData: builder.query<CrimeEntry[], Query>({
+      query: ({ date, lat, lng }) => `crimes-at-location?date=${date}&lat=${lat}&lng=${lng}`,
+    }),
+    getYearData: builder.query<CrimeEntry[], Query>({
+      queryFn: async ({ date, lat, lng }) => {
+        try {
+          const result = await promiseAllSeries<CrimeEntry[]>(
+            monthsZeroStart.map(
+              (month) => () =>
+                fetch(`https://data.police.uk/api/crimes-at-location?date=${date}-${month}&lat=${lat}&lng=${lng}`).then(
+                  (response) => response.json()
+                )
+            ),
+            100
+          );
+          return {
+            data: result.flat(),
+          };
+        } catch (e: any) {
+          return { error: e.message };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetCrimeCategoriesQuery } = dataApi;
+export const { useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } = dataApi;
+
+export const setupDataApiErrorListeners = (startAppListening: AppStartListening) => {
+  const subscriptions = [
+    startAppListening({
+      matcher: dataApi.endpoints.getCrimeCategories.matchRejected,
+      effect: (action) => {
+        console.log(action.error);
+        notify({ title: "Failed to get crime categories" });
+      },
+    }),
+    startAppListening({
+      matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
+      effect: (action) => {
+        console.log(action.error);
+        notify({ title: "Failed to get crime data" });
+      },
+    }),
+  ];
+  return (...args: Parameters<UnsubscribeListener>) => subscriptions.map((subscription) => subscription(...args));
+};
 
 export const getMonthData = createAsyncThunk(
   "data/getMonthData",
@@ -77,7 +124,11 @@ export const initialState: DataState = {
 export const dataSlice = createSlice({
   name: "data",
   initialState,
-  reducers: {},
+  reducers: {
+    newQuery: (state, { payload }: PayloadAction<Query>) => {
+      state.query = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getMonthData.fulfilled, (state, { payload, meta: { arg } }) => {
@@ -97,6 +148,13 @@ export const dataSlice = createSlice({
         state.formattedCategories = payload;
       })
       .addMatcher(
+        isAnyOf(dataApi.endpoints.getMonthData.matchFulfilled, dataApi.endpoints.getYearData.matchFulfilled),
+        (state, { payload }) => {
+          crimeAdapter.setAll(state.crimes, payload);
+          state.initialLoad = false;
+        }
+      )
+      .addMatcher(
         isAnyOf(isFulfilled(getMonthData, getYearData), isRejected(getMonthData, getYearData)),
         (state, { meta: { requestId } }) => {
           if (state.loadingId === requestId) {
@@ -106,6 +164,8 @@ export const dataSlice = createSlice({
       );
   },
 });
+
+export const { newQuery } = dataSlice.actions;
 
 export default dataSlice.reducer;
 
