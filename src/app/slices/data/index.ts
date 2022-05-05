@@ -56,13 +56,7 @@ export const dataApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetCrimeCategoriesQuery,
-  useGetMonthDataQuery,
-  useGetYearDataQuery,
-  useLazyGetMonthDataQuery,
-  useLazyGetYearDataQuery,
-} = dataApi;
+export const { useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } = dataApi;
 
 export const setupDataApiErrorListeners = (startAppListening: AppStartListening) => {
   const subscriptions = [
@@ -77,7 +71,9 @@ export const setupDataApiErrorListeners = (startAppListening: AppStartListening)
       matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
       effect: (action) => {
         console.log(action.error);
-        notify({ title: "Failed to get crime data" });
+        if (action.error.name !== "ConditionError") {
+          notify({ title: "Failed to get crime data" });
+        }
       },
     }),
   ];
@@ -167,13 +163,7 @@ export const {
 
 export const selectInitialLoad = (state: RootState) => state.data.initialLoad;
 
-export const selectLoading = (state: RootState) => !!state.data.loadingId;
-
 export const selectQuery = (state: RootState) => state.data.query;
-
-export const selectLocation = createSelector(selectAllCrimes, ([crimeEntry]) =>
-  crimeEntry ? { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude } : undefined
-);
 
 export const selectFormattedCategories = (state: RootState) => state.data.formattedCategories;
 
