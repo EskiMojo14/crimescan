@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@h";
 import { createLatLng, getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbarQueue";
 import { prompt } from "/src/app/dialogQueue";
-import { selectLoading, selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
+import { selectLoading, selectQuery, selectLocation, useLazyGetMonthDataQuery, useLazyGetYearDataQuery } from "@s/data";
 import { pinColors } from "@s/maps/constants";
 import { selectTheme, toggleTheme } from "@s/settings";
 import { queryIcons } from "@s/util/constants";
@@ -69,6 +69,9 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const resultLocation = useAppSelector(selectLocation);
   const query = useAppSelector(selectQuery);
 
+  const [getMonthData] = useLazyGetMonthDataQuery();
+  const [getYearData] = useLazyGetYearDataQuery();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -100,9 +103,9 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
     if (formFilled) {
       try {
         if (dateMode === "month") {
-          await dispatch(getMonthData({ type: dateMode, date: month, lat, lng })).unwrap();
+          await getMonthData({ type: dateMode, date: month, lat, lng }).unwrap();
         } else {
-          await dispatch(getYearData({ type: dateMode, date: year, lat, lng })).unwrap();
+          await getYearData({ type: dateMode, date: year, lat, lng }).unwrap();
         }
       } catch (e) {
         console.log(e);

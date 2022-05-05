@@ -1,13 +1,9 @@
 import {
-  createAsyncThunk,
   createEntityAdapter,
   createSelector,
   createSlice,
   EntityState,
   isAnyOf,
-  isFulfilled,
-  isPending,
-  isRejected,
   PayloadAction,
   UnsubscribeListener,
 } from "@reduxjs/toolkit";
@@ -24,6 +20,7 @@ const months = [...Array(12)].map((_, i) => ++i);
 const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
 
 export const dataApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getCrimeCategories: builder.query<Record<string, string>, void>({
       query: () => "crime-categories",
@@ -59,7 +56,13 @@ export const dataApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } = dataApi;
+export const {
+  useGetCrimeCategoriesQuery,
+  useGetMonthDataQuery,
+  useGetYearDataQuery,
+  useLazyGetMonthDataQuery,
+  useLazyGetYearDataQuery,
+} = dataApi;
 
 export const setupDataApiErrorListeners = (startAppListening: AppStartListening) => {
   const subscriptions = [
@@ -80,28 +83,6 @@ export const setupDataApiErrorListeners = (startAppListening: AppStartListening)
   ];
   return (...args: Parameters<UnsubscribeListener>) => subscriptions.map((subscription) => subscription(...args));
 };
-
-export const getMonthData = createAsyncThunk(
-  "data/getMonthData",
-  ({ date, lat, lng }: Query): Promise<CrimeEntry[]> =>
-    fetch(`https://data.police.uk/api/crimes-at-location?date=${date}&lat=${lat}&lng=${lng}`).then((response) =>
-      response.json()
-    )
-);
-
-export const getYearData = createAsyncThunk(
-  "data/getYearData",
-  ({ date, lat, lng }: Query): Promise<CrimeEntry[][]> =>
-    promiseAllSeries(
-      monthsZeroStart.map(
-        (month) => () =>
-          fetch(`https://data.police.uk/api/crimes-at-location?date=${date}-${month}&lat=${lat}&lng=${lng}`).then(
-            (response) => response.json()
-          )
-      ),
-      100
-    )
-);
 
 const crimeAdapter = createEntityAdapter<CrimeEntry>();
 
@@ -131,31 +112,38 @@ export const dataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getMonthData.fulfilled, (state, { payload, meta: { arg } }) => {
-        state.query = arg;
-        crimeAdapter.setAll(state.crimes, payload);
-        state.initialLoad = false;
-      })
-      .addCase(getYearData.fulfilled, (state, { payload, meta: { arg } }) => {
-        state.query = arg;
-        crimeAdapter.setAll(state.crimes, payload.flat());
-        state.initialLoad = false;
-      })
-      .addMatcher(isPending(getMonthData, getYearData), (state, { meta: { requestId } }) => {
-        state.loadingId = requestId;
-      })
       .addMatcher(dataApi.endpoints.getCrimeCategories.matchFulfilled, (state, { payload }) => {
         state.formattedCategories = payload;
       })
       .addMatcher(
+        isAnyOf(dataApi.endpoints.getMonthData.matchPending, dataApi.endpoints.getYearData.matchPending),
+        (state, { meta: { requestId } }) => {
+          state.loadingId = requestId;
+        }
+      )
+      .addMatcher(
         isAnyOf(dataApi.endpoints.getMonthData.matchFulfilled, dataApi.endpoints.getYearData.matchFulfilled),
-        (state, { payload }) => {
+        (
+          state,
+          {
+            payload,
+            meta: {
+              arg: { originalArgs },
+            },
+          }
+        ) => {
+          state.query = originalArgs;
           crimeAdapter.setAll(state.crimes, payload);
           state.initialLoad = false;
         }
       )
       .addMatcher(
-        isAnyOf(isFulfilled(getMonthData, getYearData), isRejected(getMonthData, getYearData)),
+        isAnyOf(
+          dataApi.endpoints.getMonthData.matchFulfilled,
+          dataApi.endpoints.getYearData.matchFulfilled,
+          dataApi.endpoints.getMonthData.matchRejected,
+          dataApi.endpoints.getYearData.matchRejected
+        ),
         (state, { meta: { requestId } }) => {
           if (state.loadingId === requestId) {
             state.loadingId = "";
