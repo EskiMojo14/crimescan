@@ -13,20 +13,26 @@ import cloneDeep from "lodash.clonedeep";
 import { RootState } from "/src/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
 import { CrimeEntry, Query } from "./types";
+import { baseApi } from "@s/api";
 
 const months = [...Array(12)].map((_, i) => ++i);
 
 const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
 
-export const getCrimeCategories = createAsyncThunk("data/getCrimeCategories", async () => {
-  const categories: { url: string; name: string }[] = await fetch("https://data.police.uk/api/crime-categories").then(
-    (response) => response.json()
-  );
-  return categories.reduce((acc: Record<string, string>, { url, name }: { url: string; name: string }) => {
-    acc[url] = name;
-    return acc;
-  }, {});
+export const dataApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getCrimeCategories: builder.query<Record<string, string>, void>({
+      query: () => "crime-categories",
+      transformResponse: (response: { url: string; name: string }[]) =>
+        response.reduce<Record<string, string>>((acc, { url, name }) => {
+          acc[url] = name;
+          return acc;
+        }, {}),
+    }),
+  }),
 });
+
+export const { useGetCrimeCategoriesQuery } = dataApi;
 
 export const getMonthData = createAsyncThunk(
   "data/getMonthData",
@@ -74,9 +80,6 @@ export const dataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCrimeCategories.fulfilled, (state, { payload }) => {
-        state.formattedCategories = payload;
-      })
       .addCase(getMonthData.fulfilled, (state, { payload, meta: { arg } }) => {
         state.query = arg;
         crimeAdapter.setAll(state.crimes, payload);
@@ -89,6 +92,9 @@ export const dataSlice = createSlice({
       })
       .addMatcher(isPending(getMonthData, getYearData), (state, { meta: { requestId } }) => {
         state.loadingId = requestId;
+      })
+      .addMatcher(dataApi.endpoints.getCrimeCategories.matchFulfilled, (state, { payload }) => {
+        state.formattedCategories = payload;
       })
       .addMatcher(
         isAnyOf(isFulfilled(getMonthData, getYearData), isRejected(getMonthData, getYearData)),

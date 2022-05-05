@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
-import { getCrimeCategories, selectCrimeTotal, selectQuery } from "@s/data";
+import { selectCrimeTotal, selectQuery, useGetCrimeCategoriesQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue as dialogQueue } from "/src/app/dialogQueue";
 import { queue as snackbarQueue, notify } from "/src/app/snackbarQueue";
@@ -15,13 +15,23 @@ import DrawerQuery from "@c/data/DrawerQuery";
 import useBoolStates from "@h/useBoolStates";
 import DrawerLocations from "@c/user/DrawerLocations";
 import "./App.scss";
+import useHandleErrors from "@h/useHandleErrors";
 
 function App() {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getCrimeCategories());
-  }, []);
+  const { error } = useGetCrimeCategoriesQuery();
+  useHandleErrors(
+    useCallback(
+      (e: NonNullable<typeof error>) => {
+        console.log(e);
+        notify({ title: "Failed to get crime categories" });
+      },
+      [notify]
+    ),
+    error
+  );
+
   useEffect(() => {
     try {
       loadGoogleMapsAPI();
