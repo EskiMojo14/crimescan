@@ -1,12 +1,12 @@
 import {
-  hasKey,
-  uniqueArray,
-  countInArray,
   addOrRemove,
   alphabeticalSort,
   alphabeticalSortProp,
+  countInArray,
   delay,
+  hasKey,
   iconObject,
+  uniqueArray,
 } from "./functions";
 
 describe("Checks if provided object has specified key", () => {
@@ -74,26 +74,23 @@ describe("Sorts an array of objects alphabetically by a specified key", () => {
 });
 
 describe("Delays for specified amount of milliseconds, then returns a promise", () => {
-  it("should return a resolved promise", () => {
-    return expect(delay(20)).resolves.toBe(undefined);
-  });
-  it("should return a resolved promise with the specified value", () => {
-    return expect(delay(20, "test")).resolves.toBe("test");
-  });
+  it("should return a resolved promise", () => expect(delay(20)).resolves.toBe(undefined));
+  it("should return a resolved promise with the specified value", () =>
+    expect(delay(20, "test")).resolves.toBe("test"));
 });
 
 describe("Creates an object suitable for RMWC's icon prop", () => {
   it("should return an object with the specified contents", () => {
     expect(iconObject("home")).toEqual({
-      strategy: "component",
       icon: "home",
+      strategy: "component",
     });
   });
   it("should include any other additional config", () => {
     expect(iconObject("home", { size: "small" })).toEqual({
-      strategy: "component",
       icon: "home",
       size: "small",
+      strategy: "component",
     });
   });
 });

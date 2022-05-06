@@ -2,31 +2,31 @@
 
 export type CrimeEntry = {
   category: string;
-  location_type: string;
+  context: string;
+  id: number;
   location: {
     latitude: string;
+    longitude: string;
     street: {
       id: number;
       name: string;
     };
-    longitude: string;
   };
-  context: string;
-  outcome_status: null | {
+  location_subtype: string;
+  location_type: string;
+  month: string;
+  outcome_status: {
     category: string;
     date: string;
-  };
+  } | null;
   persistent_id: string;
-  id: number;
-  location_subtype: string;
-  month: string;
 };
 
 /** Arguments to pass to data fetching thunks. */
 
 export type Query = {
-  type: "month" | "year";
   date: string;
   lat: string;
   lng: string;
+  type: "month" | "year";
 };

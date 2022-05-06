@@ -1,4 +1,4 @@
-import { Query } from "@s/data/types";
+import type { Query } from "@s/data/types";
 import { schemaForType } from "@s/util/schema";
 import { z } from "zod";
 
@@ -7,8 +7,8 @@ export const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
 export const latLngRegex = /^(-?\d+(\.\d+)?)$/;
 
 export const dateSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("month"), date: z.string().regex(monthRegex) }),
-  z.object({ type: z.literal("year"), date: z.string().regex(yearRegex) }),
+  z.object({ date: z.string().regex(monthRegex), type: z.literal("month") }),
+  z.object({ date: z.string().regex(yearRegex), type: z.literal("year") }),
 ]);
 
 export const latLngSchema = z.object({

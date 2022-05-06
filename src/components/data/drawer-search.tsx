@@ -1,24 +1,24 @@
 import React, { useMemo, useState } from "react";
-import { useAppSelector } from "@h";
-import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import { notify } from "/src/app/snackbar-queue";
-import useScrollLock from "@h/use-scroll-lock";
-import { statusCodes, pinColors } from "@s/maps/constants";
-import { asyncDebounce } from "@s/util/functions";
-import { MapResult } from "@s/maps/types";
-import { selectTheme } from "@s/settings";
 import { Button } from "@rmwc/button";
-import { Drawer, DrawerHeader, DrawerContent, DrawerTitle } from "@rmwc/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
+import { pinColors, statusCodes } from "@s/maps/constants";
+import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
+import type { MapResult } from "@s/maps/types";
+import { asyncDebounce } from "@s/util/functions";
+import { useAppSelector } from "@h";
+import useScrollLock from "@h/use-scroll-lock";
+import { selectTheme } from "@s/settings";
 import "./drawer-search.scss";
 import emptyImg from "@m/empty.svg";
 
 type DrawerSearchProps = {
-  open: boolean;
   close: () => void;
+  open: boolean;
   setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
@@ -44,9 +44,9 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
               results: [firstResult],
             } = geocodeResult;
             return {
-              name: firstResult.formatted_address,
               lat: `${firstResult.geometry.location.lat()}`,
               lng: `${firstResult.geometry.location.lng()}`,
+              name: firstResult.formatted_address,
             };
           }
         } catch (e: any) {
@@ -81,11 +81,11 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
   const noResultDisplay =
     !result && !loading ? (
       <div className="no-result-display">
-        <img className="image" src={emptyImg} alt="Empty" />
-        <Typography className="title" use="headline6" tag="h3">
+        <img alt="Empty" className="image" src={emptyImg} />
+        <Typography className="title" tag="h3" use="headline6">
           No results
         </Typography>
-        <Typography className="subtitle" use="body1" tag="p">
+        <Typography className="subtitle" tag="p" use="body1">
           {search.length === 0 ? "Enter a query to get started." : "Make sure your query is spelt correctly."}
         </Typography>
       </div>
@@ -101,8 +101,8 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
         style={{
           backgroundImage: `url("${getStaticMapURL("368x368", theme, [
             {
-              styles: { color: `0x${pinColors[theme].green}` },
               locations: [{ lat: result.lat, lng: result.lng }],
+              styles: { color: `0x${pinColors[theme].green}` },
             },
           ])}")`,
         }}
@@ -122,25 +122,25 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
   };
 
   return (
-    <Drawer open={props.open} onClose={props.close} modal className="drawer-search drawer-right">
+    <Drawer className="drawer-search drawer-right" modal onClose={props.close} open={props.open}>
       <DrawerHeader>
         <DrawerTitle>Location search</DrawerTitle>
-        <Button label="Confirm" outlined onClick={confirmResult} disabled={!result} />
+        <Button disabled={!result} label="Confirm" onClick={confirmResult} outlined />
         <LinearProgress closed={!loading} />
       </DrawerHeader>
       <div className="search-container">
         <TextField
-          label="Search"
           icon="travel_explore"
-          outlined
+          label="Search"
           name="query"
-          value={search}
           onChange={handleChange}
+          outlined
           trailingIcon={<IconButton icon="clear" onClick={clearSearch} />}
+          value={search}
         />
       </div>
       <DrawerContent>
-        <Typography use="overline" className="subheader" tag="div">
+        <Typography className="subheader" tag="div" use="overline">
           Result
         </Typography>
         {noResultDisplay}

@@ -17,9 +17,9 @@ export type RootState = ReturnType<typeof reducer>;
 
 export const createStore = (preloadedState?: Partial<RootState>) =>
   configureStore({
+    middleware: (gDM) => gDM().prepend(listener).concat(api.middleware),
     preloadedState,
     reducer,
-    middleware: (gDM) => gDM().prepend(listener).concat(api.middleware),
   });
 
 export const store = createStore(loadState());

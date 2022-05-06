@@ -34,7 +34,6 @@ const pathGroupsOverrides = [
 ];
 
 module.exports = {
-  parser: "@typescript-eslint/parser",
   extends: [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
@@ -43,13 +42,32 @@ module.exports = {
     "prettier",
     "plugin:prettier/recommended",
   ],
+  ignorePatterns: ["node_modules/*", "build/*"],
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"],
+      parserOptions: {
+        project: ["./tsconfig.json"],
+      },
+      rules: {
+        "@typescript-eslint/prefer-includes": "warn",
+        "@typescript-eslint/prefer-reduce-type-parameter": "warn",
+      },
+    },
+    {
+      extends: ["plugin:jest/recommended", "plugin:jest-dom/recommended", "plugin:testing-library/react"],
+      files: ["**/tests/**/*.[jt]s?(x)", "**/?(*.)+(test).[jt]s?(x)"],
+    },
+  ],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
+    ecmaVersion: 2018,
+    sourceType: "module",
   },
+  plugins: ["jest", "jest-dom", "testing-library", "sort-destructure-keys", "sort-keys", "typescript-sort-keys"],
   rules: {
     "@typescript-eslint/array-type": [
       "error",
@@ -79,6 +97,7 @@ module.exports = {
     "arrow-body-style": ["error", "as-needed"],
     "import/newline-after-import": "error",
     "import/no-named-as-default": "off",
+    "import/no-unresolved": "off",
     "import/order": [
       "warn",
       {
@@ -154,28 +173,11 @@ module.exports = {
     "import/resolver": {
       typescript: {
         alwaysTryTypes: true,
+        project: "./tsconfig.json",
       },
     },
     react: {
       version: "detect",
     },
   },
-  ignorePatterns: ["node_modules/*", "build/*"],
-  plugins: ["jest", "jest-dom", "testing-library", "sort-destructure-keys", "sort-keys", "typescript-sort-keys"],
-  overrides: [
-    {
-      files: ["*.ts", "*.tsx"],
-      parserOptions: {
-        project: ["./tsconfig.json"],
-      },
-      rules: {
-        "@typescript-eslint/prefer-includes": "warn",
-        "@typescript-eslint/prefer-reduce-type-parameter": "warn",
-      },
-    },
-    {
-      files: ["**/tests/**/*.[jt]s?(x)", "**/?(*.)+(test).[jt]s?(x)"],
-      extends: ["plugin:jest/recommended", "plugin:jest-dom/recommended", "plugin:testing-library/react"],
-    },
-  ],
 };

@@ -1,22 +1,22 @@
 import React from "react";
-import useScrollLock from "@h/use-scroll-lock";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
-import { useAppSelector } from "@h";
-import { createLatLng } from "@s/maps/functions";
-import { selectLocationLatLngs } from "@s/locations";
 import LocationCard from "@c/user/location-card";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { Typography } from "@rmwc/typography";
+import { createLatLng } from "@s/maps/functions";
+import { useAppSelector } from "@h";
+import useScrollLock from "@h/use-scroll-lock";
+import { selectLocationLatLngs } from "@s/locations";
 import emptyImg from "@m/empty.svg";
 import "./drawer-locations.scss";
 
 type DrawerLocationsProps = {
-  open: boolean;
-  onClose: () => void;
   latLng: { lat: string; lng: string };
+  onClose: () => void;
+  open: boolean;
   setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
-export const DrawerLocations = ({ open, onClose, latLng, setLatLng }: DrawerLocationsProps) => {
+export const DrawerLocations = ({ latLng, onClose, open, setLatLng }: DrawerLocationsProps) => {
   useScrollLock(open, "drawer-favourites");
   const locationLatLngs = useAppSelector(selectLocationLatLngs);
   const applyLatLng = (latLngId: string) => {
@@ -24,7 +24,7 @@ export const DrawerLocations = ({ open, onClose, latLng, setLatLng }: DrawerLoca
     setLatLng({ lat, lng });
   };
   return (
-    <Drawer {...{ open, onClose }} modal className="drawer-favourites drawer-right">
+    <Drawer {...{ onClose, open }} className="drawer-favourites drawer-right" modal>
       <DrawerHeader>
         <DrawerTitle>Saved locations</DrawerTitle>
       </DrawerHeader>
@@ -33,18 +33,18 @@ export const DrawerLocations = ({ open, onClose, latLng, setLatLng }: DrawerLoca
           locationLatLngs.map((latLngId) => (
             <LocationCard
               key={latLngId}
+              applyLatLng={applyLatLng}
               latLngId={latLngId}
               selected={latLngId === createLatLng(latLng)}
-              applyLatLng={applyLatLng}
             />
           ))
         ) : (
           <div className="no-result-display">
-            <img className="image" src={emptyImg} alt="Empty" />
-            <Typography className="title" use="headline6" tag="h3">
+            <img alt="Empty" className="image" src={emptyImg} />
+            <Typography className="title" tag="h3" use="headline6">
               No locations saved
             </Typography>
-            <Typography className="subtitle" use="body1" tag="p">
+            <Typography className="subtitle" tag="p" use="body1">
               Add some using the query drawer!
             </Typography>
           </div>

@@ -1,26 +1,27 @@
-import React, { useEffect, useState, ChangeEvent, useCallback } from "react";
-import { EntityId } from "@reduxjs/toolkit";
+import type { ChangeEvent } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { withTooltip } from "@c/util/hocs";
+import type { EntityId } from "@reduxjs/toolkit";
 import { Card, CardActionButton, CardActionButtons, CardActionIcon, CardActionIcons, CardActions } from "@rmwc/card";
 import { TextField } from "@rmwc/textfield";
+import { Typography } from "@rmwc/typography";
+import { pinColors } from "@s/maps/constants";
+import { getStaticMapURL } from "@s/maps/functions";
+import classNames from "classnames";
+import debounce from "lodash.debounce";
 import { useAppDispatch, useAppSelector } from "@h";
 import { removeLocation, selectLocationByLatLng, updateLocation } from "@s/locations";
-import { getStaticMapURL } from "@s/maps/functions";
 import { selectTheme } from "@s/settings";
-import { pinColors } from "@s/maps/constants";
-import { withTooltip } from "@c/util/hocs";
-import debounce from "lodash.debounce";
-import { Typography } from "@rmwc/typography";
 import { confirmDelete } from "/src/app/dialog-queue";
 import "./location-card.scss";
-import classNames from "classnames";
 
 type LocationCardProps = {
+  applyLatLng: (latLngId: string) => void;
   latLngId: EntityId;
   selected: boolean;
-  applyLatLng: (latLngId: string) => void;
 };
 
-export const LocationCard = ({ latLngId, selected, applyLatLng }: LocationCardProps) => {
+export const LocationCard = ({ applyLatLng, latLngId, selected }: LocationCardProps) => {
   const dispatch = useAppDispatch();
 
   const theme = useAppSelector(selectTheme);
@@ -43,31 +44,31 @@ export const LocationCard = ({ latLngId, selected, applyLatLng }: LocationCardPr
   };
   const handleDelete = async () => {
     const confirmed = await confirmDelete({
-      title: "Delete location",
       body: "Are you sure you want to delete this location?",
+      title: "Delete location",
     });
     if (confirmed) {
       dispatch(removeLocation(latLngId));
     }
   };
   return (
-    <Card outlined className={classNames("location-card", { "location-card--selected": selected })}>
-      <TextField outlined required label="Name" icon="location_on" value={name} onChange={handleChange} />
+    <Card className={classNames("location-card", { "location-card--selected": selected })} outlined>
+      <TextField icon="location_on" label="Name" onChange={handleChange} outlined required value={name} />
       <Typography use="overline">{`${location.lat}, ${location.lng}`}</Typography>
       <div
         className="map-container"
         style={{
           backgroundImage: `url("${getStaticMapURL("332x332", theme, [
             {
-              styles: { color: `0x${pinColors[theme].green}` },
               locations: [{ lat: location.lat, lng: location.lng }],
+              styles: { color: `0x${pinColors[theme].green}` },
             },
           ])}"`,
         }}
       />
       <CardActions>
         <CardActionButtons>
-          <CardActionButton label="Apply" disabled={selected} onClick={() => applyLatLng(`${latLngId}`)} />
+          <CardActionButton disabled={selected} label="Apply" onClick={() => applyLatLng(`${latLngId}`)} />
         </CardActionButtons>
         <CardActionIcons>
           {withTooltip(<CardActionIcon icon="delete" onClick={handleDelete} />, "Delete location", { align: "top" })}

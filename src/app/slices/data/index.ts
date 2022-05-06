@@ -1,10 +1,11 @@
-import { createSelector, createSlice, isAnyOf, PayloadAction, UnsubscribeListener } from "@reduxjs/toolkit";
+import type { PayloadAction, UnsubscribeListener } from "@reduxjs/toolkit";
+import { createSelector, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
-import { RootState } from "/src/app/store";
+import type { RootState } from "/src/app/store";
 import { alphabeticalSort, promiseAllSeries } from "@s/util/functions";
-import { CrimeEntry, Query } from "./types";
+import type { CrimeEntry, Query } from "./types";
 import { baseApi } from "@s/api";
-import { AppStartListening } from "@mw/listener";
+import type { AppStartListening } from "@mw/listener";
 import { notify } from "/src/app/snackbar-queue";
 
 const months = [...Array(12)].map((_, i) => ++i);
@@ -12,12 +13,11 @@ const months = [...Array(12)].map((_, i) => ++i);
 const monthsZeroStart = months.map((month) => (month > 9 ? month.toString() : `0${month}`));
 
 export const dataApi = baseApi.injectEndpoints({
-  overrideExisting: true,
   endpoints: (builder) => ({
     getCrimeCategories: builder.query<Record<string, string>, void>({
       query: () => "crime-categories",
-      transformResponse: (response: { url: string; name: string }[]) =>
-        response.reduce<Record<string, string>>((acc, { url, name }) => {
+      transformResponse: (response: { name: string; url: string }[]) =>
+        response.reduce<Record<string, string>>((acc, { name, url }) => {
           acc[url] = name;
           return acc;
         }, {}),
@@ -46,6 +46,7 @@ export const dataApi = baseApi.injectEndpoints({
       },
     }),
   }),
+  overrideExisting: true,
 });
 
 export const { useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } = dataApi;
@@ -53,22 +54,22 @@ export const { useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQ
 export const setupDataApiErrorListeners = (startAppListening: AppStartListening) => {
   const subscriptions = [
     startAppListening({
-      matcher: dataApi.endpoints.getCrimeCategories.matchRejected,
       effect: (action) => {
         if (action.error.name !== "ConditionError") {
           console.log(action.error);
           notify({ title: "Failed to get crime categories" });
         }
       },
+      matcher: dataApi.endpoints.getCrimeCategories.matchRejected,
     }),
     startAppListening({
-      matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
       effect: (action) => {
         if (action.error.name !== "ConditionError") {
           console.log(action.error);
           notify({ title: "Failed to get crime data" });
         }
       },
+      matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
     }),
   ];
   return (...args: Parameters<UnsubscribeListener>) => subscriptions.map((subscription) => subscription(...args));
@@ -83,8 +84,8 @@ export const initialState: DataState = {
 };
 
 export const dataSlice = createSlice({
-  name: "data",
   initialState,
+  name: "data",
   reducers: {
     newQuery: (state, { payload }: PayloadAction<Query>) => {
       state.query = payload;
@@ -98,9 +99,8 @@ export default dataSlice.reducer;
 
 export const selectQuery = (state: RootState) => state.data.query;
 
-export const selectFirstLocation = ([crimeEntry]: (CrimeEntry | undefined)[] = []) => {
-  return crimeEntry && { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude };
-};
+export const selectFirstLocation = ([crimeEntry]: (CrimeEntry | undefined)[] = []) =>
+  crimeEntry && { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude };
 
 const selectCrimeEntries = (data: CrimeEntry[] | undefined) => data;
 

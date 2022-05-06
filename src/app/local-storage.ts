@@ -1,12 +1,12 @@
 import type { AnyAction } from "@reduxjs/toolkit";
 import { createSelector } from "@reduxjs/toolkit";
+import { objectEntries, objectFromEntries } from "@s/util/functions";
+import type { ObjectEntries } from "@s/util/types";
 import pick from "lodash.pick";
 import type { RootState } from "/src/app/store";
 import type { AppStartListening } from "@mw/listener";
-import { objectEntries, objectFromEntries } from "@s/util/functions";
-import type { ObjectEntries } from "@s/util/types";
-import { initialState as settings, selectCookies } from "@s/settings";
 import { initialState as locations } from "@s/locations";
+import { selectCookies, initialState as settings } from "@s/settings";
 
 type WhitelistDef = {
   [K in keyof RootState]?: true | [keyof RootState[K], ...(keyof RootState[K])[]];
@@ -26,13 +26,13 @@ type InitialStates<Whitelist extends WhitelistDef> = {
 const idWhitelist = <W extends WhitelistDef>(whitelist: W) => whitelist;
 
 const persistWhitelist = idWhitelist({
-  settings: ["theme", "cookies"],
   locations: true,
+  settings: ["theme", "cookies"],
 });
 
 type PersistWhitelist = typeof persistWhitelist;
 
-const initialStates: InitialStates<PersistWhitelist> = { settings, locations };
+const initialStates: InitialStates<PersistWhitelist> = { locations, settings };
 
 export const hydrateState = (state: WhitelistedState<PersistWhitelist>): InitialStates<PersistWhitelist> =>
   objectFromEntries(
