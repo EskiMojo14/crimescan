@@ -1,30 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "/src/app/store";
+import type { RootState } from "/src/app/store";
 
 type SettingsState = {
-  theme: "light" | "dark";
   cookies: boolean;
+  theme: "dark" | "light";
 };
 
 export const initialState: SettingsState = {
-  theme: "dark",
   cookies: false,
+  theme: "dark",
 };
 
 export const settingsSlice = createSlice({
-  name: "settings",
   initialState,
+  name: "settings",
   reducers: {
-    toggleTheme: (state) => {
-      state.theme = state.theme === "dark" ? "light" : "dark";
-    },
     cookiesAccepted: (state) => {
       state.cookies = true;
+    },
+    toggleTheme: (state) => {
+      state.theme = state.theme === "dark" ? "light" : "dark";
     },
   },
 });
 
-export const { toggleTheme, cookiesAccepted } = settingsSlice.actions;
+export const {
+  actions: { cookiesAccepted, toggleTheme },
+} = settingsSlice;
 
 export const selectTheme = (state: RootState) => state.settings.theme;
 

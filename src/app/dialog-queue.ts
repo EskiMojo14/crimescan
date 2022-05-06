@@ -1,4 +1,5 @@
-import { createDialogQueue, DialogQueueInput } from "@rmwc/dialog";
+import type { DialogQueueInput } from "@rmwc/dialog";
+import { createDialogQueue } from "@rmwc/dialog";
 import classNames from "classnames";
 
 export const queue = createDialogQueue();

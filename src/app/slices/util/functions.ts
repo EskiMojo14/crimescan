@@ -1,7 +1,7 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { IconOptions, IconPropT } from "@rmwc/types";
+import type { IconOptions, IconPropT } from "@rmwc/types";
+import type { ObjectEntries } from "@s/util/types";
 import debounce from "lodash.debounce";
-import { ObjectEntries } from "@s/util/types";
 
 /**
  * Checks that object contains specified key.
@@ -197,13 +197,11 @@ export const delay: {
  * @returns Object with `strategy` set to `"component"` and `icon` set to the value of `jsx`.
  */
 
-export const iconObject = (jsx: React.ReactNode, config?: Omit<IconOptions, "icon">): IconPropT => {
-  return {
-    strategy: "component",
-    icon: jsx,
-    ...config,
-  };
-};
+export const iconObject = (jsx: React.ReactNode, config?: Omit<IconOptions, "icon">): IconPropT => ({
+  icon: jsx,
+  strategy: "component",
+  ...config,
+});
 
 /**
  * Adds scroll-lock class to body, to prevent scrolling while modal is open.
@@ -233,7 +231,7 @@ export const closeModal = (id: string) => {
  */
 
 export const promiseAllSeries = async <T>(
-  promises: Array<() => T | PromiseLike<T>>,
+  promises: (() => PromiseLike<T> | T)[],
   delayTime?: number
 ): Promise<Awaited<T>[]> => {
   const values: any[] = [];

@@ -22,13 +22,13 @@ export const getGeocodedResults = async (query: string) => {
 
 export const getStaticMapURL = (
   size: string,
-  theme?: "light" | "dark",
+  theme?: "dark" | "light",
   markers?: (
-    | {
-        styles?: { color?: string; size?: "tiny" | "mid" | "small"; label?: string };
-        locations: { lat: string; lng: string }[];
-      }
     | boolean
+    | {
+        locations: { lat: string; lng: string }[];
+        styles?: { color?: string; label?: string; size?: "mid" | "small" | "tiny" };
+      }
   )[]
 ) => {
   const baseUrl = new URL("https://maps.googleapis.com/maps/api/staticmap");
@@ -39,7 +39,7 @@ export const getStaticMapURL = (
   }
   markers?.forEach((marker) => {
     if (typeof marker === "object") {
-      const { styles, locations } = marker;
+      const { locations, styles } = marker;
       const stylesString =
         styles &&
         Object.entries(styles)

@@ -1,27 +1,27 @@
-import React, { useMemo, useState } from "react";
-import classNames from "classnames";
-import { useAppSelector } from "@h";
-import { months } from "@s/util/constants";
-import { iconObject, addOrRemove } from "@s/util/functions";
-import { selectAllOutcomes, selectOutcomeCount, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
-import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
-import ChartistGraph from "react-chartist";
-import chartistPluginAxisTitle from "chartist-plugin-axistitle";
+import { useMemo, useState } from "react";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
 import { Checkbox } from "@rmwc/checkbox";
 import {
   DataTable,
-  DataTableContent,
   DataTableBody,
-  DataTableHead,
-  DataTableRow,
-  DataTableHeadCell,
   DataTableCell,
+  DataTableContent,
+  DataTableHead,
+  DataTableHeadCell,
+  DataTableRow,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
+import { months } from "@s/util/constants";
+import { addOrRemove, iconObject } from "@s/util/functions";
+import type { IBarChartOptions, ILineChartOptions, IPieChartOptions } from "chartist";
+import chartistPluginAxisTitle from "chartist-plugin-axistitle";
+import classNames from "classnames";
+import ChartistGraph from "react-chartist";
 import { useImmer } from "use-immer";
-import { skipToken } from "@reduxjs/toolkit/query/react";
+import { useAppSelector } from "@h";
+import { selectAllOutcomes, selectOutcomeCount, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
@@ -39,9 +39,8 @@ export const OutcomeCardMonth = () => {
     series,
   };
   const chartOptions: IPieChartOptions = {
-    labelInterpolationFnc: (value: number) => {
-      return Math.round((value / chartData.series.reduce((a, b) => a + b)) * 100) + "%";
-    },
+    labelInterpolationFnc: (value: number) =>
+      `${Math.round((value / chartData.series.reduce((a, b) => a + b)) * 100)}%`,
   };
 
   const [focused, updateFocused] = useImmer<string[]>([]);
@@ -59,16 +58,16 @@ export const OutcomeCardMonth = () => {
       className={classNames(
         "category-card",
         { focused: focused.length > 0 },
-        focused.map((letter) => "focused-" + letter)
+        focused.map((letter) => `focused-${letter}`)
       )}
     >
       <div className="title-container">
-        <Typography use="headline5" tag="h3">
+        <Typography tag="h3" use="headline5">
           Outcomes
         </Typography>
       </div>
       <div className="chart-container">
-        <ChartistGraph type="Pie" data={chartData} options={chartOptions} className="ct-square" />
+        <ChartistGraph className="ct-square" data={chartData} options={chartOptions} type="Pie" />
       </div>
       <div className="table-container">
         <DataTable>
@@ -77,8 +76,8 @@ export const OutcomeCardMonth = () => {
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
                   <Checkbox
-                    indeterminate={focused.length > 0 && focused.length !== allOutcomes.length}
                     checked={focused.length === allOutcomes.length}
+                    indeterminate={focused.length > 0 && focused.length !== allOutcomes.length}
                     onClick={focusAll}
                   />
                 </DataTableHeadCell>
@@ -87,17 +86,15 @@ export const OutcomeCardMonth = () => {
               </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-              {allOutcomes.map((category, index) => {
-                return (
-                  <DataTableRow className={"series-" + letters[index]} key={category}>
-                    <DataTableCell hasFormControl>
-                      <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
-                    </DataTableCell>
-                    <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{outcomeCount[index]}</DataTableCell>
-                  </DataTableRow>
-                );
-              })}
+              {allOutcomes.map((category, index) => (
+                <DataTableRow key={category} className={`series-${letters[index]}`}>
+                  <DataTableCell hasFormControl>
+                    <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
+                  </DataTableCell>
+                  <DataTableCell className="right-border indicator">{category}</DataTableCell>
+                  <DataTableCell isNumeric>{outcomeCount[index]}</DataTableCell>
+                </DataTableRow>
+              ))}
             </DataTableBody>
           </DataTableContent>
         </DataTable>
@@ -122,21 +119,21 @@ export const OutcomeCardYear = () => {
     series: outcomeCount,
   };
   const chartOptions = {
-    low: 0,
     axisY: {
       onlyInteger: true,
     },
     chartPadding: {
-      top: 16,
-      right: 0,
       bottom: 32,
       left: 16,
+      right: 0,
+      top: 16,
     },
+    low: 0,
     plugins: [
       chartistPluginAxisTitle({
         axisX: {
-          axisTitle: "Month",
           axisClass: "ct-axis-title",
+          axisTitle: "Month",
           offset: {
             x: 0,
             y: 48,
@@ -144,13 +141,13 @@ export const OutcomeCardYear = () => {
           textAnchor: "middle",
         },
         axisY: {
-          axisTitle: "Count",
           axisClass: "ct-axis-title",
+          axisTitle: "Count",
+          flipTitle: true,
           offset: {
             x: 0,
             y: 24,
           },
-          flipTitle: true,
         },
       }),
     ],
@@ -166,11 +163,11 @@ export const OutcomeCardYear = () => {
   // workaround: react-chartist doesn't re-render on type change.
   const barChart =
     chartType === "bar" ? (
-      <ChartistGraph type="Bar" data={chartData} options={barChartOptions} className="ct-major-eleventh" />
+      <ChartistGraph className="ct-major-eleventh" data={chartData} options={barChartOptions} type="Bar" />
     ) : null;
   const lineChart =
     chartType === "line" ? (
-      <ChartistGraph type="Line" data={chartData} options={lineChartOptions} className="ct-major-eleventh" />
+      <ChartistGraph className="ct-major-eleventh" data={chartData} options={lineChartOptions} type="Line" />
     ) : null;
 
   const [focused, updateFocused] = useImmer<string[]>([]);
@@ -189,45 +186,45 @@ export const OutcomeCardYear = () => {
       className={classNames(
         "category-card",
         { focused: focused.length > 0 },
-        focused.map((letter) => "focused-" + letter)
+        focused.map((letter) => `focused-${letter}`)
       )}
     >
       <div className="title-container">
-        <Typography use="headline5" tag="h3">
+        <Typography tag="h3" use="headline5">
           Outcomes
         </Typography>
         <SegmentedButton toggle>
           <SegmentedButtonSegment
             icon={iconObject(
               <svg
+                height="24"
+                version="1.1"
+                viewBox="0 0 24 24"
+                width="24"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                version="1.1"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
               >
                 <path d="M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M18,14H22V16H18V14M12,6H16V9H12V6M16,15H12V10H16V15M6,10H10V12H6V10M10,16H6V13H10V16Z" />
               </svg>
             )}
-            selected={chartType === "bar"}
             onClick={() => setChartType("bar")}
+            selected={chartType === "bar"}
           />
           <SegmentedButtonSegment
             icon={iconObject(
               <svg
+                height="24"
+                version="1.1"
+                viewBox="0 0 24 24"
+                width="24"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                version="1.1"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
               >
                 <path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z" />
               </svg>
             )}
-            selected={chartType === "line"}
             onClick={() => setChartType("line")}
+            selected={chartType === "line"}
           />
         </SegmentedButton>
       </div>
@@ -242,42 +239,33 @@ export const OutcomeCardYear = () => {
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
                   <Checkbox
-                    indeterminate={focused.length > 0 && focused.length !== allOutcomes.length}
                     checked={focused.length === allOutcomes.length}
+                    indeterminate={focused.length > 0 && focused.length !== allOutcomes.length}
                     onClick={focusAll}
                   />
                 </DataTableHeadCell>
                 <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
-                {months.map((month) => {
-                  return (
-                    <DataTableHeadCell isNumeric key={month}>
-                      {month}
-                    </DataTableHeadCell>
-                  );
-                })}
+                {months.map((month) => (
+                  <DataTableHeadCell key={month} isNumeric>
+                    {month}
+                  </DataTableHeadCell>
+                ))}
               </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-              {allOutcomes.map((category, catIndex) => {
-                return (
-                  <DataTableRow className={"series-" + letters[catIndex]} key={category}>
-                    <DataTableCell hasFormControl>
-                      <Checkbox
-                        checked={focused.includes(letters[catIndex])}
-                        onClick={() => focus(letters[catIndex])}
-                      />
-                    </DataTableCell>
-                    <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    {months.map((month, index) => {
-                      return (
-                        <DataTableHeadCell isNumeric key={month}>
-                          {outcomeCount[catIndex]?.[index] || ""}
-                        </DataTableHeadCell>
-                      );
-                    })}
-                  </DataTableRow>
-                );
-              })}
+              {allOutcomes.map((category, catIndex) => (
+                <DataTableRow key={category} className={`series-${letters[catIndex]}`}>
+                  <DataTableCell hasFormControl>
+                    <Checkbox checked={focused.includes(letters[catIndex])} onClick={() => focus(letters[catIndex])} />
+                  </DataTableCell>
+                  <DataTableCell className="right-border indicator">{category}</DataTableCell>
+                  {months.map((month, index) => (
+                    <DataTableHeadCell key={month} isNumeric>
+                      {outcomeCount[catIndex]?.[index] || ""}
+                    </DataTableHeadCell>
+                  ))}
+                </DataTableRow>
+              ))}
             </DataTableBody>
           </DataTableContent>
         </DataTable>

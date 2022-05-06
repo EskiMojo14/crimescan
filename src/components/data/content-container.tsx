@@ -1,13 +1,12 @@
-import React from "react";
-import { useAppSelector } from "@h";
-import { queryIcons } from "@s/util/constants";
-import { selectQuery } from "@s/data";
 import { Chip } from "@rmwc/chip";
-import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
+import { TopAppBar, TopAppBarFixedAdjust, TopAppBarRow, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
 import { createLatLng } from "@s/maps/functions";
+import { queryIcons } from "@s/util/constants";
+import { useAppSelector } from "@h";
+import { selectQuery } from "@s/data";
 import { selectLocationByLatLng } from "@s/locations";
-import { CountCard } from "./count-card";
 import { CategoryCardMonth, CategoryCardYear } from "./category-card";
+import { CountCard } from "./count-card";
 import { OutcomeCardMonth, OutcomeCardYear } from "./outcome-card";
 import "./content-container.scss";
 
@@ -22,15 +21,15 @@ export const ContentContainer = () => {
 
   const queryChips =
     query.lat && query.lng ? (
-      <TopAppBarSection className="chip-section" alignEnd>
+      <TopAppBarSection alignEnd className="chip-section">
         <Chip
-          label={query.date}
-          icon={query.type === "month" ? queryIcons.month : queryIcons.year}
           className="non-interactive"
+          icon={query.type === "month" ? queryIcons.month : queryIcons.year}
+          label={query.date}
         />
-        {savedLocation && <Chip label={savedLocation.name} icon={queryIcons.location} className="non-interactive" />}
-        <Chip label={query.lat} icon={queryIcons.lat} className="non-interactive" />
-        <Chip label={query.lng} icon={queryIcons.lng} className="non-interactive" />
+        {savedLocation && <Chip className="non-interactive" icon={queryIcons.location} label={savedLocation.name} />}
+        <Chip className="non-interactive" icon={queryIcons.lat} label={query.lat} />
+        <Chip className="non-interactive" icon={queryIcons.lng} label={query.lng} />
       </TopAppBarSection>
     ) : null;
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 
 import { SegmentedButton, SegmentedButtonSegment } from "./segmented-button";
@@ -10,7 +9,7 @@ describe("<SegmentedButton />", () => {
     expect(button).toHaveClass("segmented-button");
   });
   it("adds toggle class if prop is added", async () => {
-    render(<SegmentedButton toggle data-testid="button" />);
+    render(<SegmentedButton data-testid="button" toggle />);
     const button = screen.getByTestId("button");
     expect(button).toHaveClass("segmented-button--toggle");
   });

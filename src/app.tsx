@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import ContentContainer from "@c/data/content-container";
+import ContentEmpty from "@c/data/content-empty";
+import DrawerQuery from "@c/data/drawer-query";
+import DrawerSearch from "@c/data/drawer-search";
+import DrawerLocations from "@c/user/drawer-locations";
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import { useAppDispatch, useAppSelector } from "@h";
+import { DialogQueue } from "@rmwc/dialog";
+import { DrawerAppContent } from "@rmwc/drawer";
+import { SnackbarQueue } from "@rmwc/snackbar";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
+import { useAppDispatch, useAppSelector } from "@h";
+import useBoolStates from "@h/use-bool-states";
 import { selectQuery, useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue as dialogQueue } from "/src/app/dialog-queue";
-import { queue as snackbarQueue, notify } from "/src/app/snackbar-queue";
-import { DialogQueue } from "@rmwc/dialog";
-import { SnackbarQueue } from "@rmwc/snackbar";
-import { DrawerAppContent } from "@rmwc/drawer";
-import ContentContainer from "@c/data/content-container";
-import ContentEmpty from "@c/data/content-empty";
-import DrawerSearch from "@c/data/drawer-search";
-import DrawerQuery from "@c/data/drawer-query";
-import useBoolStates from "@h/use-bool-states";
-import DrawerLocations from "@c/user/drawer-locations";
+import { notify, queue as snackbarQueue } from "/src/app/snackbar-queue";
 import "./App.scss";
 
-function App() {
+const App = () => {
   const dispatch = useAppDispatch();
 
   const query = useAppSelector(selectQuery);
@@ -75,9 +75,9 @@ function App() {
 
   return (
     <>
-      <DrawerLocations open={locationsDrawerOpen} onClose={closeLocations} latLng={latLng} setLatLng={setLatLng} />
-      <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
-      <DrawerQuery openSearch={openSearch} openLocations={openLocations} latLng={latLng} />
+      <DrawerLocations latLng={latLng} onClose={closeLocations} open={locationsDrawerOpen} setLatLng={setLatLng} />
+      <DrawerSearch close={closeSearch} open={searchDrawerOpen} setLatLng={setLatLng} />
+      <DrawerQuery latLng={latLng} openLocations={openLocations} openSearch={openSearch} />
       <DrawerAppContent>
         {!query || (query.type === "month" ? monthTotal : yearTotal) === 0 ? <ContentEmpty /> : <ContentContainer />}
       </DrawerAppContent>
@@ -85,5 +85,5 @@ function App() {
       <DialogQueue dialogs={dialogQueue.dialogs} />
     </>
   );
-}
+};
 export default App;
