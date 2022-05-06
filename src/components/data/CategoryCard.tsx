@@ -106,7 +106,7 @@ export const CategoryCardMonth = () => {
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[index][0]}</DataTableCell>
+                    <DataTableCell isNumeric>{categoryCount[index]?.[0] ?? ""}</DataTableCell>
                   </DataTableRow>
                 );
               })}
@@ -284,7 +284,7 @@ export const CategoryCardYear = () => {
                     {months.map((month, index) => {
                       return (
                         <DataTableHeadCell isNumeric key={month}>
-                          {categoryCount[catIndex][index] > 0 ? categoryCount[catIndex][index] : ""}
+                          {categoryCount[catIndex]?.[index] || ""}
                         </DataTableHeadCell>
                       );
                     })}

@@ -271,7 +271,7 @@ export const OutcomeCardYear = () => {
                     {months.map((month, index) => {
                       return (
                         <DataTableHeadCell isNumeric key={month}>
-                          {outcomeCount[catIndex][index] > 0 ? outcomeCount[catIndex][index] : ""}
+                          {outcomeCount[catIndex]?.[index] || ""}
                         </DataTableHeadCell>
                       );
                     })}
