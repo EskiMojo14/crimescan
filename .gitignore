@@ -25,3 +25,4 @@ apiKeys.env
 /dist
 /.vscode
 tsconfig.tsbuildinfo
+.eslintcache
