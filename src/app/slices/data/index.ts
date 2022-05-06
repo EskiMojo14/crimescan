@@ -115,8 +115,16 @@ const selectFormattedCategories = (
 export const selectAllCategories = createSelector(
   selectCrimeEntries,
   selectFormattedCategories,
-  (allCrimes = [], formattedCategories) =>
-    alphabeticalSort(uniqueArray(allCrimes.map(({ category }) => formattedCategories?.[category] ?? category)))
+  (allCrimes, formattedCategories = {}) => {
+    if (!allCrimes) {
+      return [];
+    }
+    const categories = new Set<string>();
+    for (const { category } of allCrimes) {
+      categories.add(formattedCategories[category] ?? category);
+    }
+    return alphabeticalSort(Array.from(categories));
+  }
 );
 
 export const selectAllOutcomes = createSelector(selectCrimeEntries, (allCrimes = []) => {
