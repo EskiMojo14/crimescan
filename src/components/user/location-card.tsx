@@ -10,8 +10,8 @@ import { pinColors } from "@s/maps/constants";
 import { withTooltip } from "@c/util/hocs";
 import debounce from "lodash.debounce";
 import { Typography } from "@rmwc/typography";
-import { confirmDelete } from "/src/app/dialogQueue";
-import "./LocationCard.scss";
+import { confirmDelete } from "/src/app/dialog-queue";
+import "./location-card.scss";
 import classNames from "classnames";
 
 type LocationCardProps = {

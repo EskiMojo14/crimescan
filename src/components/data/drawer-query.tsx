@@ -5,7 +5,7 @@ import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { createLatLng, getStaticMapURL } from "@s/maps/functions";
-import { prompt } from "/src/app/dialogQueue";
+import { prompt } from "/src/app/dialog-queue";
 import { selectQuery, useGetMonthDataQuery, useGetYearDataQuery, newQuery, selectFirstLocation } from "@s/data";
 import { dateSchema, latLngRegex, latLngSchema, monthRegex, yearRegex } from "@s/data/schema";
 import { Query } from "@s/data/types";
@@ -21,11 +21,11 @@ import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
-import { Logo } from "@c/util/Logo";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
+import { Logo } from "@c/util/logo";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { withTooltip } from "@c/util/hocs";
 import { addLocation, selectLocationMap, selectLocationTotal } from "@s/locations";
-import "./DrawerQuery.scss";
+import "./drawer-query.scss";
 
 type DrawerQueryProps = {
   openLocations: () => void;

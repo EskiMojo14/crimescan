@@ -4,7 +4,7 @@ import api from "@s/api";
 import data from "@s/data";
 import settings from "@s/settings";
 import locations from "@s/locations";
-import { loadState } from "/src/app/localStorage";
+import { loadState } from "/src/app/local-storage";
 
 const reducer = combineReducers({
   [api.reducerPath]: api.reducer,

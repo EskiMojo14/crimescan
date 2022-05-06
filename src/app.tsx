@@ -4,17 +4,17 @@ import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { selectQuery, useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
-import { queue as dialogQueue } from "/src/app/dialogQueue";
-import { queue as snackbarQueue, notify } from "/src/app/snackbarQueue";
+import { queue as dialogQueue } from "/src/app/dialog-queue";
+import { queue as snackbarQueue, notify } from "/src/app/snackbar-queue";
 import { DialogQueue } from "@rmwc/dialog";
 import { SnackbarQueue } from "@rmwc/snackbar";
 import { DrawerAppContent } from "@rmwc/drawer";
-import ContentContainer from "@c/data/ContentContainer";
-import ContentEmpty from "@c/data/ContentEmpty";
-import DrawerSearch from "@c/data/DrawerSearch";
-import DrawerQuery from "@c/data/DrawerQuery";
-import useBoolStates from "@h/useBoolStates";
-import DrawerLocations from "@c/user/DrawerLocations";
+import ContentContainer from "@c/data/content-container";
+import ContentEmpty from "@c/data/content-empty";
+import DrawerSearch from "@c/data/drawer-search";
+import DrawerQuery from "@c/data/drawer-query";
+import useBoolStates from "@h/use-bool-states";
+import DrawerLocations from "@c/user/drawer-locations";
 import "./App.scss";
 
 function App() {

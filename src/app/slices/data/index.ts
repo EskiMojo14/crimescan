@@ -5,7 +5,7 @@ import { alphabeticalSort, promiseAllSeries } from "@s/util/functions";
 import { CrimeEntry, Query } from "./types";
 import { baseApi } from "@s/api";
 import { AppStartListening } from "@mw/listener";
-import { notify } from "/src/app/snackbarQueue";
+import { notify } from "/src/app/snackbar-queue";
 
 const months = [...Array(12)].map((_, i) => ++i);
 

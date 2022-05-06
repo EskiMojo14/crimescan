@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { useAppSelector } from "@h";
 import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
-import { notify } from "/src/app/snackbarQueue";
-import useScrollLock from "@h/useScrollLock";
+import { notify } from "/src/app/snackbar-queue";
+import useScrollLock from "@h/use-scroll-lock";
 import { statusCodes, pinColors } from "@s/maps/constants";
 import { asyncDebounce } from "@s/util/functions";
 import { MapResult } from "@s/maps/types";
@@ -13,7 +13,7 @@ import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
-import "./DrawerSearch.scss";
+import "./drawer-search.scss";
 import emptyImg from "@m/empty.svg";
 
 type DrawerSearchProps = {

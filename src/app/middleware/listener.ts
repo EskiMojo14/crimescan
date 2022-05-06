@@ -1,6 +1,6 @@
 import { addListener, createListenerMiddleware } from "@reduxjs/toolkit";
 import type { TypedAddListener, TypedStartListening } from "@reduxjs/toolkit";
-import { setupPersistListener } from "/src/app/localStorage";
+import { setupPersistListener } from "/src/app/local-storage";
 import type { AppDispatch, RootState } from "/src/app/store";
 import { setupDataApiErrorListeners } from "@s/data";
 

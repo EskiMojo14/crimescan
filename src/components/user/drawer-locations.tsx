@@ -1,13 +1,13 @@
 import React from "react";
-import useScrollLock from "@h/useScrollLock";
+import useScrollLock from "@h/use-scroll-lock";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { useAppSelector } from "@h";
 import { createLatLng } from "@s/maps/functions";
 import { selectLocationLatLngs } from "@s/locations";
-import FavouriteCard from "@c/user/LocationCard";
+import LocationCard from "@c/user/location-card";
 import { Typography } from "@rmwc/typography";
 import emptyImg from "@m/empty.svg";
-import "./DrawerLocations.scss";
+import "./drawer-locations.scss";
 
 type DrawerLocationsProps = {
   open: boolean;
@@ -31,7 +31,7 @@ export const DrawerLocations = ({ open, onClose, latLng, setLatLng }: DrawerLoca
       <DrawerContent>
         {locationLatLngs.length ? (
           locationLatLngs.map((latLngId) => (
-            <FavouriteCard
+            <LocationCard
               key={latLngId}
               latLngId={latLngId}
               selected={latLngId === createLatLng(latLng)}

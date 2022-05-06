@@ -6,10 +6,10 @@ import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
 import { createLatLng } from "@s/maps/functions";
 import { selectLocationByLatLng } from "@s/locations";
-import { CountCard } from "./CountCard";
-import { CategoryCardMonth, CategoryCardYear } from "./CategoryCard";
-import { OutcomeCardMonth, OutcomeCardYear } from "./OutcomeCard";
-import "./ContentContainer.scss";
+import { CountCard } from "./count-card";
+import { CategoryCardMonth, CategoryCardYear } from "./category-card";
+import { OutcomeCardMonth, OutcomeCardYear } from "./outcome-card";
+import "./content-container.scss";
 
 export const ContentContainer = () => {
   const query = useAppSelector(selectQuery);

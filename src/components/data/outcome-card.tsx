@@ -1,19 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { skipToken } from "@reduxjs/toolkit/query/react";
 import classNames from "classnames";
-import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
-import { useImmer } from "use-immer";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
-import {
-  selectAllCategories,
-  selectCategoryCount,
-  selectQuery,
-  useGetCrimeCategoriesQuery,
-  useGetMonthDataQuery,
-  useGetYearDataQuery,
-} from "@s/data";
+import { selectAllOutcomes, selectOutcomeCount, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import { Card } from "@rmwc/card";
@@ -28,43 +19,38 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
-import "./CategoryCard.scss";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
+import { useImmer } from "use-immer";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
-export const CategoryCardMonth = () => {
+export const OutcomeCardMonth = () => {
   const query = useAppSelector(selectQuery);
-  const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
-    selectFromResult: ({ data }) => ({ formattedCategories: data }),
-  });
-  const { allCategories, categoryCount } = useGetMonthDataQuery((formattedCategories && query) ?? skipToken, {
+  const { allOutcomes, outcomeCount } = useGetMonthDataQuery(query ?? skipToken, {
     selectFromResult: ({ data, originalArgs }) => ({
-      allCategories: selectAllCategories(data, originalArgs, formattedCategories),
-      categoryCount: selectCategoryCount(data, originalArgs, formattedCategories),
+      allOutcomes: selectAllOutcomes(data),
+      outcomeCount: selectOutcomeCount(data, originalArgs),
     }),
   });
-
-  const series = useMemo(() => categoryCount.flat(), [categoryCount]);
-
+  const series = useMemo(() => outcomeCount.flat(), [outcomeCount]);
   const chartData = {
     labels: [],
     series,
   };
   const chartOptions: IPieChartOptions = {
     labelInterpolationFnc: (value: number) => {
-      return Math.round((value / chartData.series.reduce((a, b) => a + b, 0)) * 100) + "%";
+      return Math.round((value / chartData.series.reduce((a, b) => a + b)) * 100) + "%";
     },
   };
 
   const [focused, updateFocused] = useImmer<string[]>([]);
   const focus = (letter: string) => updateFocused((focused) => addOrRemove(focused, letter));
-
   const focusAll = () => {
-    if (focused.length === allCategories.length) {
+    if (focused.length === allOutcomes.length) {
       updateFocused([]);
     } else {
-      updateFocused(letters.slice(0, allCategories.length));
+      updateFocused(letters.slice(0, allOutcomes.length));
     }
   };
 
@@ -78,7 +64,7 @@ export const CategoryCardMonth = () => {
     >
       <div className="title-container">
         <Typography use="headline5" tag="h3">
-          Categories
+          Outcomes
         </Typography>
       </div>
       <div className="chart-container">
@@ -91,24 +77,24 @@ export const CategoryCardMonth = () => {
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
                   <Checkbox
-                    indeterminate={focused.length > 0 && focused.length !== allCategories.length}
-                    checked={focused.length === allCategories.length}
+                    indeterminate={focused.length > 0 && focused.length !== allOutcomes.length}
+                    checked={focused.length === allOutcomes.length}
                     onClick={focusAll}
                   />
                 </DataTableHeadCell>
-                <DataTableHeadCell className="right-border">Category</DataTableHeadCell>
+                <DataTableHeadCell className="right-border">Outcome</DataTableHeadCell>
                 <DataTableHeadCell isNumeric>Count</DataTableHeadCell>
               </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-              {allCategories.map((category, index) => {
+              {allOutcomes.map((category, index) => {
                 return (
                   <DataTableRow className={"series-" + letters[index]} key={category}>
                     <DataTableCell hasFormControl>
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[index]?.[0] ?? ""}</DataTableCell>
+                    <DataTableCell isNumeric>{outcomeCount[index]}</DataTableCell>
                   </DataTableRow>
                 );
               })}
@@ -120,15 +106,12 @@ export const CategoryCardMonth = () => {
   );
 };
 
-export const CategoryCardYear = () => {
+export const OutcomeCardYear = () => {
   const query = useAppSelector(selectQuery);
-  const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
-    selectFromResult: ({ data }) => ({ formattedCategories: data }),
-  });
-  const { allCategories, categoryCount } = useGetYearDataQuery((formattedCategories && query) ?? skipToken, {
+  const { allOutcomes, outcomeCount } = useGetYearDataQuery(query ?? skipToken, {
     selectFromResult: ({ data, originalArgs }) => ({
-      allCategories: selectAllCategories(data, originalArgs, formattedCategories),
-      categoryCount: selectCategoryCount(data, originalArgs, formattedCategories),
+      allOutcomes: selectAllOutcomes(data),
+      outcomeCount: selectOutcomeCount(data, originalArgs),
     }),
   });
 
@@ -136,7 +119,7 @@ export const CategoryCardYear = () => {
 
   const chartData = {
     labels: months,
-    series: categoryCount,
+    series: outcomeCount,
   };
   const chartOptions = {
     low: 0,
@@ -194,10 +177,10 @@ export const CategoryCardYear = () => {
   const focus = (letter: string) => updateFocused((focused) => addOrRemove(focused, letter));
 
   const focusAll = () => {
-    if (focused.length === allCategories.length) {
+    if (focused.length === allOutcomes.length) {
       updateFocused([]);
     } else {
-      updateFocused(letters.slice(0, allCategories.length));
+      updateFocused(letters.slice(0, allOutcomes.length));
     }
   };
 
@@ -211,7 +194,7 @@ export const CategoryCardYear = () => {
     >
       <div className="title-container">
         <Typography use="headline5" tag="h3">
-          Categories
+          Outcomes
         </Typography>
         <SegmentedButton toggle>
           <SegmentedButtonSegment
@@ -259,8 +242,8 @@ export const CategoryCardYear = () => {
               <DataTableRow>
                 <DataTableHeadCell hasFormControl>
                   <Checkbox
-                    indeterminate={focused.length > 0 && focused.length !== allCategories.length}
-                    checked={focused.length === allCategories.length}
+                    indeterminate={focused.length > 0 && focused.length !== allOutcomes.length}
+                    checked={focused.length === allOutcomes.length}
                     onClick={focusAll}
                   />
                 </DataTableHeadCell>
@@ -275,7 +258,7 @@ export const CategoryCardYear = () => {
               </DataTableRow>
             </DataTableHead>
             <DataTableBody>
-              {allCategories.map((category, catIndex) => {
+              {allOutcomes.map((category, catIndex) => {
                 return (
                   <DataTableRow className={"series-" + letters[catIndex]} key={category}>
                     <DataTableCell hasFormControl>
@@ -288,7 +271,7 @@ export const CategoryCardYear = () => {
                     {months.map((month, index) => {
                       return (
                         <DataTableHeadCell isNumeric key={month}>
-                          {categoryCount[catIndex]?.[index] || ""}
+                          {outcomeCount[catIndex]?.[index] || ""}
                         </DataTableHeadCell>
                       );
                     })}
