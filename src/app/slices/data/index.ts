@@ -128,6 +128,9 @@ export const selectAllCategories = createSelector(
 );
 
 export const selectAllOutcomes = createSelector(selectCrimeEntries, (allCrimes = []) => {
+  if (!allCrimes) {
+    return [];
+  }
   const outcomes = new Set<string>();
   for (const crime of allCrimes) {
     if (crime.outcome_status) {
