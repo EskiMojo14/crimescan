@@ -98,9 +98,9 @@ export default dataSlice.reducer;
 
 export const selectQuery = (state: RootState) => state.data.query;
 
-const selectCrimeEntry = (data: CrimeEntry[] | undefined) => data;
+const selectCrimeEntries = (data: CrimeEntry[] | undefined) => data;
 
-const selectQueryResult = (data: CrimeEntry[] | undefined, query?: Query | undefined) => query;
+const selectQueryParam = (data: CrimeEntry[] | undefined, query?: Query | undefined) => query;
 
 const selectFormattedCategories = (
   data: CrimeEntry[] | undefined,
@@ -109,13 +109,13 @@ const selectFormattedCategories = (
 ) => formattedCategories;
 
 export const selectAllCategories = createSelector(
-  selectCrimeEntry,
+  selectCrimeEntries,
   selectFormattedCategories,
   (allCrimes = [], formattedCategories) =>
     alphabeticalSort(uniqueArray(allCrimes.map(({ category }) => formattedCategories?.[category] ?? category)))
 );
 
-export const selectAllOutcomes = createSelector(selectCrimeEntry, (allCrimes = []) => {
+export const selectAllOutcomes = createSelector(selectCrimeEntries, (allCrimes = []) => {
   const outcomes = new Set<string>();
   for (const crime of allCrimes) {
     if (crime.outcome_status) {
@@ -125,7 +125,7 @@ export const selectAllOutcomes = createSelector(selectCrimeEntry, (allCrimes = [
   return alphabeticalSort(Array.from(outcomes));
 });
 
-export const selectAllCrimesByMonth = createSelector(selectCrimeEntry, selectQueryResult, (crimes = [], query) => {
+export const selectAllCrimesByMonth = createSelector(selectCrimeEntries, selectQueryParam, (crimes = [], query) => {
   if (!query) {
     return {};
   }
@@ -142,7 +142,7 @@ export const selectAllCrimesByMonth = createSelector(selectCrimeEntry, selectQue
   return acc;
 });
 
-export const selectCountSeries = createSelector(selectQueryResult, selectAllCrimesByMonth, (query, allCrimes) => {
+export const selectCountSeries = createSelector(selectQueryParam, selectAllCrimesByMonth, (query, allCrimes) => {
   if (!query) {
     return [];
   }
@@ -157,7 +157,7 @@ export const selectCountSeries = createSelector(selectQueryResult, selectAllCrim
 });
 
 export const selectCategoryCount = createSelector(
-  selectQueryResult,
+  selectQueryParam,
   selectFormattedCategories,
   selectAllCategories,
   selectAllCrimesByMonth,
@@ -187,7 +187,7 @@ export const selectCategoryCount = createSelector(
 );
 
 export const selectOutcomeCount = createSelector(
-  selectQueryResult,
+  selectQueryParam,
   selectAllOutcomes,
   selectAllCrimesByMonth,
   (query, allOutcomes, crimesByMonth) => {
