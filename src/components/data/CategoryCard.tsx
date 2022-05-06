@@ -35,7 +35,9 @@ const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCardMonth = () => {
   const query = useAppSelector(selectQuery);
-  const { data: formattedCategories } = useGetCrimeCategoriesQuery();
+  const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
+    selectFromResult: ({ data }) => ({ formattedCategories: data }),
+  });
   const { allCategories, categoryCount } = useGetMonthDataQuery((formattedCategories && query) ?? skipToken, {
     selectFromResult: ({ data, originalArgs }) => ({
       allCategories: selectAllCategories(data, originalArgs, formattedCategories),
@@ -120,7 +122,9 @@ export const CategoryCardMonth = () => {
 
 export const CategoryCardYear = () => {
   const query = useAppSelector(selectQuery);
-  const { data: formattedCategories } = useGetCrimeCategoriesQuery();
+  const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
+    selectFromResult: ({ data }) => ({ formattedCategories: data }),
+  });
   const { allCategories, categoryCount } = useGetYearDataQuery((formattedCategories && query) ?? skipToken, {
     selectFromResult: ({ data, originalArgs }) => ({
       allCategories: selectAllCategories(data, originalArgs, formattedCategories),
