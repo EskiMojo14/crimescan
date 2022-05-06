@@ -1,4 +1,3 @@
-import React from "react";
 import LocationCard from "@c/user/location-card";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { Typography } from "@rmwc/typography";

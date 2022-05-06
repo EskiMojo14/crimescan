@@ -1,4 +1,3 @@
-import React from "react";
 import type { ButtonProps } from "@rmwc/button";
 import { Button } from "@rmwc/button";
 import BEMHelper from "@s/util/bem-helper";

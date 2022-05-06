@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";

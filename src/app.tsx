@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ContentContainer from "@c/data/content-container";
 import ContentEmpty from "@c/data/content-empty";
 import DrawerQuery from "@c/data/drawer-query";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarFixedAdjust, TopAppBarRow, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
 import { createLatLng } from "@s/maps/functions";

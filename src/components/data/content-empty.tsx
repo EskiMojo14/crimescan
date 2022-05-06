@@ -1,4 +1,3 @@
-import React from "react";
 import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
 import { Typography } from "@rmwc/typography";
 import { useAppSelector } from "@h";

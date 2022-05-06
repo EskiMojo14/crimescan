@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from "react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 import "./Logo.scss";
 
