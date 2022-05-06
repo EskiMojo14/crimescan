@@ -159,7 +159,7 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/*", "build/*"],
-  plugins: ["jest", "jest-dom", "testing-library"],
+  plugins: ["jest", "jest-dom", "testing-library", "sort-destructure-keys", "sort-keys", "typescript-sort-keys"],
   overrides: [
     {
       files: ["*.ts", "*.tsx"],
