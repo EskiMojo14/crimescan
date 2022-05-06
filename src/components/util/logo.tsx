@@ -7,8 +7,7 @@ type LogoProps = HTMLAttributes<HTMLDivElement> & {
   rotate?: boolean;
 };
 
-export const Logo = (props: LogoProps) => {
-  const { className, rotate, ...filteredProps } = props;
+export const Logo = ({ className, rotate, ...props }: LogoProps) => {
   const [rotating, setRotating] = useState(false);
   useEffect(() => {
     if (rotate) {
@@ -21,7 +20,7 @@ export const Logo = (props: LogoProps) => {
     }
   };
   return (
-    <div className={`logo ${className}`} {...filteredProps}>
+    <div className={classNames("logo", className)} {...props}>
       <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
         <defs>
           <clipPath id="clip-path">
