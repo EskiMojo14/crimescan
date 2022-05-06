@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import classNames from "classnames";
+import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { createLatLng, getStaticMapURL } from "@s/maps/functions";
@@ -101,7 +102,10 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const validLocation = useMemo(() => latLngSchema.safeParse({ lat, lng }).success, [lat, lng]);
 
   const latLng = createLatLng({ lat, lng });
-  const formFilled = validDate && validLocation;
+  const formFilled =
+    validDate &&
+    validLocation &&
+    !shallowEqual({ lat, lng, date }, { lat: query?.lat, lng: query?.lng, date: query?.date });
 
   const submit = () => {
     if (formFilled) {
