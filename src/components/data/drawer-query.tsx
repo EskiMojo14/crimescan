@@ -34,7 +34,7 @@ type DrawerQueryProps = {
   openSearch: () => void;
 };
 
-export const DrawerQuery = (props: DrawerQueryProps) => {
+export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryProps) => {
   const dispatch = useAppDispatch();
 
   const theme = useAppSelector(selectTheme);
@@ -51,9 +51,9 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
 
   useEffect(() => {
     updateInputQuery((draftQuery) => {
-      Object.assign(draftQuery, props.latLng);
+      Object.assign(draftQuery, latLng);
     });
-  }, [props.latLng]);
+  }, [latLng]);
 
   const { date, lat, lng, type } = inputQuery;
 
@@ -78,8 +78,9 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const resultLocation = monthLocation ?? yearLocation;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
-    const { value } = e.target;
+    const {
+      target: { name, value },
+    } = e;
     if (hasKey(inputQuery, name) && name !== "type") {
       updateInputQuery((draftQuery) => {
         draftQuery[name] = value;
@@ -102,7 +103,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
   const validDate = useMemo(() => dateSchema.safeParse({ date, type }).success, [type, date]);
   const validLocation = useMemo(() => latLngSchema.safeParse({ lat, lng }).success, [lat, lng]);
 
-  const latLng = createLatLng({ lat, lng });
+  const latLngString = createLatLng({ lat, lng });
   const formFilled =
     validDate &&
     validLocation &&
@@ -160,7 +161,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
             Location
           </Typography>
           <div className="button-container">
-            <Button icon="travel_explore" label="Search" onClick={props.openSearch} outlined />
+            <Button icon="travel_explore" label="Search" onClick={openSearch} outlined />
             <Button
               disabled={!locationTotal}
               icon={iconObject(
@@ -172,7 +173,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
                 </svg>
               )}
               label="Saved"
-              onClick={props.openLocations}
+              onClick={openLocations}
               outlined
             />
           </div>
@@ -214,7 +215,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </div>
           <div className="button-container">
             <Button
-              disabled={!validLocation || latLng in locationsMap}
+              disabled={!validLocation || latLngString in locationsMap}
               icon={iconObject(
                 <svg viewBox="0 0 24 24">
                   <path
@@ -230,7 +231,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </div>
           <div className="guide-chips">
             {validLocation ? <Chip className="query-chip non-interactive" icon="location_on" label="Query" /> : null}
-            {query && resultLocation && createLatLng(query) === latLng ? (
+            {query && resultLocation && createLatLng(query) === latLngString ? (
               <Chip
                 className="result-chip non-interactive"
                 icon="location_on"
@@ -251,7 +252,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
               validLocation
                 ? {
                     backgroundImage: `url("${getStaticMapURL("438x438", theme, [
-                      resultLocation && query && createLatLng(query) === latLng
+                      resultLocation && query && createLatLng(query) === latLngString
                         ? {
                             locations: [resultLocation],
                             styles: { color: `0x${pinColors[theme].red}` },

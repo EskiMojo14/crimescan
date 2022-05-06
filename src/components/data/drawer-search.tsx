@@ -23,8 +23,8 @@ type DrawerSearchProps = {
   setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
-export const DrawerSearch = (props: DrawerSearchProps) => {
-  useScrollLock(props.open, "search-drawer");
+export const DrawerSearch = ({ close, open, setLatLng }: DrawerSearchProps) => {
+  useScrollLock(open, "search-drawer");
 
   const theme = useAppSelector(selectTheme);
 
@@ -68,7 +68,9 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
     [setLoading]
   );
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+    const {
+      target: { value },
+    } = e;
     setSearch(value);
     const result = await debouncedGeocodeSearch(value);
     setResult(result);
@@ -113,9 +115,9 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
 
   const confirmResult = () => {
     if (result) {
-      props.setLatLng({ lat: result.lat, lng: result.lng });
+      setLatLng({ lat: result.lat, lng: result.lng });
     }
-    props.close();
+    close();
     setTimeout(() => {
       setSearch("");
       setResult(undefined);
@@ -123,7 +125,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
   };
 
   return (
-    <Drawer className="drawer-search drawer-right" modal onClose={props.close} open={props.open}>
+    <Drawer className="drawer-search drawer-right" modal onClose={close} open={open}>
       <DrawerHeader>
         <DrawerTitle>Location search</DrawerTitle>
         <Button disabled={!result} label="Confirm" onClick={confirmResult} outlined />

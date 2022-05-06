@@ -24,7 +24,9 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { cookiesAccepted, toggleTheme } = settingsSlice.actions;
+export const {
+  actions: { cookiesAccepted, toggleTheme },
+} = settingsSlice;
 
 export const selectTheme = (state: RootState) => state.settings.theme;
 

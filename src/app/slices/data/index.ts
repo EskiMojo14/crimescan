@@ -93,7 +93,9 @@ export const dataSlice = createSlice({
   },
 });
 
-export const { newQuery } = dataSlice.actions;
+export const {
+  actions: { newQuery },
+} = dataSlice;
 
 export default dataSlice.reducer;
 
