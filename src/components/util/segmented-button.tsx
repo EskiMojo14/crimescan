@@ -21,7 +21,7 @@ type SegmentedButtonSegmentProps = ButtonProps &
     selected?: boolean;
   };
 
-export const SegmentedButtonSegment = ({ selected, ...props }: SegmentedButtonSegmentProps) => (
+export const SegmentedButtonSegment = ({ selected = false, ...props }: SegmentedButtonSegmentProps) => (
   <Button
     {...props}
     className={bemClasses("segment", { "only-icon": !!props.icon && !props.label, selected }, props.className)}
