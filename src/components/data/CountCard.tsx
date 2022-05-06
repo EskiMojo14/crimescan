@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject } from "@s/util/functions";
-import { selectCountSeries } from "@s/data";
+import { selectCountSeries, selectQuery, useGetYearDataQuery } from "@s/data";
 import type { IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -21,7 +22,12 @@ import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton
 import "./CountCard.scss";
 
 export const CountCard = () => {
-  const count = useAppSelector(selectCountSeries);
+  const query = useAppSelector(selectQuery);
+  const { count } = useGetYearDataQuery(query ?? skipToken, {
+    selectFromResult: ({ data, originalArgs }) => ({
+      count: selectCountSeries(data, originalArgs),
+    }),
+  });
   const chartData = {
     labels: months,
     series: [count],

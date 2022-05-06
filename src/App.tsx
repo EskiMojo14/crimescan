@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { useAppDispatch, useAppSelector } from "@h";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
-import { selectCrimeTotal, selectQuery, useGetCrimeCategoriesQuery } from "@s/data";
+import { selectQuery, useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue as dialogQueue } from "/src/app/dialogQueue";
 import { queue as snackbarQueue, notify } from "/src/app/snackbarQueue";
@@ -18,6 +19,19 @@ import "./App.scss";
 
 function App() {
   const dispatch = useAppDispatch();
+
+  const query = useAppSelector(selectQuery);
+
+  const { monthTotal } = useGetMonthDataQuery(!query || query.type !== "month" ? skipToken : query, {
+    selectFromResult: ({ data }) => ({
+      monthTotal: data?.length,
+    }),
+  });
+  const { yearTotal } = useGetYearDataQuery(!query || query.type !== "year" ? skipToken : query, {
+    selectFromResult: ({ data }) => ({
+      yearTotal: data?.length,
+    }),
+  });
 
   useGetCrimeCategoriesQuery();
 
@@ -51,10 +65,6 @@ function App() {
     }
   }, [cookies]);
 
-  const query = useAppSelector(selectQuery);
-
-  const total = useAppSelector(selectCrimeTotal);
-
   const [latLng, setLatLng] = useState({ lat: "", lng: "" });
 
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
@@ -68,7 +78,9 @@ function App() {
       <DrawerLocations open={locationsDrawerOpen} onClose={closeLocations} latLng={latLng} setLatLng={setLatLng} />
       <DrawerSearch open={searchDrawerOpen} close={closeSearch} setLatLng={setLatLng} />
       <DrawerQuery openSearch={openSearch} openLocations={openLocations} latLng={latLng} />
-      <DrawerAppContent>{!query || total === 0 ? <ContentEmpty /> : <ContentContainer />}</DrawerAppContent>
+      <DrawerAppContent>
+        {!query || (query.type === "month" ? monthTotal : yearTotal) === 0 ? <ContentEmpty /> : <ContentContainer />}
+      </DrawerAppContent>
       <SnackbarQueue messages={snackbarQueue.messages} />
       <DialogQueue dialogs={dialogQueue.dialogs} />
     </>

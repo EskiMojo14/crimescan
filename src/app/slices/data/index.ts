@@ -1,12 +1,4 @@
-import {
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-  EntityState,
-  isAnyOf,
-  PayloadAction,
-  UnsubscribeListener,
-} from "@reduxjs/toolkit";
+import { createSelector, createSlice, isAnyOf, PayloadAction, UnsubscribeListener } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "/src/app/store";
 import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
@@ -63,15 +55,17 @@ export const setupDataApiErrorListeners = (startAppListening: AppStartListening)
     startAppListening({
       matcher: dataApi.endpoints.getCrimeCategories.matchRejected,
       effect: (action) => {
-        console.log(action.error);
-        notify({ title: "Failed to get crime categories" });
+        if (action.error.name !== "ConditionError") {
+          console.log(action.error);
+          notify({ title: "Failed to get crime categories" });
+        }
       },
     }),
     startAppListening({
       matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
       effect: (action) => {
-        console.log(action.error);
         if (action.error.name !== "ConditionError") {
+          console.log(action.error);
           notify({ title: "Failed to get crime data" });
         }
       },
@@ -80,22 +74,12 @@ export const setupDataApiErrorListeners = (startAppListening: AppStartListening)
   return (...args: Parameters<UnsubscribeListener>) => subscriptions.map((subscription) => subscription(...args));
 };
 
-const crimeAdapter = createEntityAdapter<CrimeEntry>();
-
 type DataState = {
-  initialLoad: boolean;
-  loadingId: string;
-  crimes: EntityState<CrimeEntry>;
   query: Query | undefined;
-  formattedCategories: Record<string, string>;
 };
 
 export const initialState: DataState = {
-  initialLoad: true,
-  loadingId: "",
-  crimes: crimeAdapter.getInitialState(),
   query: undefined,
-  formattedCategories: {},
 };
 
 export const dataSlice = createSlice({
@@ -106,75 +90,32 @@ export const dataSlice = createSlice({
       state.query = payload;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(dataApi.endpoints.getCrimeCategories.matchFulfilled, (state, { payload }) => {
-        state.formattedCategories = payload;
-      })
-      .addMatcher(
-        isAnyOf(dataApi.endpoints.getMonthData.matchPending, dataApi.endpoints.getYearData.matchPending),
-        (state, { meta: { requestId } }) => {
-          state.loadingId = requestId;
-        }
-      )
-      .addMatcher(
-        isAnyOf(dataApi.endpoints.getMonthData.matchFulfilled, dataApi.endpoints.getYearData.matchFulfilled),
-        (
-          state,
-          {
-            payload,
-            meta: {
-              arg: { originalArgs },
-            },
-          }
-        ) => {
-          state.query = originalArgs;
-          crimeAdapter.setAll(state.crimes, payload);
-          state.initialLoad = false;
-        }
-      )
-      .addMatcher(
-        isAnyOf(
-          dataApi.endpoints.getMonthData.matchFulfilled,
-          dataApi.endpoints.getYearData.matchFulfilled,
-          dataApi.endpoints.getMonthData.matchRejected,
-          dataApi.endpoints.getYearData.matchRejected
-        ),
-        (state, { meta: { requestId } }) => {
-          if (state.loadingId === requestId) {
-            state.loadingId = "";
-          }
-        }
-      );
-  },
 });
 
 export const { newQuery } = dataSlice.actions;
 
 export default dataSlice.reducer;
 
-export const {
-  selectIds: selectCrimeIds,
-  selectEntities: selectCrimeMap,
-  selectAll: selectAllCrimes,
-  selectTotal: selectCrimeTotal,
-  selectById: selectCrimeById,
-} = crimeAdapter.getSelectors((state: RootState) => state.data.crimes);
-
-export const selectInitialLoad = (state: RootState) => state.data.initialLoad;
-
 export const selectQuery = (state: RootState) => state.data.query;
 
-export const selectFormattedCategories = (state: RootState) => state.data.formattedCategories;
+const selectCrimeEntry = (data: CrimeEntry[] | undefined) => data;
+
+const selectQueryResult = (data: CrimeEntry[] | undefined, query?: Query | undefined) => query;
+
+const selectFormattedCategories = (
+  data: CrimeEntry[] | undefined,
+  query: Query | undefined,
+  formattedCategories?: Record<string, string> | undefined
+) => formattedCategories;
 
 export const selectAllCategories = createSelector(
-  selectAllCrimes,
+  selectCrimeEntry,
   selectFormattedCategories,
-  (allCrimes, formattedCategories) =>
-    alphabeticalSort(uniqueArray(allCrimes.map(({ category }) => formattedCategories[category] ?? category)))
+  (allCrimes = [], formattedCategories) =>
+    alphabeticalSort(uniqueArray(allCrimes.map(({ category }) => formattedCategories?.[category] ?? category)))
 );
 
-export const selectAllOutcomes = createSelector(selectAllCrimes, (allCrimes) => {
+export const selectAllOutcomes = createSelector(selectCrimeEntry, (allCrimes = []) => {
   const outcomes = new Set<string>();
   for (const crime of allCrimes) {
     if (crime.outcome_status) {
@@ -184,7 +125,7 @@ export const selectAllOutcomes = createSelector(selectAllCrimes, (allCrimes) => 
   return alphabeticalSort(Array.from(outcomes));
 });
 
-export const selectAllCrimesByMonth = createSelector(selectAllCrimes, selectQuery, (crimes, query) => {
+export const selectAllCrimesByMonth = createSelector(selectCrimeEntry, selectQueryResult, (crimes = [], query) => {
   if (!query) {
     return {};
   }
@@ -201,7 +142,7 @@ export const selectAllCrimesByMonth = createSelector(selectAllCrimes, selectQuer
   return acc;
 });
 
-export const selectCountSeries = createSelector(selectQuery, selectAllCrimesByMonth, (query, allCrimes) => {
+export const selectCountSeries = createSelector(selectQueryResult, selectAllCrimesByMonth, (query, allCrimes) => {
   if (!query) {
     return [];
   }
@@ -216,11 +157,11 @@ export const selectCountSeries = createSelector(selectQuery, selectAllCrimesByMo
 });
 
 export const selectCategoryCount = createSelector(
-  selectQuery,
+  selectQueryResult,
   selectFormattedCategories,
   selectAllCategories,
   selectAllCrimesByMonth,
-  (query, formattedCategories, allCategories, crimesByMonth) => {
+  (query, formattedCategories = {}, allCategories, crimesByMonth) => {
     if (!query) {
       return [];
     }
@@ -246,7 +187,7 @@ export const selectCategoryCount = createSelector(
 );
 
 export const selectOutcomeCount = createSelector(
-  selectQuery,
+  selectQueryResult,
   selectAllOutcomes,
   selectAllCrimesByMonth,
   (query, allOutcomes, crimesByMonth) => {

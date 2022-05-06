@@ -5,7 +5,6 @@ import type { RootState } from "/src/app/store";
 import type { AppStartListening } from "@mw/listener";
 import { objectEntries, objectFromEntries } from "@s/util/functions";
 import type { ObjectEntries } from "@s/util/types";
-import { initialState as data } from "@s/data";
 import { initialState as settings, selectCookies } from "@s/settings";
 import { initialState as user } from "@s/user";
 
@@ -27,14 +26,13 @@ type InitialStates<Whitelist extends WhitelistDef> = {
 const idWhitelist = <W extends WhitelistDef>(whitelist: W) => whitelist;
 
 const persistWhitelist = idWhitelist({
-  data: ["formattedCategories"],
   settings: ["theme", "cookies"],
   user: ["locations"],
 });
 
 type PersistWhitelist = typeof persistWhitelist;
 
-const initialStates: InitialStates<PersistWhitelist> = { data, settings, user };
+const initialStates: InitialStates<PersistWhitelist> = { settings, user };
 
 export const hydrateState = (state: WhitelistedState<PersistWhitelist>): InitialStates<PersistWhitelist> =>
   objectFromEntries(

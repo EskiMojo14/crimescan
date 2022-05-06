@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
-import { selectAllOutcomes, selectOutcomeCount } from "@s/data";
+import { selectAllOutcomes, selectOutcomeCount, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
 import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
@@ -21,12 +21,18 @@ import {
 import { Typography } from "@rmwc/typography";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import { useImmer } from "use-immer";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const OutcomeCardMonth = () => {
-  const allOutcomes = useAppSelector(selectAllOutcomes);
-  const outcomeCount = useAppSelector(selectOutcomeCount);
+  const query = useAppSelector(selectQuery);
+  const { allOutcomes, outcomeCount } = useGetMonthDataQuery(query ?? skipToken, {
+    selectFromResult: ({ data, originalArgs }) => ({
+      allOutcomes: selectAllOutcomes(data),
+      outcomeCount: selectOutcomeCount(data, originalArgs),
+    }),
+  });
   const series = useMemo(() => outcomeCount.flat(), [outcomeCount]);
   const chartData = {
     labels: [],
@@ -101,8 +107,13 @@ export const OutcomeCardMonth = () => {
 };
 
 export const OutcomeCardYear = () => {
-  const allOutcomes = useAppSelector(selectAllOutcomes);
-  const outcomeCount = useAppSelector(selectOutcomeCount);
+  const query = useAppSelector(selectQuery);
+  const { allOutcomes, outcomeCount } = useGetYearDataQuery(query ?? skipToken, {
+    selectFromResult: ({ data, originalArgs }) => ({
+      allOutcomes: selectAllOutcomes(data),
+      outcomeCount: selectOutcomeCount(data, originalArgs),
+    }),
+  });
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
