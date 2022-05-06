@@ -1,6 +1,6 @@
 {
   "name": "crime-scan",
-  "version": "2.1.0-0",
+  "version": "2.1.0",
   "description": "App displaying the statistics of crime in a specific area.",
   "source": "./src/index.html",
   "alias": {
