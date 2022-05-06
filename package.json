@@ -16,7 +16,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build": "parcel build",
-    "type": "tsc --noEmit"
+    "type": "tsc --noEmit",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.11.4",
