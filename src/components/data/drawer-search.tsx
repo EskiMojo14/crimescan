@@ -1,5 +1,5 @@
+import type { ChangeEvent } from "react";
 import { useMemo, useState } from "react";
-import * as React from "react";
 import { notify } from "/src/app/snackbar-queue";
 import { Button } from "@rmwc/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
@@ -14,8 +14,8 @@ import { asyncDebounce } from "@s/util/functions";
 import { useAppSelector } from "@h";
 import useScrollLock from "@h/use-scroll-lock";
 import { selectTheme } from "@s/settings";
-import "./drawer-search.scss";
 import emptyImg from "@m/empty.svg";
+import "./drawer-search.scss";
 
 type DrawerSearchProps = {
   close: () => void;
@@ -67,7 +67,7 @@ export const DrawerSearch = (props: DrawerSearchProps) => {
       }, 400),
     [setLoading]
   );
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearch(value);
     const result = await debouncedGeocodeSearch(value);

@@ -1,5 +1,5 @@
+import type { ChangeEvent } from "react";
 import { useEffect, useMemo } from "react";
-import * as React from "react";
 import { withTooltip } from "@c/util/hocs";
 import { Logo } from "@c/util/logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
@@ -77,7 +77,7 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
 
   const resultLocation = monthLocation ?? yearLocation;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
     const { value } = e.target;
     if (hasKey(inputQuery, name) && name !== "type") {
