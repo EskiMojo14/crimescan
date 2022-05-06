@@ -2,13 +2,13 @@ import listener from "@mw/listener";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import data from "@s/data";
 import settings from "@s/settings";
-import user from "@s/user";
+import locations from "@s/locations";
 import { loadState } from "/src/app/localStorage";
 
 const reducer = combineReducers({
   data,
+  locations,
   settings,
-  user,
 });
 
 export type RootState = ReturnType<typeof reducer>;

@@ -3,7 +3,7 @@ import { EntityId } from "@reduxjs/toolkit";
 import { Card, CardActionButton, CardActionButtons, CardActionIcon, CardActionIcons, CardActions } from "@rmwc/card";
 import { TextField } from "@rmwc/textfield";
 import { useAppDispatch, useAppSelector } from "@h";
-import { removeLocation, selectLocationByLatLng, updateLocation } from "@s/user";
+import { removeLocation, selectLocationByLatLng, updateLocation } from "@s/locations";
 import { getStaticMapURL } from "@s/maps/functions";
 import { selectTheme } from "@s/settings";
 import { pinColors } from "@s/maps/constants";
