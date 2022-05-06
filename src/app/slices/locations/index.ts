@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice, EntityId, EntityState, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, EntityState } from "@reduxjs/toolkit";
 import { createLatLng } from "@s/maps/functions";
 import { SavedLocation } from "@s/locations/types";
 import { alphabeticalSortCurried } from "@s/util/functions";
