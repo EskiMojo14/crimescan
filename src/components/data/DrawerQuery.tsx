@@ -5,7 +5,7 @@ import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { createLatLng, getStaticMapURL } from "@s/maps/functions";
 import { prompt } from "/src/app/dialogQueue";
-import { selectQuery, useGetMonthDataQuery, useGetYearDataQuery, newQuery } from "@s/data";
+import { selectQuery, useGetMonthDataQuery, useGetYearDataQuery, newQuery, selectFirstLocation } from "@s/data";
 import { dateSchema, latLngRegex, latLngSchema, monthRegex, yearRegex } from "@s/data/schema";
 import { Query } from "@s/data/types";
 import { pinColors } from "@s/maps/constants";
@@ -25,15 +25,12 @@ import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton
 import { withTooltip } from "@c/util/hocs";
 import { addLocation, selectLocationMap, selectLocationTotal } from "@s/user";
 import "./DrawerQuery.scss";
-import { selectFirstLocation } from "@s/data/functions";
 
 type DrawerQueryProps = {
   openLocations: () => void;
   openSearch: () => void;
   latLng: { lat: string; lng: string };
 };
-
-const emptyArray: undefined[] = [];
 
 export const DrawerQuery = (props: DrawerQueryProps) => {
   const dispatch = useAppDispatch();
@@ -64,14 +61,14 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
     !query || query.type !== "month" ? skipToken : query,
     {
       selectFromResult: ({ data, isFetching: monthDataFetching }) => ({
-        monthLocation: selectFirstLocation(data ?? emptyArray),
+        monthLocation: selectFirstLocation(data),
         monthDataFetching,
       }),
     }
   );
   const { yearLocation, yearDataFetching } = useGetYearDataQuery(!query || query.type !== "year" ? skipToken : query, {
     selectFromResult: ({ data, isFetching: yearDataFetching }) => ({
-      yearLocation: selectFirstLocation(data ?? emptyArray),
+      yearLocation: selectFirstLocation(data),
       yearDataFetching,
     }),
   });

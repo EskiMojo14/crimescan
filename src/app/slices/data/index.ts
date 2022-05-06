@@ -98,6 +98,10 @@ export default dataSlice.reducer;
 
 export const selectQuery = (state: RootState) => state.data.query;
 
+export const selectFirstLocation = ([crimeEntry]: (CrimeEntry | undefined)[] = []) => {
+  return crimeEntry && { lat: crimeEntry.location.latitude, lng: crimeEntry.location.longitude };
+};
+
 const selectCrimeEntries = (data: CrimeEntry[] | undefined) => data;
 
 const selectQueryParam = (data: CrimeEntry[] | undefined, query?: Query | undefined) => query;
