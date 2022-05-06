@@ -5,7 +5,7 @@ import { selectQuery } from "@s/data";
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarRow, TopAppBarFixedAdjust, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
 import { createLatLng } from "@s/maps/functions";
-import { selectLocationByLatLng } from "@s/user";
+import { selectLocationByLatLng } from "@s/locations";
 import { CountCard } from "./CountCard";
 import { CategoryCardMonth, CategoryCardYear } from "./CategoryCard";
 import { OutcomeCardMonth, OutcomeCardYear } from "./OutcomeCard";

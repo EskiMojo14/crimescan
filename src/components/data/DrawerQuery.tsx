@@ -24,7 +24,7 @@ import { Typography } from "@rmwc/typography";
 import { Logo } from "@c/util/Logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
 import { withTooltip } from "@c/util/hocs";
-import { addLocation, selectLocationMap, selectLocationTotal } from "@s/user";
+import { addLocation, selectLocationMap, selectLocationTotal } from "@s/locations";
 import "./DrawerQuery.scss";
 
 type DrawerQueryProps = {

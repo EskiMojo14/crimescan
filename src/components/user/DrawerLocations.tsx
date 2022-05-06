@@ -3,7 +3,7 @@ import useScrollLock from "@h/useScrollLock";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { useAppSelector } from "@h";
 import { createLatLng } from "@s/maps/functions";
-import { selectLocationLatLngs } from "@s/user";
+import { selectLocationLatLngs } from "@s/locations";
 import FavouriteCard from "@c/user/LocationCard";
 import { Typography } from "@rmwc/typography";
 import emptyImg from "@m/empty.svg";

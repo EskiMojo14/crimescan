@@ -6,7 +6,7 @@ import type { AppStartListening } from "@mw/listener";
 import { objectEntries, objectFromEntries } from "@s/util/functions";
 import type { ObjectEntries } from "@s/util/types";
 import { initialState as settings, selectCookies } from "@s/settings";
-import { initialState as user } from "@s/user";
+import { initialState as locations } from "@s/locations";
 
 type WhitelistDef = {
   [K in keyof RootState]?: true | [keyof RootState[K], ...(keyof RootState[K])[]];
@@ -27,12 +27,12 @@ const idWhitelist = <W extends WhitelistDef>(whitelist: W) => whitelist;
 
 const persistWhitelist = idWhitelist({
   settings: ["theme", "cookies"],
-  user: ["locations"],
+  locations: true,
 });
 
 type PersistWhitelist = typeof persistWhitelist;
 
-const initialStates: InitialStates<PersistWhitelist> = { settings, user };
+const initialStates: InitialStates<PersistWhitelist> = { settings, locations };
 
 export const hydrateState = (state: WhitelistedState<PersistWhitelist>): InitialStates<PersistWhitelist> =>
   objectFromEntries(
