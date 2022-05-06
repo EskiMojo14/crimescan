@@ -1,11 +1,13 @@
 import listener from "@mw/listener";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import api from "@s/api";
 import data from "@s/data";
 import settings from "@s/settings";
 import locations from "@s/locations";
 import { loadState } from "/src/app/localStorage";
 
 const reducer = combineReducers({
+  [api.reducerPath]: api.reducer,
   data,
   locations,
   settings,
@@ -17,7 +19,7 @@ export const createStore = (preloadedState?: Partial<RootState>) =>
   configureStore({
     preloadedState,
     reducer,
-    middleware: (gDM) => gDM().prepend(listener),
+    middleware: (gDM) => gDM().prepend(listener).concat(api.middleware),
   });
 
 export const store = createStore(loadState());

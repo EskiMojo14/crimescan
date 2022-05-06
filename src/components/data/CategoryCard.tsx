@@ -1,11 +1,19 @@
 import React, { useMemo, useState } from "react";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import classNames from "classnames";
+import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
 import { useImmer } from "use-immer";
 import { useAppSelector } from "@h";
 import { months } from "@s/util/constants";
 import { iconObject, addOrRemove } from "@s/util/functions";
-import { selectAllCategories, selectCategoryCount } from "@s/data";
-import type { IPieChartOptions, IBarChartOptions, ILineChartOptions } from "chartist";
+import {
+  selectAllCategories,
+  selectCategoryCount,
+  selectQuery,
+  useGetCrimeCategoriesQuery,
+  useGetMonthDataQuery,
+  useGetYearDataQuery,
+} from "@s/data";
 import ChartistGraph from "react-chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import { Card } from "@rmwc/card";
@@ -26,8 +34,17 @@ import "./CategoryCard.scss";
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const CategoryCardMonth = () => {
-  const allCategories = useAppSelector(selectAllCategories);
-  const categoryCount = useAppSelector(selectCategoryCount);
+  const query = useAppSelector(selectQuery);
+  const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
+    selectFromResult: ({ data }) => ({ formattedCategories: data }),
+  });
+  const { allCategories, categoryCount } = useGetMonthDataQuery((formattedCategories && query) ?? skipToken, {
+    selectFromResult: ({ data, originalArgs }) => ({
+      allCategories: selectAllCategories(data, originalArgs, formattedCategories),
+      categoryCount: selectCategoryCount(data, originalArgs, formattedCategories),
+    }),
+  });
+
   const series = useMemo(() => categoryCount.flat(), [categoryCount]);
 
   const chartData = {
@@ -91,7 +108,7 @@ export const CategoryCardMonth = () => {
                       <Checkbox checked={focused.includes(letters[index])} onClick={() => focus(letters[index])} />
                     </DataTableCell>
                     <DataTableCell className="right-border indicator">{category}</DataTableCell>
-                    <DataTableCell isNumeric>{categoryCount[index][0]}</DataTableCell>
+                    <DataTableCell isNumeric>{categoryCount[index]?.[0] ?? ""}</DataTableCell>
                   </DataTableRow>
                 );
               })}
@@ -104,8 +121,16 @@ export const CategoryCardMonth = () => {
 };
 
 export const CategoryCardYear = () => {
-  const allCategories = useAppSelector(selectAllCategories);
-  const categoryCount = useAppSelector(selectCategoryCount);
+  const query = useAppSelector(selectQuery);
+  const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
+    selectFromResult: ({ data }) => ({ formattedCategories: data }),
+  });
+  const { allCategories, categoryCount } = useGetYearDataQuery((formattedCategories && query) ?? skipToken, {
+    selectFromResult: ({ data, originalArgs }) => ({
+      allCategories: selectAllCategories(data, originalArgs, formattedCategories),
+      categoryCount: selectCategoryCount(data, originalArgs, formattedCategories),
+    }),
+  });
 
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
 
@@ -263,7 +288,7 @@ export const CategoryCardYear = () => {
                     {months.map((month, index) => {
                       return (
                         <DataTableHeadCell isNumeric key={month}>
-                          {categoryCount[catIndex][index] > 0 ? categoryCount[catIndex][index] : ""}
+                          {categoryCount[catIndex]?.[index] || ""}
                         </DataTableHeadCell>
                       );
                     })}

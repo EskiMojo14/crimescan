@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import classNames from "classnames";
+import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { createLatLng, getStaticMapURL } from "@s/maps/functions";
-import { notify } from "/src/app/snackbarQueue";
 import { prompt } from "/src/app/dialogQueue";
-import { selectLoading, selectQuery, selectLocation, getMonthData, getYearData } from "@s/data";
+import { selectQuery, useGetMonthDataQuery, useGetYearDataQuery, newQuery, selectFirstLocation } from "@s/data";
+import { dateSchema, latLngRegex, latLngSchema, monthRegex, yearRegex } from "@s/data/schema";
+import { Query } from "@s/data/types";
 import { pinColors } from "@s/maps/constants";
 import { selectTheme, toggleTheme } from "@s/settings";
 import { queryIcons } from "@s/util/constants";
@@ -24,57 +27,61 @@ import { withTooltip } from "@c/util/hocs";
 import { addLocation, selectLocationMap, selectLocationTotal } from "@s/locations";
 import "./DrawerQuery.scss";
 
-const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;
-const latLngRegex = /^(-?\d+(\.\d+)?)$/;
-
 type DrawerQueryProps = {
   openLocations: () => void;
   openSearch: () => void;
   latLng: { lat: string; lng: string };
 };
 
-type InputState = {
-  dateMode: "month" | "year";
-  month: string;
-  year: string;
-  lat: string;
-  lng: string;
-};
-
 export const DrawerQuery = (props: DrawerQueryProps) => {
   const dispatch = useAppDispatch();
 
   const theme = useAppSelector(selectTheme);
-  const loading = useAppSelector(selectLoading);
 
   const locationsMap = useAppSelector(selectLocationMap);
   const locationTotal = useAppSelector(selectLocationTotal);
 
-  const [inputState, updateInputState] = useImmer<InputState>({
-    dateMode: "month",
-    month: "",
-    year: "",
+  const [inputQuery, updateInputQuery] = useImmer<Query>({
+    type: "month",
+    date: "",
     lat: "",
     lng: "",
   });
 
   useEffect(() => {
-    updateInputState((draftState) => {
-      Object.assign(draftState, props.latLng);
+    updateInputQuery((draftQuery) => {
+      Object.assign(draftQuery, props.latLng);
     });
   }, [props.latLng]);
 
-  const { dateMode, month, year, lat, lng } = inputState;
+  const { type, date, lat, lng } = inputQuery;
 
-  const resultLocation = useAppSelector(selectLocation);
   const query = useAppSelector(selectQuery);
+
+  const { monthLocation, monthDataFetching } = useGetMonthDataQuery(
+    !query || query.type !== "month" ? skipToken : query,
+    {
+      selectFromResult: ({ data, isFetching: monthDataFetching }) => ({
+        monthLocation: selectFirstLocation(data),
+        monthDataFetching,
+      }),
+    }
+  );
+  const { yearLocation, yearDataFetching } = useGetYearDataQuery(!query || query.type !== "year" ? skipToken : query, {
+    selectFromResult: ({ data, isFetching: yearDataFetching }) => ({
+      yearLocation: selectFirstLocation(data),
+      yearDataFetching,
+    }),
+  });
+
+  const resultLocation = monthLocation ?? yearLocation;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (hasKey(inputState, name) && name !== "dateMode") {
-      updateInputState((draftState) => {
-        draftState[name] = value;
+    if (hasKey(inputQuery, name) && name !== "type") {
+      updateInputQuery((draftQuery) => {
+        draftQuery[name] = value;
       });
     }
   };
@@ -86,57 +93,27 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
     }
   };
 
-  const changeDateMode = (mode: "month" | "year") =>
-    updateInputState((draftState) => {
-      draftState.dateMode = mode;
+  const changeType = (mode: "month" | "year") =>
+    updateInputQuery((draftQuery) => {
+      draftQuery.type = mode;
     });
-  const validDate = (dateMode === "month" && monthRegex.test(month)) || (dateMode === "year" && /^\d{4}$/.test(year));
-  const validLocation = latLngRegex.test(lat) && latLngRegex.test(lng);
-  const { lat: resultLat, lng: resultLng } = resultLocation ?? {};
-  const latLng = createLatLng({ lat, lng });
-  const formFilled = validDate && validLocation;
 
-  const submit = async () => {
+  const validDate = useMemo(() => dateSchema.safeParse({ type, date }).success, [type, date]);
+  const validLocation = useMemo(() => latLngSchema.safeParse({ lat, lng }).success, [lat, lng]);
+
+  const latLng = createLatLng({ lat, lng });
+  const formFilled =
+    validDate &&
+    validLocation &&
+    !shallowEqual({ lat, lng, date }, { lat: query?.lat, lng: query?.lng, date: query?.date });
+
+  const submit = () => {
     if (formFilled) {
-      try {
-        if (dateMode === "month") {
-          await dispatch(getMonthData({ type: dateMode, date: month, lat, lng })).unwrap();
-        } else {
-          await dispatch(getYearData({ type: dateMode, date: year, lat, lng })).unwrap();
-        }
-      } catch (e) {
-        console.log(e);
-        notify({ title: "Failed to get crime data" });
-      }
+      dispatch(newQuery(inputQuery));
     }
   };
 
-  const dateInput =
-    dateMode === "month" ? (
-      <TextField
-        outlined
-        label="Month"
-        icon={queryIcons.month}
-        name="month"
-        required
-        pattern="^\d{4}-(0[1-9]|1[012])$"
-        value={month}
-        onChange={handleChange}
-        helpText={{ persistent: true, validationMsg: true, children: "Format: YYYY-MM" }}
-      />
-    ) : (
-      <TextField
-        outlined
-        label="Year"
-        icon={queryIcons.year}
-        name="year"
-        required
-        pattern="^\d{4}$"
-        value={year}
-        onChange={handleChange}
-        helpText={{ persistent: true, validationMsg: true, children: "Format: YYYY" }}
-      />
-    );
+  const loading = monthDataFetching || yearDataFetching;
 
   return (
     <Drawer dismissible open className="drawer-settings">
@@ -157,19 +134,25 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
           </Typography>
           <div className="segmented-button-container">
             <SegmentedButton toggle>
-              <SegmentedButtonSegment
-                label="Month"
-                selected={dateMode === "month"}
-                onClick={() => changeDateMode("month")}
-              />
-              <SegmentedButtonSegment
-                label="Year"
-                selected={dateMode === "year"}
-                onClick={() => changeDateMode("year")}
-              />
+              <SegmentedButtonSegment label="Month" selected={type === "month"} onClick={() => changeType("month")} />
+              <SegmentedButtonSegment label="Year" selected={type === "year"} onClick={() => changeType("year")} />
             </SegmentedButton>
           </div>
-          {dateInput}
+          <TextField
+            outlined
+            label={type === "month" ? "Month" : "Year"}
+            icon={type === "month" ? queryIcons.month : queryIcons.year}
+            name="date"
+            required
+            pattern={type === "month" ? monthRegex.source : yearRegex.source}
+            value={date}
+            onChange={handleChange}
+            helpText={{
+              persistent: true,
+              validationMsg: true,
+              children: `Format: ${type === "month" ? "YYYY-MM" : "YYYY"}`,
+            }}
+          />
         </div>
         <div className="location-group">
           <Typography use="overline" tag="div" className="subheader">
@@ -267,10 +250,10 @@ export const DrawerQuery = (props: DrawerQueryProps) => {
               validLocation
                 ? {
                     backgroundImage: `url("${getStaticMapURL("438x438", theme, [
-                      resultLat && resultLng && query && createLatLng(query) === latLng
+                      resultLocation && query && createLatLng(query) === latLng
                         ? {
                             styles: { color: `0x${pinColors[theme].red}` },
-                            locations: [{ lat: resultLat, lng: resultLng }],
+                            locations: [resultLocation],
                           }
                         : false,
                       {
