@@ -1,7 +1,7 @@
 import { createSelector, createSlice, isAnyOf, PayloadAction, UnsubscribeListener } from "@reduxjs/toolkit";
 import cloneDeep from "lodash.clonedeep";
 import { RootState } from "/src/app/store";
-import { alphabeticalSort, promiseAllSeries, uniqueArray } from "@s/util/functions";
+import { alphabeticalSort, promiseAllSeries } from "@s/util/functions";
 import { CrimeEntry, Query } from "./types";
 import { baseApi } from "@s/api";
 import { AppStartListening } from "@mw/listener";
