@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 
-import { SegmentedButton, SegmentedButtonSegment } from "./SegmentedButton";
+import { SegmentedButton, SegmentedButtonSegment } from "./segmented-button";
 
 describe("<SegmentedButton />", () => {
   it("generates element with necessary class", async () => {

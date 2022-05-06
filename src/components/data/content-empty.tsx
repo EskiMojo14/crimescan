@@ -5,7 +5,7 @@ import { useAppSelector } from "@h";
 import { selectQuery } from "@s/data";
 import { Typography } from "@rmwc/typography";
 import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
-import "./ContentEmpty.scss";
+import "./content-empty.scss";
 
 export const ContentEmpty = () => {
   const query = useAppSelector(selectQuery);

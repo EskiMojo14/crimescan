@@ -1,8 +1,8 @@
 import React from "react";
-import BEMHelper from "@s/util/bemHelper";
+import BEMHelper from "@s/util/bem-helper";
 import { HTMLProps } from "@s/util/types";
 import { Button, ButtonProps } from "@rmwc/button";
-import "./SegmentedButton.scss";
+import "./segmented-button.scss";
 
 const bemClasses = new BEMHelper("segmented-button");
 

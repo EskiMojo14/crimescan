@@ -18,8 +18,8 @@ import {
   DataTableCell,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/SegmentedButton";
-import "./CountCard.scss";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
+import "./count-card.scss";
 
 export const CountCard = () => {
   const query = useAppSelector(selectQuery);
