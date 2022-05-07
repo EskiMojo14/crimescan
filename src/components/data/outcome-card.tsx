@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { SkeletonCategoryCardYear } from "@c/data/category-card/skeleton";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
@@ -105,9 +106,10 @@ export const OutcomeCardMonth = () => {
 
 export const OutcomeCardYear = () => {
   const query = useAppSelector(selectQuery);
-  const { allOutcomes, outcomeCount } = useGetYearDataQuery(query ?? skipToken, {
-    selectFromResult: ({ data, originalArgs }) => ({
+  const { allOutcomes, fetching, outcomeCount } = useGetYearDataQuery(query ?? skipToken, {
+    selectFromResult: ({ data, isFetching, originalArgs }) => ({
       allOutcomes: selectAllOutcomes(data),
+      fetching: isFetching,
       outcomeCount: selectOutcomeCount(data, originalArgs),
     }),
   });
@@ -180,6 +182,10 @@ export const OutcomeCardYear = () => {
       updateFocused(letters.slice(0, allOutcomes.length));
     }
   };
+
+  if (fetching) {
+    return <SkeletonCategoryCardYear chartType={chartType} outcome />;
+  }
 
   return (
     <Card
