@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { withTooltip } from "@c/util/hocs";
 import { Logo } from "@c/util/logo";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
@@ -33,29 +33,22 @@ type DrawerQueryProps = {
   latLng: { lat: string; lng: string };
   openLocations: () => void;
   openSearch: () => void;
+  setLatLng: (latLng: { lat: string; lng: string }) => void;
 };
 
-export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryProps) => {
+export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, setLatLng }: DrawerQueryProps) => {
   const dispatch = useAppDispatch();
 
   const theme = useAppSelector(selectTheme);
 
   const locationTotal = useAppSelector(selectLocationTotal);
 
-  const [inputQuery, updateInputQuery] = useImmer<Query>({
+  const [inputQuery, updateInputQuery] = useImmer<Omit<Query, "lat" | "lng">>({
     date: "",
-    lat: "",
-    lng: "",
     type: "month",
   });
 
-  useEffect(() => {
-    updateInputQuery((draftQuery) => {
-      Object.assign(draftQuery, latLng);
-    });
-  }, [latLng]);
-
-  const { date, lat, lng, type } = inputQuery;
+  const { date, type } = inputQuery;
 
   const latLngString = createLatLng({ lat, lng });
 
@@ -89,6 +82,8 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
       updateInputQuery((draftQuery) => {
         draftQuery[name] = value;
       });
+    } else if (name === "lat" || name === "lng") {
+      setLatLng({ lat, lng, [name]: value });
     }
   };
 
@@ -113,7 +108,7 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
 
   const submit = () => {
     if (formFilled) {
-      dispatch(newQuery(inputQuery));
+      dispatch(newQuery({ ...inputQuery, lat, lng }));
     }
   };
 

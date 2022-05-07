@@ -77,7 +77,7 @@ const App = () => {
     <>
       <DrawerLocations latLng={latLng} onClose={closeLocations} open={locationsDrawerOpen} setLatLng={setLatLng} />
       <DrawerSearch close={closeSearch} open={searchDrawerOpen} setLatLng={setLatLng} />
-      <DrawerQuery latLng={latLng} openLocations={openLocations} openSearch={openSearch} />
+      <DrawerQuery latLng={latLng} openLocations={openLocations} openSearch={openSearch} setLatLng={setLatLng} />
       <DrawerAppContent>
         {!query || (query.type === "month" ? monthTotal : yearTotal) === 0 ? <ContentEmpty /> : <ContentContainer />}
       </DrawerAppContent>
