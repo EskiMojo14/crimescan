@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { SkeletonCategoryCardYear } from "@c/data/category-card/skeleton";
+import SkeletonCategoryCard from "@c/data/category-card/skeleton";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
@@ -28,9 +28,10 @@ const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export const OutcomeCardMonth = () => {
   const query = useAppSelector(selectQuery);
-  const { allOutcomes, outcomeCount } = useGetMonthDataQuery(query ?? skipToken, {
-    selectFromResult: ({ data, originalArgs }) => ({
+  const { allOutcomes, fetching, outcomeCount } = useGetMonthDataQuery(query ?? skipToken, {
+    selectFromResult: ({ data, isFetching, originalArgs }) => ({
       allOutcomes: selectAllOutcomes(data),
+      fetching: isFetching,
       outcomeCount: selectOutcomeCount(data, originalArgs),
     }),
   });
@@ -53,6 +54,10 @@ export const OutcomeCardMonth = () => {
       updateFocused(letters.slice(0, allOutcomes.length));
     }
   };
+
+  if (fetching) {
+    return <SkeletonCategoryCard />;
+  }
 
   return (
     <Card
@@ -184,7 +189,7 @@ export const OutcomeCardYear = () => {
   };
 
   if (fetching) {
-    return <SkeletonCategoryCardYear chartType={chartType} outcome />;
+    return <SkeletonCategoryCard chartType={chartType} outcome year />;
   }
 
   return (
