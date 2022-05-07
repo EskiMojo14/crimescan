@@ -24,7 +24,14 @@ import classNames from "classnames";
 import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
-import { newQuery, selectFirstLocation, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import {
+  dataApi,
+  newQuery,
+  selectFirstLocation,
+  selectQuery,
+  useGetMonthDataQuery,
+  useGetYearDataQuery,
+} from "@s/data";
 import { addLocation, selectLocationByLatLng, selectLocationTotal } from "@s/locations";
 import { selectTheme, toggleTheme } from "@s/settings";
 import "./drawer-query.scss";
@@ -51,6 +58,16 @@ export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, s
   const { date, type } = inputQuery;
 
   const latLngString = createLatLng({ lat, lng });
+
+  const { monthError } = dataApi.endpoints.getMonthData.useQueryState(
+    type !== "month" ? skipToken : { date, lat, lng, type },
+    { selectFromResult: ({ isError }) => ({ monthError: isError }) }
+  );
+
+  const { yearError } = dataApi.endpoints.getYearData.useQueryState(
+    type !== "year" ? skipToken : { date, lat, lng, type },
+    { selectFromResult: ({ isError }) => ({ yearError: isError }) }
+  );
 
   const savedLocation = useAppSelector((state) => selectLocationByLatLng(state, latLngString));
 
@@ -286,7 +303,13 @@ export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, s
         </div>
       </DrawerContent>
       <div className="submit-button">
-        <Button disabled={!formFilled} label="submit" onClick={submit} outlined />
+        <Button
+          className={classNames({ delete: monthError || yearError })}
+          disabled={!formFilled}
+          label="submit"
+          onClick={submit}
+          outlined
+        />
       </div>
     </Drawer>
   );
