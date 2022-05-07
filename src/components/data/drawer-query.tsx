@@ -76,16 +76,16 @@ export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, s
   const { monthDataFetching, monthLocation } = useGetMonthDataQuery(
     !query || query.type !== "month" ? skipToken : query,
     {
-      selectFromResult: ({ data, isFetching }) => ({
+      selectFromResult: ({ currentData, isFetching }) => ({
         monthDataFetching: isFetching,
-        monthLocation: selectFirstLocation(data),
+        monthLocation: selectFirstLocation(currentData),
       }),
     }
   );
   const { yearDataFetching, yearLocation } = useGetYearDataQuery(!query || query.type !== "year" ? skipToken : query, {
-    selectFromResult: ({ data, isFetching }) => ({
+    selectFromResult: ({ currentData, isFetching }) => ({
       yearDataFetching: isFetching,
-      yearLocation: selectFirstLocation(data),
+      yearLocation: selectFirstLocation(currentData),
     }),
   });
 
