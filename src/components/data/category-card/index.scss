@@ -5,10 +5,10 @@
   .title-container {
     margin-bottom: 16px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     .mdc-typography--headline5 {
       margin: 0;
-      flex-grow: 1;
     }
   }
   .chart-container {

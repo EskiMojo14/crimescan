@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import SkeletonCategoryCard from "@c/data/category-card/skeleton";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
@@ -29,7 +30,7 @@ import {
   useGetMonthDataQuery,
   useGetYearDataQuery,
 } from "@s/data";
-import "./category-card.scss";
+import "./index.scss";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
@@ -38,10 +39,11 @@ export const CategoryCardMonth = () => {
   const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
     selectFromResult: ({ data }) => ({ formattedCategories: data }),
   });
-  const { allCategories, categoryCount } = useGetMonthDataQuery((formattedCategories && query) ?? skipToken, {
-    selectFromResult: ({ data, originalArgs }) => ({
+  const { allCategories, categoryCount, fetching } = useGetMonthDataQuery((formattedCategories && query) ?? skipToken, {
+    selectFromResult: ({ data, isFetching, originalArgs }) => ({
       allCategories: selectAllCategories(data, originalArgs, formattedCategories),
       categoryCount: selectCategoryCount(data, originalArgs, formattedCategories),
+      fetching: isFetching,
     }),
   });
 
@@ -66,6 +68,10 @@ export const CategoryCardMonth = () => {
       updateFocused(letters.slice(0, allCategories.length));
     }
   };
+
+  if (fetching) {
+    return <SkeletonCategoryCard />;
+  }
 
   return (
     <Card
@@ -122,10 +128,11 @@ export const CategoryCardYear = () => {
   const { formattedCategories } = useGetCrimeCategoriesQuery(undefined, {
     selectFromResult: ({ data }) => ({ formattedCategories: data }),
   });
-  const { allCategories, categoryCount } = useGetYearDataQuery((formattedCategories && query) ?? skipToken, {
-    selectFromResult: ({ data, originalArgs }) => ({
+  const { allCategories, categoryCount, fetching } = useGetYearDataQuery((formattedCategories && query) ?? skipToken, {
+    selectFromResult: ({ data, isFetching, originalArgs }) => ({
       allCategories: selectAllCategories(data, originalArgs, formattedCategories),
       categoryCount: selectCategoryCount(data, originalArgs, formattedCategories),
+      fetching: isFetching,
     }),
   });
 
@@ -197,6 +204,10 @@ export const CategoryCardYear = () => {
       updateFocused(letters.slice(0, allCategories.length));
     }
   };
+
+  if (fetching) {
+    return <SkeletonCategoryCard chartType={chartType} year />;
+  }
 
   return (
     <Card

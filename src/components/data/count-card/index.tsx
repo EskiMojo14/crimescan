@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SkeletonCountCard } from "@c/data/count-card/skeleton";
 import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
@@ -19,13 +20,14 @@ import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import ChartistGraph from "react-chartist";
 import { useAppSelector } from "@h";
 import { selectCountSeries, selectQuery, useGetYearDataQuery } from "@s/data";
-import "./count-card.scss";
+import "./index.scss";
 
 export const CountCard = () => {
   const query = useAppSelector(selectQuery);
-  const { count } = useGetYearDataQuery(query ?? skipToken, {
-    selectFromResult: ({ data, originalArgs }) => ({
+  const { count, fetching } = useGetYearDataQuery(query ?? skipToken, {
+    selectFromResult: ({ data, isFetching, originalArgs }) => ({
       count: selectCountSeries(data, originalArgs),
+      fetching: isFetching,
     }),
   });
   const chartData = {
@@ -86,6 +88,10 @@ export const CountCard = () => {
     chartType === "line" ? (
       <ChartistGraph className="ct-major-eleventh themed" data={chartData} options={lineChartOptions} type="Line" />
     ) : null;
+
+  if (fetching) {
+    return <SkeletonCountCard chartType={chartType} />;
+  }
 
   return (
     <Card className="count-card">

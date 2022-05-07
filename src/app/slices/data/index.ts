@@ -51,30 +51,6 @@ export const dataApi = baseApi.injectEndpoints({
 
 export const { useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } = dataApi;
 
-export const setupDataApiErrorListeners = (startAppListening: AppStartListening) => {
-  const subscriptions = [
-    startAppListening({
-      effect: (action) => {
-        if (action.error.name !== "ConditionError") {
-          console.log(action.error);
-          notify({ title: "Failed to get crime categories" });
-        }
-      },
-      matcher: dataApi.endpoints.getCrimeCategories.matchRejected,
-    }),
-    startAppListening({
-      effect: (action) => {
-        if (action.error.name !== "ConditionError") {
-          console.log(action.error);
-          notify({ title: "Failed to get crime data" });
-        }
-      },
-      matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
-    }),
-  ];
-  return (...args: Parameters<UnsubscribeListener>) => subscriptions.map((subscription) => subscription(...args));
-};
-
 type DataState = {
   query: Query | undefined;
 };
@@ -90,12 +66,40 @@ export const dataSlice = createSlice({
     newQuery: (state, { payload }: PayloadAction<Query>) => {
       state.query = payload;
     },
+    resetQuery: (state) => {
+      state.query = undefined;
+    },
   },
 });
 
 export const {
-  actions: { newQuery },
+  actions: { newQuery, resetQuery },
 } = dataSlice;
+
+export const setupDataApiErrorListeners = (startAppListening: AppStartListening) => {
+  const subscriptions = [
+    startAppListening({
+      effect: (action) => {
+        if (action.error.name !== "ConditionError") {
+          console.log(action.error);
+          notify({ title: "Failed to get crime categories" });
+        }
+      },
+      matcher: dataApi.endpoints.getCrimeCategories.matchRejected,
+    }),
+    startAppListening({
+      effect: (action, { dispatch }) => {
+        if (action.error.name !== "ConditionError") {
+          console.log(action.error);
+          notify({ title: "Failed to get crime data" });
+          dispatch(resetQuery());
+        }
+      },
+      matcher: isAnyOf(dataApi.endpoints.getMonthData.matchRejected, dataApi.endpoints.getYearData.matchRejected),
+    }),
+  ];
+  return (...args: Parameters<UnsubscribeListener>) => subscriptions.map((subscription) => subscription(...args));
+};
 
 export default dataSlice.reducer;
 

@@ -24,7 +24,14 @@ import classNames from "classnames";
 import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
-import { newQuery, selectFirstLocation, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import {
+  dataApi,
+  newQuery,
+  selectFirstLocation,
+  selectQuery,
+  useGetMonthDataQuery,
+  useGetYearDataQuery,
+} from "@s/data";
 import { addLocation, selectLocationByLatLng, selectLocationTotal } from "@s/locations";
 import { selectTheme, toggleTheme } from "@s/settings";
 import "./drawer-query.scss";
@@ -52,6 +59,16 @@ export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, s
 
   const latLngString = createLatLng({ lat, lng });
 
+  const { monthError } = dataApi.endpoints.getMonthData.useQueryState(
+    type !== "month" ? skipToken : { date, lat, lng, type },
+    { selectFromResult: ({ isError }) => ({ monthError: isError }) }
+  );
+
+  const { yearError } = dataApi.endpoints.getYearData.useQueryState(
+    type !== "year" ? skipToken : { date, lat, lng, type },
+    { selectFromResult: ({ isError }) => ({ yearError: isError }) }
+  );
+
   const savedLocation = useAppSelector((state) => selectLocationByLatLng(state, latLngString));
 
   const query = useAppSelector(selectQuery);
@@ -59,15 +76,15 @@ export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, s
   const { monthDataFetching, monthLocation } = useGetMonthDataQuery(
     !query || query.type !== "month" ? skipToken : query,
     {
-      selectFromResult: ({ data, isFetching: monthDataFetching }) => ({
-        monthDataFetching,
+      selectFromResult: ({ data, isFetching }) => ({
+        monthDataFetching: isFetching,
         monthLocation: selectFirstLocation(data),
       }),
     }
   );
   const { yearDataFetching, yearLocation } = useGetYearDataQuery(!query || query.type !== "year" ? skipToken : query, {
-    selectFromResult: ({ data, isFetching: yearDataFetching }) => ({
-      yearDataFetching,
+    selectFromResult: ({ data, isFetching }) => ({
+      yearDataFetching: isFetching,
       yearLocation: selectFirstLocation(data),
     }),
   });
@@ -286,7 +303,13 @@ export const DrawerQuery = ({ latLng: { lat, lng }, openLocations, openSearch, s
         </div>
       </DrawerContent>
       <div className="submit-button">
-        <Button disabled={!formFilled} label="submit" onClick={submit} outlined />
+        <Button
+          className={classNames({ delete: monthError || yearError })}
+          disabled={!formFilled}
+          label="submit"
+          onClick={submit}
+          outlined
+        />
       </div>
     </Drawer>
   );

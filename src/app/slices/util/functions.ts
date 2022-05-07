@@ -274,3 +274,10 @@ export function asyncDebounce<F extends (...args: any[]) => Promise<any>>(func: 
       debounced(args);
     }) as ReturnType<F>;
 }
+
+/**
+ * Generates a random integer between `min` and `max`
+ * @param max Maximum value to return
+ * @returns Random integer between `min` and `max`
+ */
+export const randomInt = (min = 0, max = 1) => Math.round(Math.random() * (max - min)) + min;
