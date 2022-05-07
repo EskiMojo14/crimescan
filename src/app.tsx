@@ -3,7 +3,7 @@ import ContentContainer from "@c/data/content-container";
 import ContentEmpty from "@c/data/content-empty";
 import DrawerQuery from "@c/data/drawer-query";
 import DrawerSearch from "@c/data/drawer-search";
-import DrawerLocations from "@c/user/drawer-locations";
+import DrawerLocations from "@c/locations/drawer-locations";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { DialogQueue } from "@rmwc/dialog";
 import { DrawerAppContent } from "@rmwc/drawer";

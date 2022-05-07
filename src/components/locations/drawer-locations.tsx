@@ -1,4 +1,4 @@
-import LocationCard from "@c/user/location-card";
+import LocationCard from "@c/locations/location-card";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { Typography } from "@rmwc/typography";
 import { createLatLng } from "@s/maps/functions";

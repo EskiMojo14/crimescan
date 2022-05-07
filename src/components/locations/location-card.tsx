@@ -6,6 +6,7 @@ import { Card, CardActionButton, CardActionButtons, CardActionIcon, CardActionIc
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
 import { pinColors } from "@s/maps/constants";
+import type { UppercaseLetter } from "@s/maps/functions";
 import { getStaticMapURL } from "@s/maps/functions";
 import classNames from "classnames";
 import debounce from "lodash.debounce";
@@ -61,7 +62,10 @@ export const LocationCard = ({ applyLatLng, latLngId, selected }: LocationCardPr
           backgroundImage: `url("${getStaticMapURL("332x332", theme, [
             {
               locations: [{ lat: location.lat, lng: location.lng }],
-              styles: { color: `0x${pinColors[theme].green}` },
+              styles: {
+                color: `0x${pinColors[theme].green}`,
+                label: location.name.toLocaleUpperCase().charAt(0) as UppercaseLetter,
+              },
             },
           ])}"`,
         }}

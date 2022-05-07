@@ -16,6 +16,7 @@ import { Typography } from "@rmwc/typography";
 import { dateSchema, latLngRegex, latLngSchema, monthRegex, yearRegex } from "@s/data/schema";
 import type { Query } from "@s/data/types";
 import { pinColors } from "@s/maps/constants";
+import type { UppercaseLetter } from "@s/maps/functions";
 import { createLatLng, getStaticMapURL } from "@s/maps/functions";
 import { queryIcons } from "@s/util/constants";
 import { hasKey, iconObject } from "@s/util/functions";
@@ -24,7 +25,7 @@ import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
 import { useAppDispatch, useAppSelector } from "@h";
 import { newQuery, selectFirstLocation, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
-import { addLocation, selectLocationMap, selectLocationTotal } from "@s/locations";
+import { addLocation, selectLocationByLatLng, selectLocationTotal } from "@s/locations";
 import { selectTheme, toggleTheme } from "@s/settings";
 import "./drawer-query.scss";
 
@@ -39,7 +40,6 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
 
   const theme = useAppSelector(selectTheme);
 
-  const locationsMap = useAppSelector(selectLocationMap);
   const locationTotal = useAppSelector(selectLocationTotal);
 
   const [inputQuery, updateInputQuery] = useImmer<Query>({
@@ -56,6 +56,10 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
   }, [latLng]);
 
   const { date, lat, lng, type } = inputQuery;
+
+  const latLngString = createLatLng({ lat, lng });
+
+  const savedLocation = useAppSelector((state) => selectLocationByLatLng(state, latLngString));
 
   const query = useAppSelector(selectQuery);
 
@@ -102,8 +106,6 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
 
   const validDate = useMemo(() => dateSchema.safeParse({ date, type }).success, [type, date]);
   const validLocation = useMemo(() => latLngSchema.safeParse({ lat, lng }).success, [lat, lng]);
-
-  const latLngString = createLatLng({ lat, lng });
   const formFilled =
     validDate &&
     validLocation &&
@@ -215,7 +217,7 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
           </div>
           <div className="button-container">
             <Button
-              disabled={!validLocation || latLngString in locationsMap}
+              disabled={!validLocation || !!savedLocation}
               icon={iconObject(
                 <svg viewBox="0 0 24 24">
                   <path
@@ -230,7 +232,9 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
             />
           </div>
           <div className="guide-chips">
-            {validLocation ? <Chip className="query-chip non-interactive" icon="location_on" label="Query" /> : null}
+            {validLocation ? (
+              <Chip className="query-chip non-interactive" icon="location_on" label={savedLocation?.name ?? "Query"} />
+            ) : null}
             {query && resultLocation && createLatLng(query) === latLngString ? (
               <Chip
                 className="result-chip non-interactive"
@@ -255,12 +259,15 @@ export const DrawerQuery = ({ latLng, openLocations, openSearch }: DrawerQueryPr
                       resultLocation && query && createLatLng(query) === latLngString
                         ? {
                             locations: [resultLocation],
-                            styles: { color: `0x${pinColors[theme].red}` },
+                            styles: { color: `0x${pinColors[theme].red}`, label: "A" },
                           }
                         : false,
                       {
                         locations: [{ lat, lng }],
-                        styles: { color: `0x${pinColors[theme].green}` },
+                        styles: {
+                          color: `0x${pinColors[theme].green}`,
+                          label: savedLocation?.name.toLocaleUpperCase().charAt(0) as UppercaseLetter | undefined,
+                        },
                       },
                     ])}")`,
                   }
