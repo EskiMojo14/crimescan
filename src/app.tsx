@@ -11,7 +11,7 @@ import { SnackbarQueue } from "@rmwc/snackbar";
 import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { useAppDispatch, useAppSelector } from "@h";
 import useBoolStates from "@h/use-bool-states";
-import { selectQuery, useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import { dataApi, selectQuery, useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue as dialogQueue } from "/src/app/dialog-queue";
 import { notify, queue as snackbarQueue } from "/src/app/snackbar-queue";
@@ -33,9 +33,9 @@ const App = () => {
     }),
   });
 
-  useGetCrimeCategoriesQuery(undefined, {
-    selectFromResult: () => ({}),
-  });
+  const prefetchCrimeCategories = dataApi.usePrefetch("getCrimeCategories");
+
+  useEffect(() => prefetchCrimeCategories(), []);
 
   useEffect(() => {
     try {
