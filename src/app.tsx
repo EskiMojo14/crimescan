@@ -33,7 +33,9 @@ const App = () => {
     }),
   });
 
-  useGetCrimeCategoriesQuery();
+  useGetCrimeCategoriesQuery(undefined, {
+    selectFromResult: () => ({}),
+  });
 
   useEffect(() => {
     try {
