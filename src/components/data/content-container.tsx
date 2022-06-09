@@ -1,14 +1,14 @@
 import { Chip } from "@rmwc/chip";
 import { TopAppBar, TopAppBarFixedAdjust, TopAppBarRow, TopAppBarSection, TopAppBarTitle } from "@rmwc/top-app-bar";
-import { createLatLng } from "@s/maps/functions";
-import { queryIcons } from "@s/util/constants";
 import { useAppSelector } from "@h";
 import { selectQuery } from "@s/data";
 import { selectLocationByLatLng } from "@s/locations";
+import { createLatLng } from "@s/maps/functions";
+import { queryIcons } from "@s/util/constants";
 import { CategoryCardMonth, CategoryCardYear } from "./category-card";
 import { CountCard } from "./count-card";
 import { OutcomeCardMonth, OutcomeCardYear } from "./outcome-card";
-import "./content-container.scss";
+import "./content-container.module.scss";
 
 export const ContentContainer = () => {
   const query = useAppSelector(selectQuery);

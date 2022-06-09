@@ -1,12 +1,12 @@
 import type { AnyAction } from "@reduxjs/toolkit";
 import { createSelector } from "@reduxjs/toolkit";
-import { objectEntries, objectFromEntries } from "@s/util/functions";
-import type { ObjectEntries } from "@s/util/types";
 import pick from "lodash.pick";
 import type { RootState } from "/src/app/store";
 import type { AppStartListening } from "@mw/listener";
 import { initialState as locations } from "@s/locations";
 import { selectCookies, initialState as settings } from "@s/settings";
+import { objectEntries, objectFromEntries } from "@s/util/functions";
+import type { ObjectEntries } from "@s/util/types";
 
 type WhitelistDef = {
   [K in keyof RootState]?: true | [keyof RootState[K], ...(keyof RootState[K])[]];
@@ -44,7 +44,7 @@ export const hydrateState = (state: WhitelistedState<PersistWhitelist>): Initial
 
 export const loadState = () => {
   try {
-    const serializedState = localStorage.getItem("state");
+    const serializedState = localStorage?.getItem("state");
     if (serializedState === null) {
       return undefined;
     }
@@ -68,7 +68,7 @@ export const saveState = (state: RootState) => {
     const accepted = selectCookies(state);
     if (accepted) {
       const serializedState = JSON.stringify(sanitiseState(state));
-      localStorage.setItem("state", serializedState);
+      localStorage?.setItem("state", serializedState);
     }
   } catch (err) {
     console.error(err);

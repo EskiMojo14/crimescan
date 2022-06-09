@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
+import { skipToken } from "@reduxjs/toolkit/query/react";
+import { DialogQueue } from "@rmwc/dialog";
+import { DrawerAppContent } from "@rmwc/drawer";
+import { SnackbarQueue } from "@rmwc/snackbar";
 import ContentContainer from "@c/data/content-container";
 import ContentEmpty from "@c/data/content-empty";
 import DrawerQuery from "@c/data/drawer-query";
 import DrawerSearch from "@c/data/drawer-search";
 import DrawerLocations from "@c/locations/drawer-locations";
-import { skipToken } from "@reduxjs/toolkit/query/react";
-import { DialogQueue } from "@rmwc/dialog";
-import { DrawerAppContent } from "@rmwc/drawer";
-import { SnackbarQueue } from "@rmwc/snackbar";
-import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { useAppDispatch, useAppSelector } from "@h";
 import useBoolStates from "@h/use-bool-states";
-import { dataApi, selectQuery, useGetCrimeCategoriesQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import { dataApi, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import { loadGoogleMapsAPI } from "@s/maps/functions";
 import { cookiesAccepted, selectCookies, selectTheme } from "@s/settings";
 import { queue as dialogQueue } from "/src/app/dialog-queue";
 import { notify, queue as snackbarQueue } from "/src/app/snackbar-queue";
-import "./App.scss";
 
 const App = () => {
   const dispatch = useAppDispatch();

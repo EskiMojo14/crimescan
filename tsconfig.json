@@ -1,57 +1,34 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "isolatedModules": true,
-        "resolveJsonModule": true,
-        "jsx": "react-jsx",
-        "sourceMap": true,
-        "noUnusedLocals": false,
-        "incremental": true,
-        "noFallthroughCasesInSwitch": true,
-        "paths": {
-            "@s/*": [
-                "./src/app/slices/*"
-            ],
-            "@h": [
-                "./src/app/hooks"
-            ],
-            "@h/*": [
-                "./src/app/hooks/*"
-            ],
-            "@mw/*": [
-                "./src/app/middleware/*"
-            ],
-            "@c/*": [
-                "./src/components/*"
-            ],
-            "@m/*": [
-                "./src/media/*"
-            ],
-            "/*": [
-                "./*"
-            ]
-        }
-    },
-    "include": [
-        "src/**/*",
-        "index.d.ts",
-        "./jest-setup.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "build"
-    ]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noEmit": true,
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "noUnusedLocals": false,
+    "incremental": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@s/*": ["./src/app/slices/*"],
+      "@h": ["./src/app/hooks"],
+      "@h/*": ["./src/app/hooks/*"],
+      "@mw/*": ["./src/app/middleware/*"],
+      "@c/*": ["./src/components/*"],
+      "@m/*": ["./public/*"],
+      "/*": ["./*"]
+    }
+  },
+  "include": ["**/*", "index.d.ts", "./jest-setup.ts"],
+  "exclude": ["node_modules", "build"]
 }

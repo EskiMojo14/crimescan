@@ -1,12 +1,12 @@
-import LocationCard from "@c/locations/location-card";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { Typography } from "@rmwc/typography";
-import { createLatLng } from "@s/maps/functions";
+import LocationCard from "@c/locations/location-card";
 import { useAppSelector } from "@h";
 import useScrollLock from "@h/use-scroll-lock";
 import { selectLocationLatLngs } from "@s/locations";
+import { createLatLng } from "@s/maps/functions";
 import emptyImg from "@m/empty.svg";
-import "./drawer-locations.scss";
+import "./drawer-locations.module.scss";
 
 type DrawerLocationsProps = {
   latLng: { lat: string; lng: string };

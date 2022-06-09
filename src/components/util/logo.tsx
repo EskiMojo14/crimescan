@@ -1,7 +1,7 @@
 import type { HTMLAttributes } from "react";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import "./Logo.scss";
+import "./logo.module.scss";
 
 type LogoProps = HTMLAttributes<HTMLDivElement> & {
   rotate?: boolean;

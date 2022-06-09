@@ -1,5 +1,3 @@
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
-import { SkeletonBlock, SkeletonIcon } from "@c/util/skeleton-block";
 import { Card } from "@rmwc/card";
 import {
   DataTable,
@@ -10,6 +8,8 @@ import {
   DataTableHeadCell,
   DataTableRow,
 } from "@rmwc/data-table";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
+import { SkeletonBlock, SkeletonIcon } from "@c/util/skeleton-block";
 import { months } from "@s/util/constants";
 import { iconObject, randomInt } from "@s/util/functions";
 

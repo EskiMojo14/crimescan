@@ -4,7 +4,7 @@ import { useAppSelector } from "@h";
 import { selectQuery } from "@s/data";
 import emptyImg from "@m/empty.svg";
 import emptyCheckImg from "@m/empty_check.svg";
-import "./content-empty.scss";
+import "./content-empty.module.scss";
 
 export const ContentEmpty = () => {
   const query = useAppSelector(selectQuery);

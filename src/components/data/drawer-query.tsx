@@ -1,8 +1,5 @@
 import type { ChangeEvent } from "react";
 import { useMemo } from "react";
-import { withTooltip } from "@c/util/hocs";
-import { Logo } from "@c/util/logo";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { prompt } from "/src/app/dialog-queue";
 import { Button } from "@rmwc/button";
@@ -13,16 +10,12 @@ import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
-import { dateSchema, latLngRegex, latLngSchema, monthRegex, yearRegex } from "@s/data/schema";
-import type { Query } from "@s/data/types";
-import { pinColors } from "@s/maps/constants";
-import type { UppercaseLetter } from "@s/maps/functions";
-import { createLatLng, getStaticMapURL } from "@s/maps/functions";
-import { queryIcons } from "@s/util/constants";
-import { hasKey, iconObject } from "@s/util/functions";
 import classNames from "classnames";
 import { shallowEqual } from "react-redux";
 import { useImmer } from "use-immer";
+import { withTooltip } from "@c/util/hocs";
+import { Logo } from "@c/util/logo";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { useAppDispatch, useAppSelector } from "@h";
 import {
   dataApi,
@@ -32,9 +25,16 @@ import {
   useGetMonthDataQuery,
   useGetYearDataQuery,
 } from "@s/data";
+import { dateSchema, latLngRegex, latLngSchema, monthRegex, yearRegex } from "@s/data/schema";
+import type { Query } from "@s/data/types";
 import { addLocation, selectLocationByLatLng, selectLocationTotal } from "@s/locations";
+import { pinColors } from "@s/maps/constants";
+import { createLatLng, getStaticMapURL } from "@s/maps/functions";
+import type { UppercaseLetter } from "@s/maps/functions";
 import { selectTheme, toggleTheme } from "@s/settings";
-import "./drawer-query.scss";
+import { queryIcons } from "@s/util/constants";
+import { hasKey, iconObject } from "@s/util/functions";
+import "./drawer-query.module.scss";
 
 type DrawerQueryProps = {
   latLng: { lat: string; lng: string };

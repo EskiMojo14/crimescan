@@ -1,6 +1,4 @@
 import { useMemo, useState } from "react";
-import SkeletonCategoryCard from "@c/data/category-card/skeleton";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
 import { Checkbox } from "@rmwc/checkbox";
@@ -14,15 +12,17 @@ import {
   DataTableRow,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { months } from "@s/util/constants";
-import { addOrRemove, iconObject } from "@s/util/functions";
 import type { IBarChartOptions, ILineChartOptions, IPieChartOptions } from "chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import classNames from "classnames";
 import ChartistGraph from "react-chartist";
 import { useImmer } from "use-immer";
+import SkeletonCategoryCard from "@c/data/category-card/skeleton";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { useAppSelector } from "@h";
 import { selectAllOutcomes, selectOutcomeCount, selectQuery, useGetMonthDataQuery, useGetYearDataQuery } from "@s/data";
+import { months } from "@s/util/constants";
+import { addOrRemove, iconObject } from "@s/util/functions";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 

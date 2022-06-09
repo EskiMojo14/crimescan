@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { SkeletonCountCard } from "@c/data/count-card/skeleton";
-import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Card } from "@rmwc/card";
 import {
@@ -13,14 +11,16 @@ import {
   DataTableRow,
 } from "@rmwc/data-table";
 import { Typography } from "@rmwc/typography";
-import { months } from "@s/util/constants";
-import { iconObject } from "@s/util/functions";
 import type { IBarChartOptions, ILineChartOptions } from "chartist";
 import chartistPluginAxisTitle from "chartist-plugin-axistitle";
 import ChartistGraph from "react-chartist";
+import { SkeletonCountCard } from "@c/data/count-card/skeleton";
+import { SegmentedButton, SegmentedButtonSegment } from "@c/util/segmented-button";
 import { useAppSelector } from "@h";
 import { selectCountSeries, selectQuery, useGetYearDataQuery } from "@s/data";
-import "./index.scss";
+import { months } from "@s/util/constants";
+import { iconObject } from "@s/util/functions";
+import "./index.module.scss";
 
 export const CountCard = () => {
   const query = useAppSelector(selectQuery);

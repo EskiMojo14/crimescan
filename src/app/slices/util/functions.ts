@@ -1,7 +1,7 @@
 import { nanoid } from "@reduxjs/toolkit";
 import type { IconOptions, IconPropT } from "@rmwc/types";
-import type { ObjectEntries } from "@s/util/types";
 import debounce from "lodash.debounce";
+import type { ObjectEntries } from "@s/util/types";
 
 /**
  * Checks that object contains specified key.

@@ -1,20 +1,20 @@
 import type { ChangeEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
-import { withTooltip } from "@c/util/hocs";
 import type { EntityId } from "@reduxjs/toolkit";
 import { Card, CardActionButton, CardActionButtons, CardActionIcon, CardActionIcons, CardActions } from "@rmwc/card";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
-import { pinColors } from "@s/maps/constants";
-import type { UppercaseLetter } from "@s/maps/functions";
-import { getStaticMapURL } from "@s/maps/functions";
 import classNames from "classnames";
 import debounce from "lodash.debounce";
+import { withTooltip } from "@c/util/hocs";
 import { useAppDispatch, useAppSelector } from "@h";
 import { removeLocation, selectLocationByLatLng, updateLocation } from "@s/locations";
+import { pinColors } from "@s/maps/constants";
+import { getStaticMapURL } from "@s/maps/functions";
+import type { UppercaseLetter } from "@s/maps/functions";
 import { selectTheme } from "@s/settings";
 import { confirmDelete } from "/src/app/dialog-queue";
-import "./location-card.scss";
+import "./location-card.module.scss";
 
 type LocationCardProps = {
   applyLatLng: (latLngId: string) => void;

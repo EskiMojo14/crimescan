@@ -7,15 +7,15 @@ import { IconButton } from "@rmwc/icon-button";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { TextField } from "@rmwc/textfield";
 import { Typography } from "@rmwc/typography";
+import { useAppSelector } from "@h";
+import useScrollLock from "@h/use-scroll-lock";
 import { pinColors, statusCodes } from "@s/maps/constants";
 import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import type { MapResult } from "@s/maps/types";
-import { asyncDebounce } from "@s/util/functions";
-import { useAppSelector } from "@h";
-import useScrollLock from "@h/use-scroll-lock";
 import { selectTheme } from "@s/settings";
+import { asyncDebounce } from "@s/util/functions";
 import emptyImg from "@m/empty.svg";
-import "./drawer-search.scss";
+import "./drawer-search.module.scss";
 
 type DrawerSearchProps = {
   close: () => void;

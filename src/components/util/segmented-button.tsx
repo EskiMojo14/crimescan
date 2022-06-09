@@ -2,7 +2,7 @@ import type { ButtonProps } from "@rmwc/button";
 import { Button } from "@rmwc/button";
 import BEMHelper from "@s/util/bem-helper";
 import type { HTMLProps } from "@s/util/types";
-import "./segmented-button.scss";
+import "./segmented-button.module.scss";
 
 const bemClasses = new BEMHelper("segmented-button");
 

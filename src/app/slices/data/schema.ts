@@ -1,6 +1,6 @@
+import { z } from "zod";
 import type { Query } from "@s/data/types";
 import { schemaForType } from "@s/util/schema";
-import { z } from "zod";
 
 export const yearRegex = /^\d{4}$/;
 export const monthRegex = /^\d{4}-(0[1-9]|1[012])$/;

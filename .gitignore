@@ -26,3 +26,4 @@ apiKeys.env
 /.vscode
 tsconfig.tsbuildinfo
 .eslintcache
+.next
