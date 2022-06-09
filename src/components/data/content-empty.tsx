@@ -2,8 +2,6 @@ import { TopAppBarFixedAdjust } from "@rmwc/top-app-bar";
 import { Typography } from "@rmwc/typography";
 import { useAppSelector } from "@h";
 import { selectQuery } from "@s/data";
-import emptyImg from "@m/empty.svg";
-import emptyCheckImg from "@m/empty_check.svg";
 import "./content-empty.module.scss";
 
 export const ContentEmpty = () => {
@@ -13,7 +11,7 @@ export const ContentEmpty = () => {
     <div className="empty-container">
       <TopAppBarFixedAdjust />
       <div className="content">
-        <img alt="Empty" className="image" src={query ? emptyCheckImg : emptyImg} />
+        <img alt="Empty" className="image" src={query ? "/empty_check.svg" : "/empty.svg"} />
         <Typography className="title" tag="h3" use="headline6">
           {query ? "No crimes logged within given period." : "No data to display"}
         </Typography>

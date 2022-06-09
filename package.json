@@ -8,8 +8,7 @@
     "@h": "./src/app/hooks",
     "@h/*": "./src/app/hooks/$1",
     "@mw/*": "./src/app/middleware/$1",
-    "@c/*": "./src/components/$1",
-    "@m/*": "./src/media/$1"
+    "@c/*": "./src/components/$1"
   },
   "scripts": {
     "dev": "next dev",

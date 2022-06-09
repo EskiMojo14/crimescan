@@ -3,7 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 export const createLatLng = ({ lat, lng }: { lat: string; lng: string }) => `${lat},${lng}`;
 
 const loader = new Loader({
-  apiKey: process.env.GOOGLE_MAPS_KEY as string,
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
 });
 
 let geocoder: google.maps.Geocoder | undefined;
@@ -60,7 +60,7 @@ export const getStaticMapURL = (
   )[]
 ) => {
   const baseUrl = new URL("https://maps.googleapis.com/maps/api/staticmap");
-  baseUrl.searchParams.set("key", process.env.GOOGLE_MAPS_KEY!);
+  baseUrl.searchParams.set("key", process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!);
   baseUrl.searchParams.set("size", size);
   if (theme === "dark") {
     baseUrl.searchParams.set("map_id", "f3b730e3bc8bf288");

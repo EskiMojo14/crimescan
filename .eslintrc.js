@@ -23,11 +23,6 @@ const pathGroupsOverrides = [
   },
   {
     group: "object",
-    pattern: "@m/*",
-    position: "after",
-  },
-  {
-    group: "object",
     pattern: "./*.scss",
     position: "after",
   },

@@ -5,7 +5,7 @@ export const Document = () => (
     <Head>
       <meta charSet="UTF-8" />
       <meta content="ie=edge" httpEquiv="X-UA-Compatible" />
-      <link href="./favicon.ico" rel="icon" />
+      <link href="public/favicon.ico" rel="icon" />
       <meta content="App displaying the statistics of crime in a specific area." name="description" />
       <meta content="#0f0f0f" name="theme-color" />
       <meta content="CrimeScan" property="og:title" />

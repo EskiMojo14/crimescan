@@ -44,11 +44,14 @@ export const hydrateState = (state: WhitelistedState<PersistWhitelist>): Initial
 
 export const loadState = () => {
   try {
-    const serializedState = localStorage?.getItem("state");
-    if (serializedState === null) {
-      return undefined;
+    if (window) {
+      const serializedState = localStorage.getItem("state");
+      if (!serializedState) {
+        return undefined;
+      }
+      return hydrateState(JSON.parse(serializedState));
     }
-    return hydrateState(JSON.parse(serializedState));
+    return undefined;
   } catch (err) {
     console.log(err);
     return undefined;
@@ -68,7 +71,9 @@ export const saveState = (state: RootState) => {
     const accepted = selectCookies(state);
     if (accepted) {
       const serializedState = JSON.stringify(sanitiseState(state));
-      localStorage?.setItem("state", serializedState);
+      if (window) {
+        localStorage.setItem("state", serializedState);
+      }
     }
   } catch (err) {
     console.error(err);

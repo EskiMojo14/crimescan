@@ -5,7 +5,6 @@ import { useAppSelector } from "@h";
 import useScrollLock from "@h/use-scroll-lock";
 import { selectLocationLatLngs } from "@s/locations";
 import { createLatLng } from "@s/maps/functions";
-import emptyImg from "@m/empty.svg";
 import "./drawer-locations.module.scss";
 
 type DrawerLocationsProps = {
@@ -39,7 +38,7 @@ export const DrawerLocations = ({ latLng, onClose, open, setLatLng }: DrawerLoca
           ))
         ) : (
           <div className="no-result-display">
-            <img alt="Empty" className="image" src={emptyImg} />
+            <img alt="Empty" className="image" src="/empty.svg" />
             <Typography className="title" tag="h3" use="headline6">
               No locations saved
             </Typography>

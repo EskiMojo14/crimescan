@@ -14,7 +14,6 @@ import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import type { MapResult } from "@s/maps/types";
 import { selectTheme } from "@s/settings";
 import { asyncDebounce } from "@s/util/functions";
-import emptyImg from "@m/empty.svg";
 import "./drawer-search.module.scss";
 
 type DrawerSearchProps = {
@@ -84,7 +83,7 @@ export const DrawerSearch = ({ close, open, setLatLng }: DrawerSearchProps) => {
   const noResultDisplay =
     !result && !loading ? (
       <div className="no-result-display">
-        <img alt="Empty" className="image" src={emptyImg} />
+        <img alt="Empty" className="image" src="/empty.svg" />
         <Typography className="title" tag="h3" use="headline6">
           No results
         </Typography>

@@ -25,7 +25,6 @@
       "@h/*": ["./src/app/hooks/*"],
       "@mw/*": ["./src/app/middleware/*"],
       "@c/*": ["./src/components/*"],
-      "@m/*": ["./public/*"],
       "/*": ["./*"]
     }
   },
