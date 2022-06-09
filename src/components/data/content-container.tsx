@@ -8,7 +8,6 @@ import { queryIcons } from "@s/util/constants";
 import { CategoryCardMonth, CategoryCardYear } from "./category-card";
 import { CountCard } from "./count-card";
 import { OutcomeCardMonth, OutcomeCardYear } from "./outcome-card";
-import "./content-container.module.scss";
 
 export const ContentContainer = () => {
   const query = useAppSelector(selectQuery);

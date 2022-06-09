@@ -14,7 +14,6 @@ import { getStaticMapURL } from "@s/maps/functions";
 import type { UppercaseLetter } from "@s/maps/functions";
 import { selectTheme } from "@s/settings";
 import { confirmDelete } from "/src/app/dialog-queue";
-import "./location-card.module.scss";
 
 type LocationCardProps = {
   applyLatLng: (latLngId: string) => void;

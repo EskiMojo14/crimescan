@@ -5,7 +5,6 @@ import { useAppSelector } from "@h";
 import useScrollLock from "@h/use-scroll-lock";
 import { selectLocationLatLngs } from "@s/locations";
 import { createLatLng } from "@s/maps/functions";
-import "./drawer-locations.module.scss";
 
 type DrawerLocationsProps = {
   latLng: { lat: string; lng: string };

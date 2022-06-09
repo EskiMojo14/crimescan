@@ -20,7 +20,6 @@ import { useAppSelector } from "@h";
 import { selectCountSeries, selectQuery, useGetYearDataQuery } from "@s/data";
 import { months } from "@s/util/constants";
 import { iconObject } from "@s/util/functions";
-import "./index.module.scss";
 
 export const CountCard = () => {
   const query = useAppSelector(selectQuery);

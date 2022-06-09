@@ -30,7 +30,6 @@ import {
 } from "@s/data";
 import { months } from "@s/util/constants";
 import { addOrRemove, iconObject } from "@s/util/functions";
-import "./index.module.scss";
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 

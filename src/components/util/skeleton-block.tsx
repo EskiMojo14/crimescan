@@ -2,7 +2,6 @@ import type { TypographyT } from "@rmwc/typography";
 import { nanoid } from "nanoid";
 import BEMHelper from "@s/util/bem-helper";
 import { randomInt } from "@s/util/functions";
-import "./skeleton-block.module.scss";
 
 export type SkeletonBlockProps<Tag extends keyof JSX.IntrinsicElements = "div"> = Omit<
   JSX.IntrinsicElements[Tag],

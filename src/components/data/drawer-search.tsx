@@ -14,7 +14,6 @@ import { getGeocodedResults, getStaticMapURL } from "@s/maps/functions";
 import type { MapResult } from "@s/maps/types";
 import { selectTheme } from "@s/settings";
 import { asyncDebounce } from "@s/util/functions";
-import "./drawer-search.module.scss";
 
 type DrawerSearchProps = {
   close: () => void;

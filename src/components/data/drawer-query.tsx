@@ -34,7 +34,6 @@ import type { UppercaseLetter } from "@s/maps/functions";
 import { selectTheme, toggleTheme } from "@s/settings";
 import { queryIcons } from "@s/util/constants";
 import { hasKey, iconObject } from "@s/util/functions";
-import "./drawer-query.module.scss";
 
 type DrawerQueryProps = {
   latLng: { lat: string; lng: string };
